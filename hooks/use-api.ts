@@ -1,0 +1,101 @@
+import useSWR, { mutate as globalMutate } from "swr"
+import { fetcher, apiMutate } from "@/lib/fetcher"
+import useSWRMutation from "swr/mutation"
+
+function listKey(url: string, params?: Record<string, string>) {
+  if (!params) return url
+  const qs = new URLSearchParams(params).toString()
+  return `${url}?${qs}`
+}
+
+export function useClients() {
+  return useSWR<any[]>("/api/clients", fetcher)
+}
+
+export function useAnalysts() {
+  return useSWR<any[]>("/api/analysts", fetcher)
+}
+
+export function useContracts() {
+  return useSWR<any[]>("/api/contracts", fetcher)
+}
+
+export function useRequesters() {
+  return useSWR<any[]>("/api/requesters", fetcher)
+}
+
+export function useDepartments() {
+  return useSWR<any[]>("/api/departments", fetcher)
+}
+
+export function useDemandTypes() {
+  return useSWR<any[]>("/api/demand-types", fetcher)
+}
+
+export function useTags() {
+  return useSWR<any[]>("/api/tags", fetcher)
+}
+
+export function useUsers() {
+  return useSWR<any[]>("/api/users", fetcher)
+}
+
+export function useRoles() {
+  return useSWR<any[]>("/api/roles", fetcher)
+}
+
+export function usePermissions() {
+  return useSWR<any[]>("/api/permissions", fetcher)
+}
+
+export function useNotifications(unreadOnly?: boolean) {
+  return useSWR<any[]>(
+    listKey("/api/notifications", unreadOnly ? { unread: "true" } : undefined),
+    fetcher
+  )
+}
+
+export function useDemands(filters?: Record<string, string>) {
+  return useSWR<any[]>(listKey("/api/demands", filters), fetcher)
+}
+
+export type DemandStats = {
+  total: number
+  totalMinutes: number
+  monthlyEvolution: { month: number; year: number; totalMinutes: number; count: number }[]
+  byStatus: { status: string; count: number }[]
+  byClient: { clientId: string; clientName: string; count: number; totalMinutes: number }[]
+  byAnalyst: { analystId: string; analystName: string; analystColor: string; count: number; totalMinutes: number }[]
+}
+
+export function useDemandStats(filters?: Record<string, string>) {
+  return useSWR<DemandStats>(listKey("/api/demands/stats", filters), fetcher)
+}
+
+export function useCreate(key: string) {
+  return useSWRMutation(
+    key,
+    (url: string, { arg }: { arg: Record<string, unknown> }) =>
+      apiMutate(url, { method: "POST", body: JSON.stringify(arg) })
+  )
+}
+
+export function useUpdate(key: string) {
+  return useSWRMutation(
+    key,
+    (url: string, { arg }: { arg: Record<string, unknown> }) =>
+      apiMutate(url, { method: "PUT", body: JSON.stringify(arg) })
+  )
+}
+
+export function useRemove(key: string) {
+  return useSWRMutation(
+    key,
+    (url: string, { arg }: { arg: Record<string, unknown> }) =>
+      apiMutate(url, { method: "DELETE", body: JSON.stringify(arg) })
+  )
+}
+
+export function mutateList(key: string) {
+  return globalMutate((k) => typeof k === "string" && k.startsWith(key))
+}

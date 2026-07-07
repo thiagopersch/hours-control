@@ -1,0 +1,486 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum DemandStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+  ON_HOLD
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+enum ContractStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  CANCELLED
+}
+
+enum NotificationChannel {
+  EMAIL
+  WHATSAPP
+  TELEGRAM
+  DISCORD
+  IN_APP
+  WEBHOOK
+}
+
+enum ExportStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+enum ExportFormat {
+  XLSX
+  PDF
+  CSV
+  JSON
+}
+
+// ─── Multi-tenant ───────────────────────────────────────────────
+
+model Organization {
+  id        String   @id @default(cuid())
+  name      String
+  slug      String   @unique
+  document  String?
+  plan      String   @default("free")
+  status    String   @default("active")
+  configs   Json?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+
+  users         User[]
+  roles         Role[]
+  analysts      Analyst[]
+  clients       Client[]
+  requesters    Requester[]
+  departments   Department[]
+  demandTypes   DemandType[]
+  tags          Tag[]
+  auditLogs     AuditLog[]
+  exports       Export[]
+}
+
+// ─── Auth.js tables ────────────────────────────────────────────
+
+model User {
+  id            String   @id @default(cuid())
+  name          String?
+  email         String   @unique
+  emailVerified DateTime?
+  image         String?
+  passwordHash  String?
+  phone         String?
+  status        String   @default("active")
+  lastLoginAt   DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  deletedAt     DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  accounts            Account[]
+  sessions            Session[]
+  userRoles           UserRole[]
+  comments            Comment[]
+  notifications       Notification[]
+  notificationSettings NotificationSetting[]
+  auditLogs           AuditLog[]
+  exports             Export[]
+  dashboardPreferences DashboardPreference?
+  uploadedAttachments  Attachment[] @relation("UploadedAttachments")
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refreshToken      String? @map("refresh_token")
+  accessToken       String? @map("access_token")
+  expiresAt         Int?    @map("expires_at")
+  tokenType         String? @map("token_type")
+  scope             String?
+  idToken           String? @map("id_token")
+  sessionState      String? @map("session_state")
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─── RBAC ───────────────────────────────────────────────────────
+
+model Role {
+  id             String   @id @default(cuid())
+  name           String
+  description    String?
+  isSystem       Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@unique([organizationId, name])
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  resource    String
+  action      String
+  description String?
+
+  rolePermissions RolePermission[]
+
+  @@unique([resource, action])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+model UserRole {
+  userId String
+  roleId String
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+
+  @@id([userId, roleId])
+}
+
+// ─── Analysts ───────────────────────────────────────────────────
+
+model Analyst {
+  id           String   @id @default(cuid())
+  name         String
+  email        String?
+  phone        String?
+  role         String?
+  hourlyRate   Float?   @map("hourly_rate")
+  status       String   @default("active")
+  photo        String?
+  team         String?
+  color        String   @default("#6366f1")
+  level        Int      @default(1)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  deletedAt    DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  demands Demand[]
+}
+
+// ─── Clients ────────────────────────────────────────────────────
+
+model Client {
+  id             String   @id @default(cuid())
+  name           String
+  legalName      String?  @map("legal_name")
+  document       String?
+  email          String?
+  phone          String?
+  responsible    String?
+  color          String   @default("#22c55e")
+  notes          String?  @db.Text
+  favorite       Boolean  @default(false)
+  status         String   @default("active")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  deletedAt      DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  contracts ClientContract[]
+  demands   Demand[]
+}
+
+model ClientContract {
+  id               String         @id @default(cuid())
+  contractedHours  Int            @map("contracted_hours")
+  hourlyRate       Float          @map("hourly_rate")
+  startDate        DateTime       @map("start_date")
+  endDate          DateTime?      @map("end_date")
+  status           ContractStatus @default(ACTIVE)
+  notes            String?        @db.Text
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+  deletedAt        DateTime?
+
+  clientId String
+  client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+}
+
+// ─── Support Structure ─────────────────────────────────────────
+
+model Requester {
+  id         String   @id @default(cuid())
+  name       String
+  email      String?
+  phone      String?
+  status     String   @default("active")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  deletedAt  DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  demands Demand[]
+}
+
+model Department {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  demands Demand[]
+}
+
+model DemandType {
+  id          String   @id @default(cuid())
+  name        String
+  description String?  @db.Text
+  color       String   @default("#a855f7")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  deletedAt   DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  demands Demand[]
+}
+
+// ─── Core: Demands ──────────────────────────────────────────────
+
+model Demand {
+  id              String       @id @default(cuid())
+  name            String
+  description     String       @db.Text
+  date            DateTime
+  startTime       DateTime?    @map("start_time")
+  endTime         DateTime?    @map("end_time")
+  durationMinutes Int          @default(0) @map("duration_minutes")
+  priority        Priority     @default(MEDIUM)
+  status          DemandStatus @default(PENDING)
+  notes           String?      @db.Text
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+  deletedAt       DateTime?
+
+  analystId      String    @map("analyst_id")
+  clientId       String    @map("client_id")
+  requesterId    String?   @map("requester_id")
+  departmentId   String?   @map("department_id")
+  demandTypeId   String?   @map("demand_type_id")
+
+  analyst     Analyst     @relation(fields: [analystId], references: [id])
+  client      Client      @relation(fields: [clientId], references: [id])
+  requester   Requester?  @relation(fields: [requesterId], references: [id])
+  department  Department? @relation(fields: [departmentId], references: [id])
+  demandType  DemandType? @relation(fields: [demandTypeId], references: [id])
+
+  attachments Attachment[]
+  comments    Comment[]
+  demandTags  DemandTag[]
+}
+
+// ─── Attachments & Comments ─────────────────────────────────────
+
+model Attachment {
+  id           String   @id @default(cuid())
+  filename     String
+  originalName String   @map("original_name")
+  mimeType     String   @map("mime_type")
+  size         Int
+  url          String
+  createdAt    DateTime @default(now())
+
+  demandId String
+  demand   Demand @relation(fields: [demandId], references: [id], onDelete: Cascade)
+
+  uploadedById String? @map("uploaded_by_id")
+  uploadedBy   User?   @relation("UploadedAttachments", fields: [uploadedById], references: [id])
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  demandId String
+  demand   Demand @relation(fields: [demandId], references: [id], onDelete: Cascade)
+
+  userId   String
+  user     User @relation(fields: [userId], references: [id])
+
+  parentId String?
+  parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
+  replies  Comment[] @relation("CommentReplies")
+}
+
+// ─── Tags ───────────────────────────────────────────────────────
+
+model Tag {
+  id             String   @id @default(cuid())
+  name           String
+  color          String   @default("#8b5cf6")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  demandTags DemandTag[]
+
+  @@unique([organizationId, name])
+}
+
+model DemandTag {
+  demandId String
+  tagId    String
+
+  demand Demand @relation(fields: [demandId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([demandId, tagId])
+}
+
+// ─── Notifications ──────────────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(cuid())
+  type      String
+  title     String
+  body      String   @db.Text
+  data      Json?
+  readAt    DateTime?
+  createdAt DateTime @default(now())
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model NotificationSetting {
+  id      String               @id @default(cuid())
+  channel NotificationChannel
+  enabled Boolean              @default(true)
+
+  userId String
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, channel])
+}
+
+// ─── Audit ──────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  entityType String   @map("entity_type")
+  entityId   String   @map("entity_id")
+  action     String
+  field      String?
+  oldValue   String?  @map("old_value") @db.Text
+  newValue   String?  @map("new_value") @db.Text
+  ip         String?
+  userAgent  String?  @map("user_agent")
+  createdAt  DateTime @default(now())
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  userId String?
+  user   User?   @relation(fields: [userId], references: [id])
+
+  @@index([entityType, entityId])
+  @@index([organizationId])
+  @@index([createdAt])
+}
+
+// ─── Exports ────────────────────────────────────────────────────
+
+model Export {
+  id         String       @id @default(cuid())
+  type       String
+  format     ExportFormat
+  filters    Json?
+  status     ExportStatus @default(PENDING)
+  fileUrl    String?      @map("file_url")
+  error      String?      @db.Text
+  createdAt  DateTime     @default(now())
+  completedAt DateTime?   @map("completed_at")
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  userId String
+  user   User @relation(fields: [userId], references: [id])
+}
+
+// ─── User Preferences ───────────────────────────────────────────
+
+model DashboardPreference {
+  id        String @id @default(cuid())
+  widgets   Json?
+  layout    Json?
+
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
