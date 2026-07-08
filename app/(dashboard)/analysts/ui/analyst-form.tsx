@@ -22,7 +22,9 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 import { Field, FieldError } from "@/components/ui/field"
-import { analystSchema, type AnalystFormData } from "../schema/analyst-schema"
+import { analystSchema, MAX_ANALYST_LEVEL, type AnalystFormData } from "../schema/analyst-schema"
+
+const levelOptions = Array.from({ length: MAX_ANALYST_LEVEL }, (_, i) => i + 1)
 
 type AnalystFormProps = {
   defaultValues?: Partial<AnalystFormData>
@@ -39,6 +41,7 @@ export function AnalystForm({
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<AnalystFormData>({
     resolver: zodResolver(analystSchema),
@@ -50,6 +53,7 @@ export function AnalystForm({
       hourlyRate: 0,
       team: "",
       color: "#6b7280",
+      level: 1,
       status: "active",
       ...defaultValues,
     },
@@ -69,46 +73,75 @@ export function AnalystForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Email</Label>
-            <Input type="email" {...register("email")} />
+            <Input type="email" aria-invalid={!!errors.email} {...register("email")} />
             <FieldError errors={[errors.email]} />
           </Field>
           <Field>
             <Label>Telefone</Label>
-            <Input {...register("phone")} />
+            <Input aria-invalid={!!errors.phone} {...register("phone")} />
             <FieldError errors={[errors.phone]} />
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Cargo</Label>
-            <Input {...register("role")} />
+            <Input aria-invalid={!!errors.role} {...register("role")} />
             <FieldError errors={[errors.role]} />
           </Field>
           <Field>
             <Label>Valor Hora (R$)</Label>
-            <Input type="number" step="0.01" {...register("hourlyRate", { valueAsNumber: true })} />
+            <Input type="number" step="0.01" aria-invalid={!!errors.hourlyRate} {...register("hourlyRate", { valueAsNumber: true })} />
             <FieldError errors={[errors.hourlyRate]} />
           </Field>
         </div>
 
-        <Field>
-          <Label>Equipe</Label>
-          <Input {...register("team")} />
-          <FieldError errors={[errors.team]} />
-        </Field>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <Field>
+            <Label>Equipe</Label>
+            <Input aria-invalid={!!errors.team} {...register("team")} />
+            <FieldError errors={[errors.team]} />
+          </Field>
+          <Field>
+            <Label>Nível</Label>
+            <Controller
+              name="level"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  value={String(field.value)}
+                  onValueChange={(val) => {
+                    if (val !== null) field.onChange(Number(val))
+                  }}
+                >
+                  <SelectTrigger className="w-full" aria-invalid={!!errors.level}>
+                    <SelectValue placeholder="Selecione..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {levelOptions.map((level) => (
+                      <SelectItem key={level} value={String(level)}>
+                        Nível {level}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            <FieldError errors={[errors.level]} />
+          </Field>
+        </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Cor</Label>
-            <Input type="color" {...register("color")} className="h-8 p-1" />
+            <Input type="color" aria-invalid={!!errors.color} {...register("color")} className="h-8 p-1" />
             <FieldError errors={[errors.color]} />
           </Field>
           <Field>
@@ -123,7 +156,7 @@ export function AnalystForm({
                     if (val !== null) field.onChange(val)
                   }}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -144,7 +177,7 @@ export function AnalystForm({
         </div>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

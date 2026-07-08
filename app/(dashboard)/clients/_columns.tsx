@@ -4,7 +4,6 @@ import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Pencil, Trash2, Star } from "lucide-react"
-import { formatDate } from "@/lib/utils"
 
 export type Client = {
   id: string
@@ -38,6 +37,20 @@ export function getClientColumns({
       header: "Nome",
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
+          <Button
+            variant="ghost"
+            size="icon-sm"
+            className="shrink-0"
+            onClick={() => { onToggleFavorite(row.original) }}
+          >
+            <Star
+              className={`size-4 ${
+                row.original.favorite
+                  ? "fill-amber-400 text-amber-400"
+                  : "text-muted-foreground"
+              }`}
+            />
+          </Button>
           <div
             className="size-2 rounded-full shrink-0"
             style={{ backgroundColor: row.original.color || "#6b7280" }}
@@ -63,25 +76,6 @@ export function getClientColumns({
         >
           {row.original.status === "active" ? "Ativo" : "Inativo"}
         </Badge>
-      ),
-    },
-    {
-      id: "favorite",
-      header: "Fav",
-      cell: ({ row }) => (
-        <Button
-          variant="ghost"
-          size="icon-sm"
-          onClick={() => onToggleFavorite(row.original)}
-        >
-          <Star
-            className={`size-4 ${
-              row.original.favorite
-                ? "fill-amber-400 text-amber-400"
-                : "text-muted-foreground"
-            }`}
-          />
-        </Button>
       ),
     },
     {

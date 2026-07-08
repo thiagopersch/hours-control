@@ -11,8 +11,8 @@ export const demandSchema = z.object({
   description: z.string().min(1, "Descrição é obrigatória"),
   durationHours: z.number().min(0).optional(),
   durationMinutes: z.number().min(0).max(59).optional(),
-  priority: z.enum(["low", "medium", "high", "urgent"]),
-  status: z.enum(["open", "in_progress", "resolved", "closed", "cancelled"]),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]),
+  status: z.enum(["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED", "ON_HOLD"]),
   notes: z.string().optional(),
 })
 

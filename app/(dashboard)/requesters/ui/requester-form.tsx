@@ -38,6 +38,7 @@ export function RequesterForm({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<RequesterFormData>({
     resolver: zodResolver(requesterSchema),
@@ -64,19 +65,21 @@ export function RequesterForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
-            <Label>Email</Label>
-            <Input type="email" {...register("email")} />
+            <Label>
+              Email <span className="text-destructive">*</span>
+            </Label>
+            <Input type="email" aria-invalid={!!errors.email} {...register("email")} />
             <FieldError errors={[errors.email]} />
           </Field>
           <Field>
             <Label>Telefone</Label>
-            <Input {...register("phone")} />
+            <Input aria-invalid={!!errors.phone} {...register("phone")} />
             <FieldError errors={[errors.phone]} />
           </Field>
         </div>
@@ -93,7 +96,7 @@ export function RequesterForm({
                   if (val !== null) field.onChange(val)
                 }}
               >
-                <SelectTrigger className="w-full">
+                <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
                   <SelectValue placeholder="Selecione o status" />
                 </SelectTrigger>
                 <SelectContent>
@@ -113,7 +116,7 @@ export function RequesterForm({
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

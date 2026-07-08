@@ -40,6 +40,7 @@ export function ClientForm({
     register,
     control,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),
@@ -73,46 +74,46 @@ export function ClientForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Razão Social</Label>
-            <Input {...register("legalName")} />
+            <Input aria-invalid={!!errors.legalName} {...register("legalName")} />
             <FieldError errors={[errors.legalName]} />
           </Field>
           <Field>
             <Label>Documento (CPF/CNPJ)</Label>
-            <Input {...register("document")} />
+            <Input aria-invalid={!!errors.document} {...register("document")} />
             <FieldError errors={[errors.document]} />
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Email</Label>
-            <Input type="email" {...register("email")} />
+            <Input type="email" aria-invalid={!!errors.email} {...register("email")} />
             <FieldError errors={[errors.email]} />
           </Field>
           <Field>
             <Label>Telefone</Label>
-            <Input {...register("phone")} />
+            <Input aria-invalid={!!errors.phone} {...register("phone")} />
             <FieldError errors={[errors.phone]} />
           </Field>
         </div>
 
         <Field>
           <Label>Responsável</Label>
-          <Input {...register("responsible")} />
+          <Input aria-invalid={!!errors.responsible} {...register("responsible")} />
           <FieldError errors={[errors.responsible]} />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Cor</Label>
-            <Input type="color" {...register("color")} className="h-8 p-1" />
+            <Input type="color" aria-invalid={!!errors.color} {...register("color")} className="h-8 p-1" />
             <FieldError errors={[errors.color]} />
           </Field>
           <Field>
@@ -127,7 +128,7 @@ export function ClientForm({
                     if (val !== null) field.onChange(val)
                   }}
                 >
-                  <SelectTrigger className="w-full">
+                  <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
                     <SelectValue placeholder="Selecione..." />
                   </SelectTrigger>
                   <SelectContent>
@@ -154,7 +155,7 @@ export function ClientForm({
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>
             Cancelar
           </DialogClose>
           <Button type="submit" disabled={loading}>

@@ -9,6 +9,7 @@ import {
   getSortedRowModel,
   useReactTable,
   type ColumnDef,
+  type FilterFn,
   type SortingState,
   type VisibilityState,
 } from "@tanstack/react-table"
@@ -20,7 +21,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
-import { Button } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import {
   Select,
@@ -33,6 +34,7 @@ import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
@@ -49,6 +51,34 @@ import {
   Inbox,
 } from "lucide-react"
 
+const COMBINING_DIACRITIC_MIN = 0x0300
+const COMBINING_DIACRITIC_MAX = 0x036f
+
+function toSearchableString(value: unknown): string {
+  if (value == null) return ""
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return String(value)
+  }
+  if (value instanceof Date) return value.toISOString()
+  return ""
+}
+
+function normalizeForSearch(value: unknown): string {
+  let withoutDiacritics = ""
+  for (const char of toSearchableString(value).normalize("NFD")) {
+    const code = char.codePointAt(0) ?? 0
+    if (code >= COMBINING_DIACRITIC_MIN && code <= COMBINING_DIACRITIC_MAX) continue
+    withoutDiacritics += char
+  }
+  return withoutDiacritics.toLowerCase().replace(/[^a-z0-9]+/g, "")
+}
+
+const accentInsensitiveFilter: FilterFn<any> = (row, columnId, filterValue) => {
+  return normalizeForSearch(row.getValue(columnId)).includes(
+    normalizeForSearch(filterValue)
+  )
+}
+
 type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
@@ -60,13 +90,11 @@ type DataTableProps<TData, TValue> = {
 export function DataTable<TData, TValue>({
   columns,
   data,
-  showSearch,
+  showSearch = true,
   searchPlaceholder = "Pesquisar...",
   loading = false,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([
-    { id: columns[0]?.id ?? "", desc: false },
-  ])
+  const [sorting, setSorting] = useState<SortingState>([])
   const [globalFilter, setGlobalFilter] = useState("")
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({})
 
@@ -77,6 +105,7 @@ export function DataTable<TData, TValue>({
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    globalFilterFn: accentInsensitiveFilter,
     onSortingChange: setSorting,
     onGlobalFilterChange: setGlobalFilter,
     onColumnVisibilityChange: setColumnVisibility,
@@ -85,6 +114,10 @@ export function DataTable<TData, TValue>({
   })
 
   const pageSize = table.getState().pagination.pageSize
+  const pageIndex = table.getState().pagination.pageIndex
+  const filteredCount = table.getFilteredRowModel().rows.length
+  const rangeStart = filteredCount === 0 ? 0 : pageIndex * pageSize + 1
+  const rangeEnd = Math.min(filteredCount, (pageIndex + 1) * pageSize)
 
   return (
     <div className="space-y-4">
@@ -101,6 +134,9 @@ export function DataTable<TData, TValue>({
           </div>
         )}
         <div className="flex items-center gap-2 ml-auto">
+          <span className="text-sm text-muted-foreground whitespace-nowrap">
+            Itens por página
+          </span>
           <Select
             value={String(pageSize)}
             onValueChange={(value) => table.setPageSize(Number(value))}
@@ -117,16 +153,15 @@ export function DataTable<TData, TValue>({
             </SelectContent>
           </Select>
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button variant="outline" size="sm">
-                <Columns3 className="size-4" />
-                Colunas
-              </Button>
+            <DropdownMenuTrigger className={buttonVariants({ variant: "outline", size: "sm" })}>
+              <Columns3 className="size-4" />
+              Colunas
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-48">
-              <DropdownMenuLabel>Visibilidade</DropdownMenuLabel>
-              <DropdownMenuSeparator />
-              {table
+              <DropdownMenuGroup>
+                <DropdownMenuLabel>Visibilidade</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                {table
                 .getAllColumns()
                 .filter((col) => col.getCanHide())
                 .map((col) => {
@@ -146,6 +181,7 @@ export function DataTable<TData, TValue>({
                     </DropdownMenuCheckboxItem>
                   )
                 })}
+              </DropdownMenuGroup>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -226,7 +262,9 @@ export function DataTable<TData, TValue>({
 
       <div className="flex items-center justify-between">
         <p className="text-sm text-muted-foreground">
-          {table.getFilteredRowModel().rows.length} registro(s)
+          {filteredCount === 0
+            ? "0 registro(s)"
+            : `Mostrando ${rangeStart}–${rangeEnd} de ${filteredCount} registro(s)`}
         </p>
         <div className="flex items-center gap-2">
           <Button

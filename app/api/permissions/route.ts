@@ -12,5 +12,15 @@ export async function GET(_request: NextRequest) {
     orderBy: [{ resource: "asc" }, { action: "asc" }],
   })
 
-  return NextResponse.json(permissions)
+  const grouped = new Map<string, { resource: string; permissions: typeof permissions }>()
+  for (const permission of permissions) {
+    const group = grouped.get(permission.resource)
+    if (group) {
+      group.permissions.push(permission)
+    } else {
+      grouped.set(permission.resource, { resource: permission.resource, permissions: [permission] })
+    }
+  }
+
+  return NextResponse.json(Array.from(grouped.values()))
 }

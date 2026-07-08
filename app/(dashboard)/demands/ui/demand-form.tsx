@@ -7,13 +7,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { DatePicker } from "@/components/ui/date-picker"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { ColoredSelect } from "@/components/ui/colored-select"
 import {
   DialogContent,
   DialogHeader,
@@ -25,12 +19,27 @@ import {
 import { Field, FieldError, FieldDescription } from "@/components/ui/field"
 import { demandSchema, type DemandFormData } from "../schema/demand-schema"
 
+const priorityOptions = [
+  { value: "LOW", label: "Baixa", color: "#22c55e" },
+  { value: "MEDIUM", label: "Média", color: "#f59e0b" },
+  { value: "HIGH", label: "Alta", color: "#f97316" },
+  { value: "URGENT", label: "Urgente", color: "#ef4444" },
+]
+
+const statusOptions = [
+  { value: "PENDING", label: "Pendente", color: "#94a3b8" },
+  { value: "IN_PROGRESS", label: "Em Andamento", color: "#3b82f6" },
+  { value: "COMPLETED", label: "Concluída", color: "#22c55e" },
+  { value: "ON_HOLD", label: "Em Espera", color: "#f59e0b" },
+  { value: "CANCELLED", label: "Cancelada", color: "#ef4444" },
+]
+
 type DemandFormProps = {
-  analysts: { id: string; name: string }[]
-  clients: { id: string; name: string }[]
+  analysts: { id: string; name: string; color?: string }[]
+  clients: { id: string; name: string; color?: string }[]
   requesters: { id: string; name: string }[]
   departments: { id: string; name: string }[]
-  demandTypes: { id: string; name: string }[]
+  demandTypes: { id: string; name: string; color?: string }[]
   defaultValues?: Partial<DemandFormData> & { durationMinutes?: number }
   onSubmit: (data: DemandFormData) => void
   loading?: boolean
@@ -50,6 +59,7 @@ export function DemandForm({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<DemandFormData>({
     resolver: zodResolver(demandSchema),
@@ -59,8 +69,8 @@ export function DemandForm({
       description: defaultValues?.description ?? "",
       durationHours: defaultValues?.durationMinutes != null ? Math.floor(defaultValues.durationMinutes / 60) : 0,
       durationMinutes: defaultValues?.durationMinutes != null ? defaultValues.durationMinutes % 60 : 0,
-      priority: defaultValues?.priority ?? "medium",
-      status: defaultValues?.status ?? "open",
+      priority: defaultValues?.priority ?? "MEDIUM",
+      status: defaultValues?.status ?? "PENDING",
       notes: defaultValues?.notes ?? "",
       analystId: defaultValues?.analystId ?? "",
       clientId: defaultValues?.clientId ?? "",
@@ -69,6 +79,21 @@ export function DemandForm({
       demandTypeId: defaultValues?.demandTypeId ?? "",
     },
   })
+
+  const analystOptions = analysts.map((a) => ({ value: a.id, label: a.name, color: a.color }))
+  const clientOptions = clients.map((c) => ({ value: c.id, label: c.name, color: c.color }))
+  const requesterOptions = [
+    { value: "", label: "Nenhum" },
+    ...requesters.map((r) => ({ value: r.id, label: r.name })),
+  ]
+  const departmentOptions = [
+    { value: "", label: "Nenhum" },
+    ...departments.map((d) => ({ value: d.id, label: d.name })),
+  ]
+  const demandTypeOptions = [
+    { value: "", label: "Nenhum" },
+    ...demandTypes.map((dt) => ({ value: dt.id, label: dt.name, color: dt.color })),
+  ]
 
   return (
     <DialogContent className="sm:max-w-2xl">
@@ -81,12 +106,12 @@ export function DemandForm({
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[70vh] overflow-y-auto pr-1">
+      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[75vh] overflow-y-auto overflow-x-hidden pr-1">
         <Field>
           <Label>
             Nome da Demanda <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
@@ -94,11 +119,11 @@ export function DemandForm({
           <Label>
             Descrição <span className="text-destructive">*</span>
           </Label>
-          <Textarea rows={3} {...register("description")} />
+          <Textarea rows={3} aria-invalid={!!errors.description} {...register("description")} />
           <FieldError errors={[errors.description]} />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>
               Data <span className="text-destructive">*</span>
@@ -110,6 +135,7 @@ export function DemandForm({
                 <DatePicker
                   value={field.value ? new Date(field.value + "T00:00:00") : undefined}
                   onChange={(date) => field.onChange(date ? date.toISOString().split("T")[0] : "")}
+                  aria-invalid={!!errors.date}
                 />
               )}
             />
@@ -122,25 +148,27 @@ export function DemandForm({
                 type="number"
                 min="0"
                 placeholder="00"
-                className="w-20 text-center"
+                className="w-full min-w-0 text-center"
+                aria-invalid={!!(errors.durationHours ?? errors.durationMinutes)}
                 {...register("durationHours", { valueAsNumber: true })}
               />
-              <span className="text-muted-foreground">:</span>
+              <span className="text-muted-foreground shrink-0">:</span>
               <Input
                 type="number"
                 min="0"
                 max="59"
                 placeholder="00"
-                className="w-20 text-center"
+                className="w-full min-w-0 text-center"
+                aria-invalid={!!(errors.durationHours ?? errors.durationMinutes)}
                 {...register("durationMinutes", { valueAsNumber: true })}
               />
             </div>
-            <FieldDescription>Informe o tempo em horas e minutos</FieldDescription>
-            <FieldError errors={[errors.durationHours || errors.durationMinutes]} />
+            <FieldDescription>Informe valores inteiros de horas (HH) e minutos (MM)</FieldDescription>
+            <FieldError errors={[errors.durationHours ?? errors.durationMinutes]} />
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>
               Analista <span className="text-destructive">*</span>
@@ -149,18 +177,14 @@ export function DemandForm({
               name="analystId"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {analysts.map((a) => (
-                      <SelectItem key={a.id} value={a.id}>
-                        {a.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={analystOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                  aria-invalid={!!errors.analystId}
+                />
               )}
             />
             <FieldError errors={[errors.analystId]} />
@@ -173,44 +197,34 @@ export function DemandForm({
               name="clientId"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {clients.map((c) => (
-                      <SelectItem key={c.id} value={c.id}>
-                        {c.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={clientOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                  aria-invalid={!!errors.clientId}
+                />
               )}
             />
             <FieldError errors={[errors.clientId]} />
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <Field>
             <Label>Solicitante</Label>
             <Controller
               name="requesterId"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Nenhum</SelectItem>
-                    {requesters.map((r) => (
-                      <SelectItem key={r.id} value={r.id}>
-                        {r.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={requesterOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                />
               )}
             />
             <FieldError errors={[errors.requesterId]} />
@@ -221,136 +235,69 @@ export function DemandForm({
               name="departmentId"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Nenhum</SelectItem>
-                    {departments.map((d) => (
-                      <SelectItem key={d.id} value={d.id}>
-                        {d.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={departmentOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                />
               )}
             />
             <FieldError errors={[errors.departmentId]} />
           </Field>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
           <Field>
             <Label>Tipo de Demanda</Label>
             <Controller
               name="demandTypeId"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="">Nenhum</SelectItem>
-                    {demandTypes.map((dt) => (
-                      <SelectItem key={dt.id} value={dt.id}>
-                        {dt.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={demandTypeOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                />
               )}
             />
             <FieldError errors={[errors.demandTypeId]} />
           </Field>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>Prioridade</Label>
             <Controller
               name="priority"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="low">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-green-500" />
-                        Baixa
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="medium">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-amber-500" />
-                        Média
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="high">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-orange-500" />
-                        Alta
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="urgent">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-red-500" />
-                        Urgente
-                      </span>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={priorityOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                  aria-invalid={!!errors.priority}
+                />
               )}
             />
             <FieldError errors={[errors.priority]} />
           </Field>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
           <Field>
             <Label>Status</Label>
             <Controller
               name="status"
               control={control}
               render={({ field }) => (
-                <Select value={field.value ?? ""} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="open">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-slate-400" />
-                        Aberta
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="in_progress">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-blue-500" />
-                        Em Andamento
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="resolved">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-green-500" />
-                        Resolvida
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="closed">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-slate-400" />
-                        Fechada
-                      </span>
-                    </SelectItem>
-                    <SelectItem value="cancelled">
-                      <span className="flex items-center gap-2">
-                        <span className="size-2 rounded-full bg-red-500" />
-                        Cancelada
-                      </span>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <ColoredSelect
+                  options={statusOptions}
+                  value={field.value ?? ""}
+                  onValueChange={field.onChange}
+                  placeholder="Selecione"
+                  className="w-full"
+                  aria-invalid={!!errors.status}
+                />
               )}
             />
             <FieldError errors={[errors.status]} />
@@ -364,7 +311,7 @@ export function DemandForm({
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>
             Cancelar
           </DialogClose>
           <Button type="submit" disabled={loading}>

@@ -10,8 +10,6 @@ export type Requester = {
   name: string
   email: string
   phone: string
-  clientId: string
-  clientName: string
   status: "active" | "inactive"
 }
 
@@ -31,7 +29,6 @@ export function getRequesterColumns({
     },
     { accessorKey: "email", header: "Email" },
     { accessorKey: "phone", header: "Telefone" },
-    { accessorKey: "clientName", header: "Cliente" },
     {
       accessorKey: "status",
       header: "Status",

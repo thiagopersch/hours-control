@@ -17,39 +17,39 @@ export type Demand = {
   department?: { id: string; name: string }
   demandType?: { id: string; name: string }
   durationMinutes: number
-  priority: "low" | "medium" | "high" | "urgent"
-  status: "open" | "in_progress" | "resolved" | "closed" | "cancelled"
+  priority: "LOW" | "MEDIUM" | "HIGH" | "URGENT"
+  status: "PENDING" | "IN_PROGRESS" | "COMPLETED" | "CANCELLED" | "ON_HOLD"
   notes: string
 }
 
 const priorityVariants: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  low: "secondary",
-  medium: "default",
-  high: "outline",
-  urgent: "destructive",
+  LOW: "secondary",
+  MEDIUM: "default",
+  HIGH: "outline",
+  URGENT: "destructive",
 }
 
 const priorityLabels: Record<string, string> = {
-  low: "Baixa",
-  medium: "Média",
-  high: "Alta",
-  urgent: "Urgente",
+  LOW: "Baixa",
+  MEDIUM: "Média",
+  HIGH: "Alta",
+  URGENT: "Urgente",
 }
 
 const statusVariants: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  open: "secondary",
-  in_progress: "default",
-  resolved: "outline",
-  closed: "secondary",
-  cancelled: "destructive",
+  PENDING: "secondary",
+  IN_PROGRESS: "default",
+  COMPLETED: "outline",
+  ON_HOLD: "secondary",
+  CANCELLED: "destructive",
 }
 
 const statusLabels: Record<string, string> = {
-  open: "Aberta",
-  in_progress: "Em Andamento",
-  resolved: "Resolvida",
-  closed: "Fechada",
-  cancelled: "Cancelada",
+  PENDING: "Pendente",
+  IN_PROGRESS: "Em Andamento",
+  COMPLETED: "Concluída",
+  ON_HOLD: "Em Espera",
+  CANCELLED: "Cancelada",
 }
 
 type DemandColumnsProps = {

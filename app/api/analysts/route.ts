@@ -24,7 +24,28 @@ export async function GET(request: NextRequest) {
     orderBy: { name: "asc" },
   })
 
-  return NextResponse.json(analysts)
+  const withActiveClientsCount = await Promise.all(
+    analysts.map(async (analyst) => {
+      const demandClients = await prisma.demand.findMany({
+        where: { analystId: analyst.id, deletedAt: null },
+        select: { clientId: true },
+        distinct: ["clientId"],
+      })
+      const clientIds = demandClients.map((d) => d.clientId)
+      const activeClientsCount = clientIds.length
+        ? await prisma.client.count({
+            where: {
+              id: { in: clientIds },
+              deletedAt: null,
+              contracts: { some: { status: "ACTIVE", deletedAt: null } },
+            },
+          })
+        : 0
+      return { ...analyst, activeClientsCount }
+    })
+  )
+
+  return NextResponse.json(withActiveClientsCount)
 }
 
 export async function POST(request: NextRequest) {

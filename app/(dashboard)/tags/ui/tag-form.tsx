@@ -30,6 +30,8 @@ export function TagForm({
   const {
     register,
     handleSubmit,
+    watch,
+    reset,
     formState: { errors },
   } = useForm<TagFormData>({
     resolver: zodResolver(tagSchema),
@@ -39,6 +41,8 @@ export function TagForm({
       ...defaultValues,
     },
   })
+
+  const colorValue = watch("color")
 
   return (
     <DialogContent className="sm:max-w-md">
@@ -54,18 +58,21 @@ export function TagForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
         <Field>
           <Label>Cor</Label>
-          <Input type="color" {...register("color")} className="h-8 p-1" />
+          <div className="flex items-center gap-2">
+            <Input type="color" aria-invalid={!!errors.color} {...register("color")} className="h-8 w-[30%] p-1" />
+            <span className="text-sm text-muted-foreground">{colorValue}</span>
+          </div>
           <FieldError errors={[errors.color]} />
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

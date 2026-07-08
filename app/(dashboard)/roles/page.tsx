@@ -32,9 +32,9 @@ export default function RolesPage() {
     if (!permissions) return []
     return permissions.map((group: any) => ({
       resource: group.resource,
-      permissions: (group.permissions || group.rolePermissions?.map((rp: any) => rp.permission) || []).map((p: any) => ({
+      permissions: (group.permissions ?? []).map((p: any) => ({
         id: p.id,
-        name: p.name,
+        action: p.action,
         description: p.description ?? "",
       })),
     }))

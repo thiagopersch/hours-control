@@ -1,8 +1,26 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
+import { z } from "zod"
 
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { logger } from "@/lib/logger"
+
+const demandUpdateSchema = z.object({
+  date: z.string().min(1).optional(),
+  analystId: z.string().min(1).optional(),
+  clientId: z.string().min(1).optional(),
+  requesterId: z.string().optional().nullable(),
+  departmentId: z.string().optional().nullable(),
+  demandTypeId: z.string().optional().nullable(),
+  name: z.string().min(1).optional(),
+  description: z.string().min(1).optional(),
+  durationMinutes: z.number().min(0).optional(),
+  priority: z.enum(["LOW", "MEDIUM", "HIGH", "URGENT"]).optional(),
+  status: z.enum(["PENDING", "IN_PROGRESS", "COMPLETED", "CANCELLED", "ON_HOLD"]).optional(),
+  notes: z.string().optional().nullable(),
+  tags: z.array(z.string()).optional(),
+})
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   const session = await auth()
@@ -59,38 +77,52 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   if (!existing) return NextResponse.json({ error: "Demand not found" }, { status: 404 })
 
   const body = await request.json()
-  const { tags, ...demandData } = body
-
-  if (tags) {
-    await prisma.demandTag.deleteMany({ where: { demandId: id } })
+  const parsed = demandUpdateSchema.safeParse(body)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "Dados inválidos", issues: parsed.error.flatten() },
+      { status: 400 }
+    )
   }
+  const { tags, ...demandData } = parsed.data
 
-  const demand = await prisma.demand.update({
-    where: { id },
-    data: {
-      ...demandData,
-      date: demandData.date ? new Date(demandData.date) : undefined,
-      startTime: demandData.startTime ? new Date(demandData.startTime) : undefined,
-      endTime: demandData.endTime ? new Date(demandData.endTime) : undefined,
-      demandTags: tags
-        ? {
-            create: tags.map((tagId: string) => ({
-              tag: { connect: { id: tagId } },
-            })),
-          }
-        : undefined,
-    },
-    include: {
-      analyst: { select: { id: true, name: true, color: true } },
-      client: { select: { id: true, name: true } },
-      requester: { select: { id: true, name: true } },
-      department: { select: { id: true, name: true } },
-      demandType: { select: { id: true, name: true, color: true } },
-      demandTags: { include: { tag: true } },
-    },
-  })
+  try {
+    if (tags) {
+      await prisma.demandTag.deleteMany({ where: { demandId: id } })
+    }
 
-  return NextResponse.json(demand)
+    const demand = await prisma.demand.update({
+      where: { id },
+      data: {
+        ...demandData,
+        requesterId: demandData.requesterId === undefined ? undefined : demandData.requesterId || null,
+        departmentId: demandData.departmentId === undefined ? undefined : demandData.departmentId || null,
+        demandTypeId: demandData.demandTypeId === undefined ? undefined : demandData.demandTypeId || null,
+        notes: demandData.notes === undefined ? undefined : demandData.notes || null,
+        date: demandData.date ? new Date(demandData.date) : undefined,
+        demandTags: tags
+          ? {
+              create: tags.map((tagId: string) => ({
+                tag: { connect: { id: tagId } },
+              })),
+            }
+          : undefined,
+      },
+      include: {
+        analyst: { select: { id: true, name: true, color: true } },
+        client: { select: { id: true, name: true } },
+        requester: { select: { id: true, name: true } },
+        department: { select: { id: true, name: true } },
+        demandType: { select: { id: true, name: true, color: true } },
+        demandTags: { include: { tag: true } },
+      },
+    })
+
+    return NextResponse.json(demand)
+  } catch (error) {
+    logger.error({ error }, "Failed to update demand")
+    return NextResponse.json({ error: "Erro ao atualizar demanda" }, { status: 500 })
+  }
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {

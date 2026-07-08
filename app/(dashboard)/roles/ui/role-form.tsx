@@ -20,7 +20,14 @@ import { roleSchema, type RoleFormData } from "../schema/role-schema"
 
 type PermissionGroup = {
   resource: string
-  permissions: { id: string; name: string; description: string }[]
+  permissions: { id: string; action: string; description: string }[]
+}
+
+const actionLabels: Record<string, string> = {
+  create: "Criar",
+  read: "Visualizar",
+  update: "Editar",
+  delete: "Excluir",
 }
 
 type RoleFormProps = {
@@ -41,6 +48,7 @@ export function RoleForm({
     handleSubmit,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<RoleFormData>({
     resolver: zodResolver(roleSchema),
@@ -66,13 +74,13 @@ export function RoleForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
         <Field>
           <Label>Descrição</Label>
-          <Textarea {...register("description")} />
+          <Textarea aria-invalid={!!errors.description} {...register("description")} />
           <FieldError errors={[errors.description]} />
         </Field>
 
@@ -85,8 +93,8 @@ export function RoleForm({
                   {group.resource}
                 </p>
                 <div className="flex flex-wrap gap-3 pl-2">
-                  {group.permissions.map((perm) => {
-                    const watchedIds = watch("permissionIds") || []
+                  {(group.permissions ?? []).map((perm) => {
+                    const watchedIds = watch("permissionIds") ?? []
                     return (
                       <label
                         key={perm.id}
@@ -102,7 +110,7 @@ export function RoleForm({
                             }
                           }}
                         />
-                        <span>{perm.name}</span>
+                        <span>{actionLabels[perm.action] ?? perm.action}</span>
                       </label>
                     )
                   })}
@@ -114,7 +122,7 @@ export function RoleForm({
         </FieldSet>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

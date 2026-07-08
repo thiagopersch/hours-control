@@ -21,10 +21,10 @@ import { ColoredSelect } from "@/components/ui/colored-select"
 import { contractSchema, type ContractFormData } from "../schema/contract-schema"
 
 const statusOptions = [
-  { value: "active", label: "Ativo", color: "#22c55e" },
-  { value: "inactive", label: "Inativo", color: "#6b7280" },
-  { value: "completed", label: "Concluído", color: "#3b82f6" },
-  { value: "cancelled", label: "Cancelado", color: "#ef4444" },
+  { value: "ACTIVE", label: "Ativo", color: "#22c55e" },
+  { value: "SUSPENDED", label: "Suspenso", color: "#eab308" },
+  { value: "EXPIRED", label: "Expirado", color: "#6b7280" },
+  { value: "CANCELLED", label: "Cancelado", color: "#ef4444" },
 ]
 
 type ContractFormProps = {
@@ -44,6 +44,7 @@ export function ContractForm({
     register,
     handleSubmit,
     control,
+    reset,
     formState: { errors },
   } = useForm<ContractFormData>({
     resolver: zodResolver(contractSchema),
@@ -52,7 +53,7 @@ export function ContractForm({
       contractedHours: 0,
       hourlyRate: 0,
       notes: "",
-      status: "active",
+      status: "ACTIVE",
       ...defaultValues,
     },
   })
@@ -86,20 +87,23 @@ export function ContractForm({
                 value={field.value}
                 onValueChange={field.onChange}
                 placeholder="Selecione um cliente"
+                aria-invalid={!!errors.clientId}
               />
             )}
           />
           <FieldError errors={[errors.clientId]} />
         </Field>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>
               Horas Contratadas <span className="text-destructive">*</span>
             </Label>
             <Input
               type="number"
-              step="0.5"
+              step="1"
+              min="1"
+              aria-invalid={!!errors.contractedHours}
               {...register("contractedHours", { valueAsNumber: true })}
             />
             <FieldError errors={[errors.contractedHours]} />
@@ -111,13 +115,14 @@ export function ContractForm({
             <Input
               type="number"
               step="0.01"
+              aria-invalid={!!errors.hourlyRate}
               {...register("hourlyRate", { valueAsNumber: true })}
             />
             <FieldError errors={[errors.hourlyRate]} />
           </Field>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <Field>
             <Label>
               Data Início <span className="text-destructive">*</span>
@@ -130,6 +135,7 @@ export function ContractForm({
                   value={field.value}
                   onChange={(date) => field.onChange(date)}
                   placeholder="Selecione a data"
+                  aria-invalid={!!errors.startDate}
                 />
               )}
             />
@@ -147,6 +153,7 @@ export function ContractForm({
                   value={field.value}
                   onChange={(date) => field.onChange(date)}
                   placeholder="Selecione a data"
+                  aria-invalid={!!errors.endDate}
                 />
               )}
             />
@@ -165,6 +172,7 @@ export function ContractForm({
                 value={field.value}
                 onValueChange={field.onChange}
                 placeholder="Selecione o status"
+                aria-invalid={!!errors.status}
               />
             )}
           />
@@ -178,7 +186,7 @@ export function ContractForm({
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

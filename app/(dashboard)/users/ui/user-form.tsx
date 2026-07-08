@@ -1,11 +1,17 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { NativeSelect } from "@/components/ui/native-select"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
   DialogContent,
@@ -36,8 +42,10 @@ export function UserForm({
   const {
     register,
     handleSubmit,
+    control,
     watch,
     setValue,
+    reset,
     formState: { errors },
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
@@ -65,7 +73,7 @@ export function UserForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
@@ -73,7 +81,7 @@ export function UserForm({
           <Label>
             Email <span className="text-destructive">*</span>
           </Label>
-          <Input type="email" {...register("email")} />
+          <Input type="email" aria-invalid={!!errors.email} {...register("email")} />
           <FieldError errors={[errors.email]} />
         </Field>
 
@@ -82,7 +90,7 @@ export function UserForm({
             <Label>
               Senha <span className="text-destructive">*</span>
             </Label>
-            <Input type="password" {...register("password")} />
+            <Input type="password" aria-invalid={!!errors.password} {...register("password")} />
             <FieldError errors={[errors.password]} />
           </Field>
         )}
@@ -90,17 +98,39 @@ export function UserForm({
         {isEditing && (
           <Field>
             <Label>Nova Senha (deixe em branco para manter)</Label>
-            <Input type="password" {...register("password")} />
+            <Input type="password" aria-invalid={!!errors.password} {...register("password")} />
             <FieldError errors={[errors.password]} />
           </Field>
         )}
 
         <Field>
           <Label>Status</Label>
-          <NativeSelect {...register("status")}>
-            <option value="active">Ativo</option>
-            <option value="inactive">Inativo</option>
-          </NativeSelect>
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value}
+                onValueChange={(val) => {
+                  if (val !== null) field.onChange(val)
+                }}
+              >
+                <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
+                  <SelectValue placeholder="Selecione..." />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="active">
+                    <span className="inline-block size-2 rounded-full bg-green-500" />
+                    Ativo
+                  </SelectItem>
+                  <SelectItem value="inactive">
+                    <span className="inline-block size-2 rounded-full bg-gray-400" />
+                    Inativo
+                  </SelectItem>
+                </SelectContent>
+              </Select>
+            )}
+          />
           <FieldError errors={[errors.status]} />
         </Field>
 
@@ -108,7 +138,7 @@ export function UserForm({
           <Label>Perfis</Label>
           <div className="flex flex-wrap gap-2 mt-1">
             {roles.map((role) => {
-              const watchedRoleIds = watch("roleIds") || []
+              const watchedRoleIds = watch("roleIds") ?? []
               return (
                 <label
                   key={role.id}
@@ -133,7 +163,7 @@ export function UserForm({
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

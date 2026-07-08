@@ -8,8 +8,6 @@ export type Department = {
   id: string
   name: string
   description: string
-  clientId: string
-  clientName: string
 }
 
 type DepartmentColumnsProps = {
@@ -28,7 +26,6 @@ export function getDepartmentColumns({
       header: "Descrição",
       cell: ({ row }) => row.original.description || "-",
     },
-    { accessorKey: "clientName", header: "Cliente" },
     {
       id: "actions",
       cell: ({ row }) => (

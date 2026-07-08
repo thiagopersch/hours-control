@@ -31,6 +31,7 @@ export function DepartmentForm({
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<DepartmentFormData>({
     resolver: zodResolver(departmentSchema),
@@ -55,18 +56,18 @@ export function DepartmentForm({
           <Label>
             Nome <span className="text-destructive">*</span>
           </Label>
-          <Input {...register("name")} />
+          <Input aria-invalid={!!errors.name} {...register("name")} />
           <FieldError errors={[errors.name]} />
         </Field>
 
         <Field>
           <Label>Descrição</Label>
-          <Textarea {...register("description")} />
+          <Textarea aria-invalid={!!errors.description} {...register("description")} />
           <FieldError errors={[errors.description]} />
         </Field>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" />}>Cancelar</DialogClose>
+          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
           <Button type="submit" disabled={loading}>
             {loading ? "Salvando..." : "Salvar"}
           </Button>

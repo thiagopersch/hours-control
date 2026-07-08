@@ -15,7 +15,9 @@ export type Analyst = {
   hourlyRate: number
   team: string
   color: string
+  level: number
   status: "active" | "inactive"
+  activeClientsCount?: number
 }
 
 type AnalystColumnsProps = {
@@ -53,6 +55,16 @@ export function getAnalystColumns({
       accessorKey: "hourlyRate",
       header: "Valor Hora",
       cell: ({ row }) => formatCurrency(row.original.hourlyRate),
+    },
+    {
+      accessorKey: "level",
+      header: "Nível",
+      cell: ({ row }) => <Badge variant="outline">Nível {row.original.level}</Badge>,
+    },
+    {
+      id: "activeClientsCount",
+      accessorFn: (row) => row.activeClientsCount ?? 0,
+      header: "Clientes Ativos",
     },
     {
       accessorKey: "status",

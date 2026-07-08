@@ -3,6 +3,8 @@ import type { NextRequest } from "next/server"
 
 import { auth } from "@/lib/auth"
 import { logger } from "@/lib/logger"
+import { navItems } from "@/lib/nav-items"
+import { hasPermission } from "@/lib/permissions"
 
 const publicRoutes = ["/login", "/register", "/forgot-password", "/api/auth"]
 const apiRoutes = ["/api/"]
@@ -34,11 +36,22 @@ async function proxyHandler(request: NextRequest) {
   }
 
   logRequest(request, session.user.id)
-  const response = NextResponse.next()
-  response.headers.set("X-User-Id", session.user.id)
   const orgId = (session.user as any).organizationId
-  if (orgId) response.headers.set("X-Organization-Id", orgId)
-  return response
+  const permissions = (session.user as any).permissions as string[] | undefined
+
+  if (!isApiRoute) {
+    const matchedItem = navItems.find(
+      (item) => pathname === item.href || pathname.startsWith(item.href + "/")
+    )
+    if (matchedItem?.resource && !hasPermission(permissions, matchedItem.resource)) {
+      return NextResponse.redirect(new URL("/dashboard", request.url))
+    }
+  }
+
+  const requestHeaders = new Headers(request.headers)
+  requestHeaders.set("X-User-Id", session.user.id)
+  if (orgId) requestHeaders.set("X-Organization-Id", orgId)
+  return NextResponse.next({ request: { headers: requestHeaders } })
 }
 
 function logRequest(request: NextRequest, userId?: string) {

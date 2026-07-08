@@ -11,7 +11,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="w-64 p-0">
+        <SheetContent side="left" className="w-[80%] p-0">
           <Sidebar variant="mobile" onNavClick={() => setMobileOpen(false)} />
         </SheetContent>
       </Sheet>

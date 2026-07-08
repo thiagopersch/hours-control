@@ -83,16 +83,18 @@ export function useCreate(key: string) {
 export function useUpdate(key: string) {
   return useSWRMutation(
     key,
-    (url: string, { arg }: { arg: Record<string, unknown> }) =>
-      apiMutate(url, { method: "PUT", body: JSON.stringify(arg) })
+    (url: string, { arg }: { arg: Record<string, unknown> & { id: string } }) => {
+      const { id, ...rest } = arg
+      return apiMutate(`${url}/${id}`, { method: "PUT", body: JSON.stringify(rest) })
+    }
   )
 }
 
 export function useRemove(key: string) {
   return useSWRMutation(
     key,
-    (url: string, { arg }: { arg: Record<string, unknown> }) =>
-      apiMutate(url, { method: "DELETE", body: JSON.stringify(arg) })
+    (url: string, { arg }: { arg: { id: string } }) =>
+      apiMutate(`${url}/${arg.id}`, { method: "DELETE" })
   )
 }
 

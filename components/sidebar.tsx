@@ -1,21 +1,9 @@
 'use client';
 
-import {
-  BarChart3,
-  Bell,
-  Building2,
-  CalendarClock,
-  ChevronLeft,
-  ChevronRight,
-  FileText,
-  LayoutDashboard,
-  Tags,
-  UserCircle,
-  Users,
-  Users2,
-} from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Separator } from '@/components/ui/separator';
@@ -25,30 +13,9 @@ import {
   TooltipTrigger,
 } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
+import { hasPermission } from '@/lib/permissions';
+import { navItems } from '@/lib/nav-items';
 import { useState } from 'react';
-
-type NavItem = {
-  href: string;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  resource: string | null;
-};
-
-const navItems: NavItem[] = [
-  { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, resource: null },
-  { href: '/demands', label: 'Demandas', icon: CalendarClock, resource: 'demand' },
-  { href: '/clients', label: 'Clientes', icon: Building2, resource: 'client' },
-  { href: '/contracts', label: 'Contratos', icon: FileText, resource: 'contract' },
-  { href: '/analysts', label: 'Analistas', icon: Users, resource: 'analyst' },
-  { href: '/requesters', label: 'Solicitantes', icon: UserCircle, resource: 'requester' },
-  { href: '/departments', label: 'Setores', icon: Building2, resource: 'department' },
-  { href: '/demand-types', label: 'Tipos de Demanda', icon: Tags, resource: 'demand_type' },
-  { href: '/tags', label: 'Tags', icon: Tags, resource: 'tag' },
-  { href: '/users', label: 'Usuários', icon: Users2, resource: 'user' },
-  { href: '/roles', label: 'Perfis', icon: UserCircle, resource: 'role' },
-  { href: '/reports', label: 'Relatórios', icon: BarChart3, resource: 'report' },
-  { href: '/notifications', label: 'Notificações', icon: Bell, resource: 'notification' },
-];
 
 type SidebarProps = {
   onNavClick?: () => void;
@@ -58,15 +25,19 @@ type SidebarProps = {
 export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
+  const { data: session } = useSession();
+  const permissions = (session?.user as any)?.permissions as string[] | undefined;
 
   const isCollapsed = variant === 'mobile' ? false : collapsed;
 
-  const filteredItems = navItems
+  const filteredItems = navItems.filter(
+    (item) => !item.resource || hasPermission(permissions, item.resource)
+  );
 
   return (
     <aside
       className={cn(
-        'relative flex flex-col border-r bg-card transition-all duration-300',
+        'relative flex flex-col border-r bg-card transition-[width] duration-300 ease-in-out',
         isCollapsed ? 'w-16' : 'w-64',
       )}
     >

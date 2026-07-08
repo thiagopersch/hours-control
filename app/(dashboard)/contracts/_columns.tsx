@@ -15,7 +15,27 @@ export type Contract = {
   startDate: string
   endDate: string
   notes: string
-  status: "active" | "inactive" | "completed" | "cancelled"
+  status: "ACTIVE" | "SUSPENDED" | "EXPIRED" | "CANCELLED"
+  balanceMinutes?: number
+}
+
+function formatBalance(minutes: number): string {
+  const sign = minutes < 0 ? "-" : ""
+  const abs = Math.abs(minutes)
+  const h = Math.floor(abs / 60)
+  const m = abs % 60
+  return `${sign}${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
+}
+
+function getDueDateStatus(endDate: string): { label: string; className: string } {
+  const days = Math.ceil((new Date(endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
+  if (days <= 3) {
+    return { label: `${days}d`, className: "bg-red-500/15 text-red-600 dark:text-red-400" }
+  }
+  if (days <= 7) {
+    return { label: `${days}d`, className: "bg-amber-500/15 text-amber-600 dark:text-amber-400" }
+  }
+  return { label: `${days}d`, className: "bg-green-500/15 text-green-600 dark:text-green-400" }
 }
 
 type ContractColumnsProps = {
@@ -53,24 +73,49 @@ export function getContractColumns({
       cell: ({ row }) => formatDate(row.original.endDate),
     },
     {
+      id: "balanceMinutes",
+      accessorFn: (row) => row.balanceMinutes ?? 0,
+      header: "Saldo de Horas",
+      cell: ({ row }) => {
+        const balance = row.original.balanceMinutes ?? 0
+        return (
+          <span className={balance < 0 ? "text-destructive font-medium" : "font-medium"}>
+            {formatBalance(balance)}
+          </span>
+        )
+      },
+    },
+    {
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
         const variantMap: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-          active: "default",
-          inactive: "secondary",
-          completed: "outline",
-          cancelled: "destructive",
+          ACTIVE: "default",
+          SUSPENDED: "secondary",
+          EXPIRED: "outline",
+          CANCELLED: "destructive",
         }
         const labelMap: Record<string, string> = {
-          active: "Ativo",
-          inactive: "Inativo",
-          completed: "Concluído",
-          cancelled: "Cancelado",
+          ACTIVE: "Ativo",
+          SUSPENDED: "Suspenso",
+          EXPIRED: "Expirado",
+          CANCELLED: "Cancelado",
         }
         return (
           <Badge variant={variantMap[row.original.status] || "secondary"}>
             {labelMap[row.original.status] || row.original.status}
+          </Badge>
+        )
+      },
+    },
+    {
+      id: "dueStatus",
+      header: "Vencimento",
+      cell: ({ row }) => {
+        const { label, className } = getDueDateStatus(row.original.endDate)
+        return (
+          <Badge variant="outline" className={className}>
+            {label}
           </Badge>
         )
       },

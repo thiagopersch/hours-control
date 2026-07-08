@@ -11,7 +11,7 @@ import { ClientForm } from "./ui/client-form"
 import { ClientDeleteDialog } from "./ui/client-delete-dialog"
 import type { ClientFormData } from "./schema/client-schema"
 import { useClients, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-clients"
-import { FetchError } from "@/lib/fetcher"
+import { FetchError, apiMutate } from "@/lib/fetcher"
 
 export default function ClientsPage() {
   const { data: clients, error, isLoading } = useClients()
@@ -56,14 +56,22 @@ export default function ClientsPage() {
     }
   }
 
-  function handleToggleFavorite(client: Client) {
-    // optimistic favorite toggle would call an API endpoint
+  async function handleToggleFavorite(client: Client) {
+    try {
+      await apiMutate(`/api/clients/${client.id}`, {
+        method: "PATCH",
+        body: JSON.stringify({ favorite: !client.favorite }),
+      })
+      mutateList("/api/clients")
+    } catch (err) {
+      toast.error(err instanceof FetchError ? err.message : "Erro ao atualizar favorito")
+    }
   }
 
   const columns = getClientColumns({
     onEdit: handleEdit,
     onDelete: setDeletingClient,
-    onToggleFavorite: handleToggleFavorite,
+    onToggleFavorite: (client) => { void handleToggleFavorite(client) },
   })
 
   if (isLoading) return <div className="flex items-center justify-center py-20"><span className="text-muted-foreground">Carregando...</span></div>
