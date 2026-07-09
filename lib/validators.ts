@@ -69,6 +69,12 @@ export function documentSchema(required: boolean) {
   return required ? requiredDocument() : optionalDocument()
 }
 
+export function dateSchema() {
+  return z.date({
+    error: (issue) => (issue.input === undefined ? "Campo obrigatório" : "Data inválida"),
+  })
+}
+
 export const passwordRequirements = {
   minLength: 8,
   maxLength: 32,

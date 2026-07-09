@@ -3,6 +3,7 @@ import jsPDF from "jspdf"
 import { toast } from "sonner"
 import { apiMutate } from "@/lib/fetcher"
 import { mutateList } from "@/hooks/use-api"
+import { formatDate } from "@/lib/utils"
 
 const statusLabels: Record<string, string> = {
   PENDING: "Pendente",
@@ -23,7 +24,7 @@ function toRows(demands: any[]) {
     Demanda: d.name,
     Cliente: d.client?.name ?? "-",
     Analista: d.analyst?.name ?? "-",
-    Data: d.date ? new Date(d.date).toLocaleDateString("pt-BR") : "-",
+    Data: d.date ? formatDate(d.date) : "-",
     Duracao: d.durationMinutes != null ? formatDuration(d.durationMinutes) : "-",
     Status: statusLabels[d.status] ?? d.status,
   }))

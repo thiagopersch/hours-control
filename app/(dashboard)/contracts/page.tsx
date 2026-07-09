@@ -9,6 +9,7 @@ import { Plus } from "lucide-react"
 import { toast } from "sonner"
 import { useClients } from "@/hooks/use-api"
 import { FetchError } from "@/lib/fetcher"
+import { parseDateOnly } from "@/lib/utils"
 import { Contract, getContractColumns } from "./_columns"
 import { ContractForm } from "./ui/contract-form"
 import type { ContractFormData } from "./schema/contract-schema"
@@ -85,8 +86,8 @@ export default function ContractsPage() {
               clientId: modal.editing.clientId,
               contractedHours: modal.editing.contractedHours,
               hourlyRate: modal.editing.hourlyRate,
-              startDate: new Date(modal.editing.startDate),
-              endDate: new Date(modal.editing.endDate),
+              startDate: parseDateOnly(modal.editing.startDate),
+              endDate: parseDateOnly(modal.editing.endDate),
               notes: modal.editing.notes,
               status: modal.editing.status,
             } : undefined}

@@ -2,6 +2,7 @@
 
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -70,7 +71,9 @@ export function DemandForm({
     mode: "onBlur",
     reValidateMode: "onChange",
     defaultValues: {
-      date: defaultValues?.date ?? new Date().toISOString().split("T")[0],
+      date: defaultValues?.date
+        ? defaultValues.date.split("T")[0]
+        : format(new Date(), "yyyy-MM-dd"),
       name: defaultValues?.name ?? "",
       description: defaultValues?.description ?? "",
       durationHours: defaultValues?.durationMinutes != null ? Math.floor(defaultValues.durationMinutes / 60) : 0,
@@ -134,7 +137,7 @@ export function DemandForm({
               render={({ field }) => (
                 <DatePicker
                   value={field.value ? new Date(field.value + "T00:00:00") : undefined}
-                  onChange={(date) => field.onChange(date ? date.toISOString().split("T")[0] : "")}
+                  onChange={(date) => field.onChange(date ? format(date, "yyyy-MM-dd") : "")}
                   onBlur={field.onBlur}
                   disabled={loading}
                   aria-invalid={!!errors.date}

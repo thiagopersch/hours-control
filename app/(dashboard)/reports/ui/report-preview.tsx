@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/table"
 import { Badge } from "@/components/ui/badge"
 import { BarChart3, Loader2, AlertCircle } from "lucide-react"
+import { formatDate } from "@/lib/utils"
 
 const statusLabels: Record<string, string> = {
   PENDING: "Pendente",
@@ -92,7 +93,7 @@ export function ReportPreview({ applied, isLoading, error, demands }: ReportPrev
                     <TableCell className="font-medium max-w-[200px] truncate">{d.name}</TableCell>
                     <TableCell>{d.client?.name ?? "-"}</TableCell>
                     <TableCell>{d.analyst?.name ?? "-"}</TableCell>
-                    <TableCell>{d.date ? new Date(d.date).toLocaleDateString("pt-BR") : "-"}</TableCell>
+                    <TableCell>{d.date ? formatDate(d.date) : "-"}</TableCell>
                     <TableCell>{d.durationMinutes != null ? formatDuration(d.durationMinutes) : "-"}</TableCell>
                     <TableCell>
                       <Badge variant={statusVariants[d.status] ?? "outline"}>

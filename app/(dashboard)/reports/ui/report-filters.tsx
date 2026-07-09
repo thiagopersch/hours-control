@@ -1,5 +1,6 @@
 "use client"
 
+import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -69,7 +70,7 @@ export function ReportFiltersCard({
           <Label>Data Início</Label>
           <DatePicker
             value={filters.startDate ? new Date(filters.startDate + "T00:00:00") : undefined}
-            onChange={(date) => setFilter("startDate", date ? date.toISOString().split("T")[0] : "")}
+            onChange={(date) => setFilter("startDate", date ? format(date, "yyyy-MM-dd") : "")}
             placeholder="Selecione a data"
           />
         </Field>
@@ -78,7 +79,7 @@ export function ReportFiltersCard({
           <Label>Data Fim</Label>
           <DatePicker
             value={filters.endDate ? new Date(filters.endDate + "T00:00:00") : undefined}
-            onChange={(date) => setFilter("endDate", date ? date.toISOString().split("T")[0] : "")}
+            onChange={(date) => setFilter("endDate", date ? format(date, "yyyy-MM-dd") : "")}
             placeholder="Selecione a data"
           />
         </Field>
