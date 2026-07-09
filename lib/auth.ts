@@ -24,6 +24,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: { email },
             include: {
               organization: true,
+              analyst: { select: { id: true } },
               userRoles: {
                 include: {
                   role: {
@@ -62,6 +63,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             organizationSlug: user.organization.slug,
             mustChangePassword: user.mustChangePassword,
             isSuperAdmin: user.isSuperAdmin,
+            analystId: user.analyst?.id ?? null,
             permissions: permissions.map((p: typeof permissions[0]) => `${p.resource}:${p.action}`),
           }
         } catch (error) {
@@ -80,6 +82,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.permissions = (user as any).permissions
         token.mustChangePassword = (user as any).mustChangePassword
         token.isSuperAdmin = (user as any).isSuperAdmin
+        token.analystId = (user as any).analystId
       }
       if (trigger === "update" && session && "mustChangePassword" in session) {
         token.mustChangePassword = session.mustChangePassword
@@ -94,6 +97,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         ;(session.user as any).permissions = token.permissions
         ;(session.user as any).mustChangePassword = token.mustChangePassword
         ;(session.user as any).isSuperAdmin = token.isSuperAdmin
+        ;(session.user as any).analystId = token.analystId
       }
       return session
     },

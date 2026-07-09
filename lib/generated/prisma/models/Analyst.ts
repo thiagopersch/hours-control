@@ -52,6 +52,7 @@ export type AnalystMinAggregateOutputType = {
   updatedAt: Date | null
   deletedAt: Date | null
   organizationId: string | null
+  userId: string | null
 }
 
 export type AnalystMaxAggregateOutputType = {
@@ -70,6 +71,7 @@ export type AnalystMaxAggregateOutputType = {
   updatedAt: Date | null
   deletedAt: Date | null
   organizationId: string | null
+  userId: string | null
 }
 
 export type AnalystCountAggregateOutputType = {
@@ -88,6 +90,7 @@ export type AnalystCountAggregateOutputType = {
   updatedAt: number
   deletedAt: number
   organizationId: number
+  userId: number
   _all: number
 }
 
@@ -118,6 +121,7 @@ export type AnalystMinAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  userId?: true
 }
 
 export type AnalystMaxAggregateInputType = {
@@ -136,6 +140,7 @@ export type AnalystMaxAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  userId?: true
 }
 
 export type AnalystCountAggregateInputType = {
@@ -154,6 +159,7 @@ export type AnalystCountAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  userId?: true
   _all?: true
 }
 
@@ -259,6 +265,7 @@ export type AnalystGroupByOutputType = {
   updatedAt: Date
   deletedAt: Date | null
   organizationId: string
+  userId: string | null
   _count: AnalystCountAggregateOutputType | null
   _avg: AnalystAvgAggregateOutputType | null
   _sum: AnalystSumAggregateOutputType | null
@@ -300,7 +307,9 @@ export type AnalystWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Analyst"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Analyst"> | string
+  userId?: Prisma.StringNullableFilter<"Analyst"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }
 
@@ -320,12 +329,15 @@ export type AnalystOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   demands?: Prisma.DemandOrderByRelationAggregateInput
 }
 
 export type AnalystWhereUniqueInput = Prisma.AtLeast<{
   id?: string
+  userId?: string
   AND?: Prisma.AnalystWhereInput | Prisma.AnalystWhereInput[]
   OR?: Prisma.AnalystWhereInput[]
   NOT?: Prisma.AnalystWhereInput | Prisma.AnalystWhereInput[]
@@ -344,8 +356,9 @@ export type AnalystWhereUniqueInput = Prisma.AtLeast<{
   deletedAt?: Prisma.DateTimeNullableFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Analyst"> | string
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
-}, "id">
+}, "id" | "userId">
 
 export type AnalystOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
@@ -363,6 +376,7 @@ export type AnalystOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  userId?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AnalystCountOrderByAggregateInput
   _avg?: Prisma.AnalystAvgOrderByAggregateInput
   _max?: Prisma.AnalystMaxOrderByAggregateInput
@@ -389,6 +403,7 @@ export type AnalystScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Analyst"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringWithAggregatesFilter<"Analyst"> | string
+  userId?: Prisma.StringNullableWithAggregatesFilter<"Analyst"> | string | null
 }
 
 export type AnalystCreateInput = {
@@ -407,6 +422,7 @@ export type AnalystCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  user?: Prisma.UserCreateNestedOneWithoutAnalystInput
   demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
 }
 
@@ -426,6 +442,7 @@ export type AnalystUncheckedCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  userId?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
 }
 
@@ -445,6 +462,7 @@ export type AnalystUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
   demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
 }
 
@@ -464,6 +482,7 @@ export type AnalystUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
 }
 
@@ -483,6 +502,7 @@ export type AnalystCreateManyInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  userId?: string | null
 }
 
 export type AnalystUpdateManyMutationInput = {
@@ -518,6 +538,7 @@ export type AnalystUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnalystListRelationFilter = {
@@ -528,6 +549,11 @@ export type AnalystListRelationFilter = {
 
 export type AnalystOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
+}
+
+export type AnalystNullableScalarRelationFilter = {
+  is?: Prisma.AnalystWhereInput | null
+  isNot?: Prisma.AnalystWhereInput | null
 }
 
 export type AnalystCountOrderByAggregateInput = {
@@ -546,6 +572,7 @@ export type AnalystCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type AnalystAvgOrderByAggregateInput = {
@@ -569,6 +596,7 @@ export type AnalystMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type AnalystMinOrderByAggregateInput = {
@@ -587,6 +615,7 @@ export type AnalystMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
 }
 
 export type AnalystSumOrderByAggregateInput = {
@@ -641,6 +670,38 @@ export type AnalystUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
 }
 
+export type AnalystCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutUserInput
+  connect?: Prisma.AnalystWhereUniqueInput
+}
+
+export type AnalystUncheckedCreateNestedOneWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutUserInput
+  connect?: Prisma.AnalystWhereUniqueInput
+}
+
+export type AnalystUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutUserInput
+  upsert?: Prisma.AnalystUpsertWithoutUserInput
+  disconnect?: Prisma.AnalystWhereInput | boolean
+  delete?: Prisma.AnalystWhereInput | boolean
+  connect?: Prisma.AnalystWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AnalystUpdateToOneWithWhereWithoutUserInput, Prisma.AnalystUpdateWithoutUserInput>, Prisma.AnalystUncheckedUpdateWithoutUserInput>
+}
+
+export type AnalystUncheckedUpdateOneWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutUserInput
+  upsert?: Prisma.AnalystUpsertWithoutUserInput
+  disconnect?: Prisma.AnalystWhereInput | boolean
+  delete?: Prisma.AnalystWhereInput | boolean
+  connect?: Prisma.AnalystWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.AnalystUpdateToOneWithWhereWithoutUserInput, Prisma.AnalystUpdateWithoutUserInput>, Prisma.AnalystUncheckedUpdateWithoutUserInput>
+}
+
 export type NullableFloatFieldUpdateOperationsInput = {
   set?: number | null
   increment?: number
@@ -686,6 +747,7 @@ export type AnalystCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  user?: Prisma.UserCreateNestedOneWithoutAnalystInput
   demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
 }
 
@@ -704,6 +766,7 @@ export type AnalystUncheckedCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  userId?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
 }
 
@@ -752,6 +815,99 @@ export type AnalystScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Analyst"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Analyst"> | string
+  userId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+}
+
+export type AnalystCreateWithoutUserInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystUncheckedCreateWithoutUserInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystCreateOrConnectWithoutUserInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+}
+
+export type AnalystUpsertWithoutUserInput = {
+  update: Prisma.XOR<Prisma.AnalystUpdateWithoutUserInput, Prisma.AnalystUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+  where?: Prisma.AnalystWhereInput
+}
+
+export type AnalystUpdateToOneWithWhereWithoutUserInput = {
+  where?: Prisma.AnalystWhereInput
+  data: Prisma.XOR<Prisma.AnalystUpdateWithoutUserInput, Prisma.AnalystUncheckedUpdateWithoutUserInput>
+}
+
+export type AnalystUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
 }
 
 export type AnalystCreateWithoutDemandsInput = {
@@ -770,6 +926,7 @@ export type AnalystCreateWithoutDemandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  user?: Prisma.UserCreateNestedOneWithoutAnalystInput
 }
 
 export type AnalystUncheckedCreateWithoutDemandsInput = {
@@ -788,6 +945,7 @@ export type AnalystUncheckedCreateWithoutDemandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  userId?: string | null
 }
 
 export type AnalystCreateOrConnectWithoutDemandsInput = {
@@ -822,6 +980,7 @@ export type AnalystUpdateWithoutDemandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
 }
 
 export type AnalystUncheckedUpdateWithoutDemandsInput = {
@@ -840,6 +999,7 @@ export type AnalystUncheckedUpdateWithoutDemandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnalystCreateManyOrganizationInput = {
@@ -857,6 +1017,7 @@ export type AnalystCreateManyOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  userId?: string | null
 }
 
 export type AnalystUpdateWithoutOrganizationInput = {
@@ -874,6 +1035,7 @@ export type AnalystUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
   demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
 }
 
@@ -892,6 +1054,7 @@ export type AnalystUncheckedUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
 }
 
@@ -910,6 +1073,7 @@ export type AnalystUncheckedUpdateManyWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -959,7 +1123,9 @@ export type AnalystSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  userId?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
   demands?: boolean | Prisma.Analyst$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.AnalystCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["analyst"]>
@@ -980,7 +1146,9 @@ export type AnalystSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  userId?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
 }, ExtArgs["result"]["analyst"]>
 
 export type AnalystSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -999,7 +1167,9 @@ export type AnalystSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  userId?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
 }, ExtArgs["result"]["analyst"]>
 
 export type AnalystSelectScalar = {
@@ -1018,25 +1188,30 @@ export type AnalystSelectScalar = {
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  userId?: boolean
 }
 
-export type AnalystOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "role" | "hourlyRate" | "status" | "photo" | "team" | "color" | "level" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId", ExtArgs["result"]["analyst"]>
+export type AnalystOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "role" | "hourlyRate" | "status" | "photo" | "team" | "color" | "level" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId" | "userId", ExtArgs["result"]["analyst"]>
 export type AnalystInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
   demands?: boolean | Prisma.Analyst$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.AnalystCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AnalystIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
 }
 export type AnalystIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
 }
 
 export type $AnalystPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Analyst"
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs> | null
     demands: Prisma.$DemandPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1055,6 +1230,7 @@ export type $AnalystPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     updatedAt: Date
     deletedAt: Date | null
     organizationId: string
+    userId: string | null
   }, ExtArgs["result"]["analyst"]>
   composites: {}
 }
@@ -1450,6 +1626,7 @@ readonly fields: AnalystFieldRefs;
 export interface Prisma__AnalystClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  user<T extends Prisma.Analyst$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   demands<T extends Prisma.Analyst$demandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$demandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1495,6 +1672,7 @@ export interface AnalystFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Analyst", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Analyst", 'DateTime'>
   readonly organizationId: Prisma.FieldRef<"Analyst", 'String'>
+  readonly userId: Prisma.FieldRef<"Analyst", 'String'>
 }
     
 
@@ -1893,6 +2071,25 @@ export type AnalystDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
    * Limit how many Analysts to delete.
    */
   limit?: number
+}
+
+/**
+ * Analyst.user
+ */
+export type Analyst$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

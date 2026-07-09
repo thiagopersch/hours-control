@@ -3,6 +3,7 @@ import type { NextRequest } from "next/server"
 
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { getDemandAnalystScope } from "@/lib/scope"
 
 export async function GET(request: NextRequest) {
   const session = await auth()
@@ -28,6 +29,9 @@ export async function GET(request: NextRequest) {
   if (Object.keys(dateFilter).length) whereBase.date = dateFilter
   if (clientId) whereBase.clientId = clientId
   if (analystId) whereBase.analystId = analystId
+
+  const scopedAnalystId = getDemandAnalystScope(session)
+  if (scopedAnalystId) whereBase.analystId = scopedAnalystId
 
   const [
     totalDemands,
@@ -81,6 +85,14 @@ export async function GET(request: NextRequest) {
       if (endDate) {
         params.push(new Date(endDate).toISOString())
         sql += ` AND date <= $${params.length}::timestamp`
+      }
+      if (clientId) {
+        params.push(clientId)
+        sql += ` AND "client_id" = $${params.length}`
+      }
+      if (whereBase.analystId) {
+        params.push(whereBase.analystId as string)
+        sql += ` AND "analyst_id" = $${params.length}`
       }
       sql += ` GROUP BY year, month ORDER BY year ASC, month ASC`
       return prisma.$queryRawUnsafe<

@@ -5,6 +5,7 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { logger } from "@/lib/logger"
+import { getDemandAnalystScope } from "@/lib/scope"
 
 const demandUpdateSchema = z.object({
   date: z.string().min(1).optional(),
@@ -30,8 +31,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
   if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
 
   const { id } = await params
+  const scopedAnalystId = getDemandAnalystScope(session)
   const demand = await prisma.demand.findFirst({
-    where: { id, client: { organizationId }, deletedAt: null },
+    where: {
+      id,
+      client: { organizationId },
+      deletedAt: null,
+      ...(scopedAnalystId ? { analystId: scopedAnalystId } : {}),
+    },
     include: {
       analyst: { select: { id: true, name: true, email: true, color: true } },
       client: { select: { id: true, name: true, document: true } },
@@ -70,8 +77,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
   if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
 
   const { id } = await params
+  const scopedAnalystId = getDemandAnalystScope(session)
   const existing = await prisma.demand.findFirst({
-    where: { id, client: { organizationId }, deletedAt: null },
+    where: {
+      id,
+      client: { organizationId },
+      deletedAt: null,
+      ...(scopedAnalystId ? { analystId: scopedAnalystId } : {}),
+    },
   })
 
   if (!existing) return NextResponse.json({ error: "Demand not found" }, { status: 404 })
@@ -83,6 +96,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       { error: "Dados inválidos", issues: parsed.error.flatten() },
       { status: 400 }
     )
+  }
+
+  if (
+    scopedAnalystId &&
+    parsed.data.analystId &&
+    parsed.data.analystId !== scopedAnalystId
+  ) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
   }
   const { tags, ...demandData } = parsed.data
 
@@ -133,8 +154,14 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
 
   const { id } = await params
+  const scopedAnalystId = getDemandAnalystScope(session)
   const existing = await prisma.demand.findFirst({
-    where: { id, client: { organizationId }, deletedAt: null },
+    where: {
+      id,
+      client: { organizationId },
+      deletedAt: null,
+      ...(scopedAnalystId ? { analystId: scopedAnalystId } : {}),
+    },
   })
 
   if (!existing) return NextResponse.json({ error: "Demand not found" }, { status: 404 })

@@ -8,17 +8,24 @@ import { Plus, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Spinner } from "@/components/ui/spinner"
-import type { Demand } from "./_columns"
-import { getDemandColumns } from "./_columns"
+import { getDemandColumns, type Demand } from "./_columns"
 import { DemandForm } from "./ui/demand-form"
 import { DemandDeleteDialog } from "./ui/demand-delete-dialog"
-import type { DemandFormData } from "./schema/demand-schema"
 import { useDemands, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-demands"
 import useSWR from "swr"
+import { useSession } from "next-auth/react"
 import { fetcher, FetchError } from "@/lib/fetcher"
 import { useCrudModal } from "@/hooks/use-crud-modal"
+import { hasPermission } from "@/lib/permissions"
 
 export default function DemandsPage() {
+  const { data: session } = useSession()
+  const isSuperAdmin = (session?.user as any)?.isSuperAdmin as boolean | undefined
+  const permissions = (session?.user as any)?.permissions as string[] | undefined
+  const ownAnalystId = (session?.user as any)?.analystId as string | null | undefined
+  const canViewAllAnalysts = !!isSuperAdmin || hasPermission(permissions, "analyst")
+  const restrictedAnalystId = !canViewAllAnalysts && ownAnalystId ? ownAnalystId : undefined
+
   const { data: demandsResponse, error, isLoading } = useDemands()
   const demands = demandsResponse?.data ?? []
   const { data: analysts } = useSWR<any[]>("/api/analysts", fetcher)
@@ -95,6 +102,7 @@ export default function DemandsPage() {
             requesters={requesters ?? []}
             departments={departments ?? []}
             demandTypes={demandTypes ?? []}
+            lockedAnalystId={restrictedAnalystId}
             defaultValues={
               modal.editing
                 ? {

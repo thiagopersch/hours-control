@@ -5,6 +5,7 @@ import { z } from "zod"
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { logger } from "@/lib/logger"
+import { getDemandAnalystScope } from "@/lib/scope"
 
 const demandCreateSchema = z.object({
   date: z.string().min(1),
@@ -47,6 +48,9 @@ export async function GET(request: NextRequest) {
   }
   if (clientId) where.clientId = clientId
   if (analystId) where.analystId = analystId
+
+  const scopedAnalystId = getDemandAnalystScope(session)
+  if (scopedAnalystId) where.analystId = scopedAnalystId
   if (status) where.status = status
   if (priority) where.priority = priority
   if (search) where.name = { contains: search, mode: "insensitive" }
@@ -100,6 +104,11 @@ export async function POST(request: NextRequest) {
     )
   }
   const { tags, ...demandData } = parsed.data
+
+  const scopedAnalystId = getDemandAnalystScope(session)
+  if (scopedAnalystId && demandData.analystId !== scopedAnalystId) {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  }
 
   try {
     const client = await prisma.client.findFirst({

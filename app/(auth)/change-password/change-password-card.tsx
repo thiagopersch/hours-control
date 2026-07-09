@@ -62,7 +62,10 @@ export function ChangePasswordCard() {
       await update({ mustChangePassword: false })
 
       const permissions = (session?.user as any)?.permissions as string[] | undefined
-      const target = flattenNavItems().find((item) => !item.resource || hasPermission(permissions, item.resource))?.href ?? "/dashboard"
+      const target =
+        flattenNavItems().find(
+          (item) => item.resource && hasPermission(permissions, item.resource)
+        )?.href ?? "/dashboard"
 
       toast.success("Senha alterada com sucesso!")
       router.push(target)

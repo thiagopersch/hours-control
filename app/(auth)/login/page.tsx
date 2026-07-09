@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { signIn } from 'next-auth/react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useState } from 'react';
-import { useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,7 @@ import {
   FieldLabel,
 } from '@/components/ui/field';
 import { Input } from '@/components/ui/input';
+import { PasswordInput } from '@/components/ui/password-input';
 import { Spinner } from '@/components/ui/spinner';
 import { toast } from 'sonner';
 
@@ -58,10 +59,13 @@ function LoginForm() {
 
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors },
   } = useForm<LoginValues>({
     resolver: zodResolver(loginSchema),
+    mode: 'onBlur',
+    reValidateMode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
@@ -79,7 +83,7 @@ function LoginForm() {
       });
 
       if (result?.error) {
-        toast.error('Credenciais inválidas');
+        toast.error('Credenciais inválidas', { position: 'bottom-center' });
         return;
       }
 
@@ -87,7 +91,7 @@ function LoginForm() {
       router.push(callbackUrl);
       router.refresh();
     } catch {
-      toast.error('Erro ao fazer login');
+      toast.error('Erro ao fazer login', { position: 'bottom-center' });
     } finally {
       setIsLoading(false);
     }
@@ -109,6 +113,7 @@ function LoginForm() {
                 placeholder="seu@email.com"
                 autoComplete="email"
                 disabled={isLoading}
+                aria-invalid={!!errors.email}
                 {...register('email')}
               />
               {errors.email && <FieldError>{errors.email.message}</FieldError>}
@@ -118,12 +123,19 @@ function LoginForm() {
           <Field>
             <FieldLabel>Senha</FieldLabel>
             <FieldContent>
-              <Input
-                type="password"
-                placeholder="••••••••"
-                autoComplete="current-password"
-                disabled={isLoading}
-                {...register('password')}
+              <Controller
+                name="password"
+                control={control}
+                render={({ field }) => (
+                  <PasswordInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    onBlur={field.onBlur}
+                    placeholder="••••••••"
+                    disabled={isLoading}
+                    aria-invalid={!!errors.password}
+                  />
+                )}
               />
               {errors.password && (
                 <FieldError>{errors.password.message}</FieldError>

@@ -2445,7 +2445,8 @@ export const AnalystScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  userId: 'userId'
 } as const
 
 export type AnalystScalarFieldEnum = (typeof AnalystScalarFieldEnum)[keyof typeof AnalystScalarFieldEnum]

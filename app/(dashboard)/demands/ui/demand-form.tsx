@@ -42,6 +42,8 @@ type DemandFormProps = {
   departments: { id: string; name: string }[]
   demandTypes: { id: string; name: string; color?: string }[]
   defaultValues?: Partial<DemandFormData> & { durationMinutes?: number }
+  /** When set, the analyst field is locked to this id (analysts restricted to their own demands) */
+  lockedAnalystId?: string
   onSubmit: (data: DemandFormData) => void
   loading?: boolean
 }
@@ -53,6 +55,7 @@ export function DemandForm({
   departments,
   demandTypes,
   defaultValues,
+  lockedAnalystId,
   onSubmit,
   loading = false,
 }: DemandFormProps) {
@@ -75,7 +78,7 @@ export function DemandForm({
       priority: defaultValues?.priority ?? "MEDIUM",
       status: defaultValues?.status ?? "PENDING",
       notes: defaultValues?.notes ?? "",
-      analystId: defaultValues?.analystId ?? "",
+      analystId: defaultValues?.analystId ?? lockedAnalystId ?? "",
       clientId: defaultValues?.clientId ?? "",
       requesterId: defaultValues?.requesterId ?? "",
       departmentId: defaultValues?.departmentId ?? "",
@@ -183,7 +186,7 @@ export function DemandForm({
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
                   onBlur={field.onBlur}
-                  disabled={loading}
+                  disabled={loading || !!lockedAnalystId}
                   placeholder="Selecione"
                   className="w-full"
                   aria-invalid={!!errors.analystId}
