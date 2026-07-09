@@ -15,6 +15,7 @@ import { useDepartments, useCreate, useUpdate, mutateList } from "@/hooks/use-ap
 import { FetchError } from "@/lib/fetcher"
 import useSWRMutation from "swr/mutation"
 import { apiMutate } from "@/lib/fetcher"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function DepartmentsPage() {
   const { data: departments, error, isLoading } = useDepartments()
@@ -25,23 +26,21 @@ export default function DepartmentsPage() {
     (url: string, { arg }: { arg: { id: string } }) =>
       apiMutate(`${url}/${arg.id}`, { method: "DELETE" })
   )
-  const [editing, setEditing] = useState<Department | null>(null)
+  const modal = useCrudModal<Department>()
   const [deleting, setDeleting] = useState<Department | null>(null)
-  const [open, setOpen] = useState(false)
 
   const mutating = isCreating || isUpdating || isDeleting
 
   async function handleSubmit(data: DepartmentFormData) {
     try {
-      if (editing) {
-        await updateItem({ ...data, id: editing.id } as any)
+      if (modal.editing) {
+        await updateItem({ ...data, id: modal.editing.id } as any)
         toast.success("Setor atualizado com sucesso!")
       } else {
         await createItem(data as any)
         toast.success("Setor criado com sucesso!")
       }
-      setOpen(false)
-      setEditing(null)
+      modal.close()
       await mutateList("/api/departments")
     } catch (err) {
       if (err instanceof FetchError) {
@@ -68,15 +67,10 @@ export default function DepartmentsPage() {
     }
   }
 
-  function handleEdit(dept: Department) {
-    setEditing(dept)
-    setOpen(true)
-  }
-
   if (isLoading) return <div className="flex items-center justify-center py-20"><Spinner className="size-8" /></div>
   if (error) return <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive">Erro ao carregar: {error.message}</div>
 
-  const columns = getDepartmentColumns({ onEdit: handleEdit, onDelete: setDeleting })
+  const columns = getDepartmentColumns({ onEdit: modal.openEdit, onDelete: setDeleting })
 
   return (
     <div className="space-y-6">
@@ -85,11 +79,11 @@ export default function DepartmentsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Setores</h1>
           <p className="text-muted-foreground">Gerencie os setores dos clientes</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Novo Setor</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Novo Setor</Button>} />
           <DepartmentForm
-            key={editing?.id ?? "new"}
-            defaultValues={editing ?? undefined}
+            key={modal.sessionId}
+            defaultValues={modal.editing ?? undefined}
             onSubmit={handleSubmit}
             loading={mutating}
           />

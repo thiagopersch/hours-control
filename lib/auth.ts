@@ -60,6 +60,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             image: user.image,
             organizationId: user.organizationId,
             organizationSlug: user.organization.slug,
+            mustChangePassword: user.mustChangePassword,
+            isSuperAdmin: user.isSuperAdmin,
             permissions: permissions.map((p: typeof permissions[0]) => `${p.resource}:${p.action}`),
           }
         } catch (error) {
@@ -70,12 +72,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
   callbacks: {
-    async jwt({ token, user }) {
+    async jwt({ token, user, trigger, session }) {
       if (user) {
         token.id = user.id
         token.organizationId = (user as any).organizationId
         token.organizationSlug = (user as any).organizationSlug
         token.permissions = (user as any).permissions
+        token.mustChangePassword = (user as any).mustChangePassword
+        token.isSuperAdmin = (user as any).isSuperAdmin
+      }
+      if (trigger === "update" && session && "mustChangePassword" in session) {
+        token.mustChangePassword = session.mustChangePassword
       }
       return token
     },
@@ -85,6 +92,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         ;(session.user as any).organizationId = token.organizationId
         ;(session.user as any).organizationSlug = token.organizationSlug
         ;(session.user as any).permissions = token.permissions
+        ;(session.user as any).mustChangePassword = token.mustChangePassword
+        ;(session.user as any).isSuperAdmin = token.isSuperAdmin
       }
       return session
     },

@@ -7,6 +7,7 @@ import { Field } from "@/components/ui/field"
 import { Separator } from "@/components/ui/separator"
 import { DatePicker } from "@/components/ui/date-picker"
 import { ColoredSelect } from "@/components/ui/colored-select"
+import { Spinner } from "@/components/ui/spinner"
 import {
   FileDown,
   FileSpreadsheet,
@@ -34,6 +35,8 @@ type ReportFiltersCardProps = {
   onGenerate: () => void
   onExport: (format: "xlsx" | "csv" | "json" | "pdf") => void
   onPrint: () => void
+  generating?: boolean
+  canPrint?: boolean
 }
 
 export function ReportFiltersCard({
@@ -44,6 +47,8 @@ export function ReportFiltersCard({
   onGenerate,
   onExport,
   onPrint,
+  generating = false,
+  canPrint = false,
 }: ReportFiltersCardProps) {
   const clientOptions = [
     { value: "", label: "Todos" },
@@ -108,9 +113,9 @@ export function ReportFiltersCard({
           />
         </Field>
 
-        <Button className="w-full" onClick={onGenerate}>
-          <Search className="size-4" />
-          Gerar Relatório
+        <Button className="w-full" onClick={onGenerate} disabled={generating}>
+          {generating ? <Spinner /> : <Search className="size-4" />}
+          {generating ? "Gerando..." : "Gerar Relatório"}
         </Button>
 
         <Separator />
@@ -137,7 +142,7 @@ export function ReportFiltersCard({
           </div>
         </div>
 
-        <Button className="w-full" variant="secondary" onClick={onPrint}>
+        <Button className="w-full" variant="secondary" onClick={onPrint} disabled={!canPrint}>
           <Printer className="size-4" />
           Imprimir
         </Button>

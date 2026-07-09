@@ -16,6 +16,7 @@ import type { UserFormData } from "./schema/user-schema"
 import { useUsers, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-users"
 import useSWR from "swr"
 import { fetcher, FetchError } from "@/lib/fetcher"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function UsersPage() {
   const { data: users, error, isLoading } = useUsers()
@@ -25,22 +26,20 @@ export default function UsersPage() {
   const { trigger: updateUser, isMutating: updating } = useUpdate("/api/users")
   const { trigger: removeUser, isMutating: removing } = useRemove("/api/users")
 
-  const [editing, setEditing] = useState<User | null>(null)
+  const modal = useCrudModal<User>()
   const [deleting, setDeleting] = useState<User | null>(null)
-  const [open, setOpen] = useState(false)
 
   async function handleSubmit(data: Record<string, unknown>) {
     try {
-      if (editing) {
-        await updateUser({ id: editing.id, ...data } as any)
+      if (modal.editing) {
+        await updateUser({ id: modal.editing.id, ...data } as any)
         toast.success("Usuário atualizado com sucesso!")
       } else {
         await createUser(data as any)
         toast.success("Usuário criado com sucesso!")
       }
       await mutateList("/api/users")
-      setOpen(false)
-      setEditing(null)
+      modal.close()
     } catch (err) {
       toast.error(err instanceof FetchError ? err.message : "Erro ao salvar usuário")
     }
@@ -58,12 +57,7 @@ export default function UsersPage() {
     }
   }
 
-  function handleEdit(user: User) {
-    setEditing(user)
-    setOpen(true)
-  }
-
-  const columns = getUserColumns({ onEdit: handleEdit, onDelete: setDeleting })
+  const columns = getUserColumns({ onEdit: modal.openEdit, onDelete: setDeleting })
   const loading = creating || updating || removing
 
   if (error) {
@@ -83,18 +77,20 @@ export default function UsersPage() {
           <h1 className="text-2xl font-bold tracking-tight">Usuários</h1>
           <p className="text-muted-foreground">Gerencie os usuários do sistema</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Novo Usuário</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Novo Usuário</Button>} />
           <UserForm
-            key={editing?.id ?? "new"}
+            key={modal.sessionId}
             roles={roles ?? []}
             defaultValues={
-              editing
+              modal.editing
                 ? {
-                    name: editing.name,
-                    email: editing.email,
-                    status: editing.status,
-                    roleIds: editing.userRoles?.map((ur) => ur.role.id) ?? [],
+                    id: modal.editing.id,
+                    name: modal.editing.name,
+                    email: modal.editing.email,
+                    status: modal.editing.status,
+                    mustChangePassword: modal.editing.mustChangePassword,
+                    roleIds: modal.editing.userRoles?.map((ur) => ur.role.id) ?? [],
                   }
                 : undefined
             }

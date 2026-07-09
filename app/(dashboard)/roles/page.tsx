@@ -15,6 +15,7 @@ import { RoleDeleteDialog } from "./ui/role-delete-dialog"
 import type { RoleFormData } from "./schema/role-schema"
 import { useRoles, usePermissions, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-roles"
 import { FetchError } from "@/lib/fetcher"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function RolesPage() {
   const { data: roles, error, isLoading } = useRoles()
@@ -24,9 +25,8 @@ export default function RolesPage() {
   const { trigger: updateRole, isMutating: updating } = useUpdate("/api/roles")
   const { trigger: removeRole, isMutating: removing } = useRemove("/api/roles")
 
-  const [editing, setEditing] = useState<Role | null>(null)
+  const modal = useCrudModal<Role>()
   const [deleting, setDeleting] = useState<Role | null>(null)
-  const [open, setOpen] = useState(false)
 
   const permissionGroups = useMemo(() => {
     if (!permissions) return []
@@ -42,23 +42,22 @@ export default function RolesPage() {
 
   async function handleSubmit(data: Record<string, unknown>) {
     try {
-      if (editing) {
-        await updateRole({ id: editing.id, ...data } as any)
+      if (modal.editing) {
+        await updateRole({ id: modal.editing.id, ...data } as any)
         toast.success("Perfil atualizado com sucesso!")
       } else {
         await createRole(data as any)
         toast.success("Perfil criado com sucesso!")
       }
       await mutateList("/api/roles")
-      setOpen(false)
-      setEditing(null)
+      modal.close()
     } catch (err) {
       toast.error(err instanceof FetchError ? err.message : "Erro ao salvar perfil")
     }
   }
 
   async function handleDelete() {
-    if (!deleting || deleting.isSystem) return
+    if (!deleting) return
     try {
       await removeRole({ id: deleting.id } as any)
       await mutateList("/api/roles")
@@ -69,13 +68,7 @@ export default function RolesPage() {
     }
   }
 
-  function handleEdit(role: Role) {
-    if (role.isSystem) return
-    setEditing(role)
-    setOpen(true)
-  }
-
-  const columns = getRoleColumns({ onEdit: handleEdit, onDelete: setDeleting })
+  const columns = getRoleColumns({ onEdit: modal.openEdit, onDelete: setDeleting })
   const loading = creating || updating || removing
 
   if (error) {
@@ -95,17 +88,17 @@ export default function RolesPage() {
           <h1 className="text-2xl font-bold tracking-tight">Perfis</h1>
           <p className="text-muted-foreground">Gerencie os perfis de acesso do sistema</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Novo Perfil</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Novo Perfil</Button>} />
           <RoleForm
-            key={editing?.id ?? "new"}
+            key={modal.sessionId}
             permissionGroups={permissionGroups}
             defaultValues={
-              editing
+              modal.editing
                 ? {
-                    name: editing.name,
-                    description: editing.description,
-                    permissionIds: ((editing as any).rolePermissions ?? []).map(
+                    name: modal.editing.name,
+                    description: modal.editing.description,
+                    permissionIds: ((modal.editing as any).rolePermissions ?? []).map(
                       (rp: any) => rp.permission?.id ?? rp.permissionId
                     ),
                   }

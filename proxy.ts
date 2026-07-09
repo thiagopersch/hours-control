@@ -3,8 +3,10 @@ import type { NextRequest } from "next/server"
 
 import { auth } from "@/lib/auth"
 import { logger } from "@/lib/logger"
-import { navItems } from "@/lib/nav-items"
+import { flattenNavItems } from "@/lib/nav-items"
 import { hasPermission } from "@/lib/permissions"
+
+const flatNavItems = flattenNavItems()
 
 const publicRoutes = ["/login", "/register", "/forgot-password", "/api/auth"]
 const apiRoutes = ["/api/"]
@@ -38,11 +40,20 @@ async function proxyHandler(request: NextRequest) {
   logRequest(request, session.user.id)
   const orgId = (session.user as any).organizationId
   const permissions = (session.user as any).permissions as string[] | undefined
+  const mustChangePassword = (session.user as any).mustChangePassword as boolean | undefined
+  const isSuperAdmin = (session.user as any).isSuperAdmin as boolean | undefined
 
   if (!isApiRoute) {
-    const matchedItem = navItems.find(
+    if (mustChangePassword && pathname !== "/change-password") {
+      return NextResponse.redirect(new URL("/change-password", request.url))
+    }
+
+    const matchedItem = flatNavItems.find(
       (item) => pathname === item.href || pathname.startsWith(item.href + "/")
     )
+    if (matchedItem?.superAdminOnly && !isSuperAdmin) {
+      return NextResponse.redirect(new URL("/dashboard", request.url))
+    }
     if (matchedItem?.resource && !hasPermission(permissions, matchedItem.resource)) {
       return NextResponse.redirect(new URL("/dashboard", request.url))
     }

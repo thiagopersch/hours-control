@@ -119,6 +119,8 @@ export const UserScalarFieldEnum = {
   passwordHash: 'passwordHash',
   phone: 'phone',
   status: 'status',
+  mustChangePassword: 'mustChangePassword',
+  isSuperAdmin: 'isSuperAdmin',
   lastLoginAt: 'lastLoginAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',

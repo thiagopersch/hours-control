@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
+import { Spinner } from "@/components/ui/spinner"
 import {
   DialogContent,
   DialogHeader,
@@ -26,15 +27,17 @@ type DepartmentFormProps = {
 export function DepartmentForm({
   defaultValues,
   onSubmit,
-  loading,
+  loading = false,
 }: DepartmentFormProps) {
+  const isEditing = !!defaultValues
   const {
     register,
     handleSubmit,
-    reset,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<DepartmentFormData>({
     resolver: zodResolver(departmentSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
       description: "",
@@ -42,16 +45,19 @@ export function DepartmentForm({
     },
   })
 
+  const canSubmit = isValid && (!isEditing || isDirty)
+
   return (
     <DialogContent className="sm:max-w-lg">
       <DialogHeader>
         <DialogTitle>
-          {defaultValues?.name ? "Editar Setor" : "Novo Setor"}
+          {isEditing ? "Editar Setor" : "Novo Setor"}
         </DialogTitle>
         <DialogDescription>Preencha os dados do setor abaixo.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <fieldset disabled={loading} className="contents">
         <Field>
           <Label>
             Nome <span className="text-destructive">*</span>
@@ -65,10 +71,12 @@ export function DepartmentForm({
           <Textarea aria-invalid={!!errors.description} {...register("description")} />
           <FieldError errors={[errors.description]} />
         </Field>
+        </fieldset>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
-          <Button type="submit" disabled={loading}>
+          <DialogClose render={<Button variant="outline" disabled={loading} />}>Cancelar</DialogClose>
+          <Button type="submit" disabled={loading || !canSubmit}>
+            {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>

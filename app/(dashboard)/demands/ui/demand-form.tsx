@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { DatePicker } from "@/components/ui/date-picker"
 import { ColoredSelect } from "@/components/ui/colored-select"
+import { Spinner } from "@/components/ui/spinner"
 import {
   DialogContent,
   DialogHeader,
@@ -53,16 +54,18 @@ export function DemandForm({
   demandTypes,
   defaultValues,
   onSubmit,
-  loading,
+  loading = false,
 }: DemandFormProps) {
+  const isEditing = !!defaultValues
   const {
     register,
     handleSubmit,
     control,
-    reset,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<DemandFormData>({
     resolver: zodResolver(demandSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: {
       date: defaultValues?.date ?? new Date().toISOString().split("T")[0],
       name: defaultValues?.name ?? "",
@@ -82,31 +85,25 @@ export function DemandForm({
 
   const analystOptions = analysts.map((a) => ({ value: a.id, label: a.name, color: a.color }))
   const clientOptions = clients.map((c) => ({ value: c.id, label: c.name, color: c.color }))
-  const requesterOptions = [
-    { value: "", label: "Nenhum" },
-    ...requesters.map((r) => ({ value: r.id, label: r.name })),
-  ]
-  const departmentOptions = [
-    { value: "", label: "Nenhum" },
-    ...departments.map((d) => ({ value: d.id, label: d.name })),
-  ]
-  const demandTypeOptions = [
-    { value: "", label: "Nenhum" },
-    ...demandTypes.map((dt) => ({ value: dt.id, label: dt.name, color: dt.color })),
-  ]
+  const requesterOptions = requesters.map((r) => ({ value: r.id, label: r.name }))
+  const departmentOptions = departments.map((d) => ({ value: d.id, label: d.name }))
+  const demandTypeOptions = demandTypes.map((dt) => ({ value: dt.id, label: dt.name, color: dt.color }))
+
+  const canSubmit = isValid && (!isEditing || isDirty)
 
   return (
-    <DialogContent className="sm:max-w-2xl">
+    <DialogContent className="sm:max-w-3xl">
       <DialogHeader>
         <DialogTitle>
-          {defaultValues?.name ? "Editar Demanda" : "Nova Demanda"}
+          {isEditing ? "Editar Demanda" : "Nova Demanda"}
         </DialogTitle>
         <DialogDescription>
           Preencha os dados da demanda abaixo.
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 max-h-[75vh] overflow-y-auto overflow-x-hidden pr-1">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 max-h-[75vh] overflow-y-auto overflow-x-hidden pr-1">
+        <fieldset disabled={loading} className="contents">
         <Field>
           <Label>
             Nome da Demanda <span className="text-destructive">*</span>
@@ -123,7 +120,7 @@ export function DemandForm({
           <FieldError errors={[errors.description]} />
         </Field>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>
               Data <span className="text-destructive">*</span>
@@ -135,6 +132,8 @@ export function DemandForm({
                 <DatePicker
                   value={field.value ? new Date(field.value + "T00:00:00") : undefined}
                   onChange={(date) => field.onChange(date ? date.toISOString().split("T")[0] : "")}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   aria-invalid={!!errors.date}
                 />
               )}
@@ -142,7 +141,9 @@ export function DemandForm({
             <FieldError errors={[errors.date]} />
           </Field>
           <Field>
-            <Label>Duração (HH:MM)</Label>
+            <Label>
+              Duração (HH:MM) <span className="text-destructive">*</span>
+            </Label>
             <div className="flex items-center gap-2">
               <Input
                 type="number"
@@ -168,7 +169,7 @@ export function DemandForm({
           </Field>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>
               Analista <span className="text-destructive">*</span>
@@ -181,6 +182,8 @@ export function DemandForm({
                   options={analystOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
                   aria-invalid={!!errors.analystId}
@@ -201,6 +204,8 @@ export function DemandForm({
                   options={clientOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
                   aria-invalid={!!errors.clientId}
@@ -211,9 +216,11 @@ export function DemandForm({
           </Field>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
           <Field>
-            <Label>Solicitante</Label>
+            <Label>
+              Solicitante <span className="text-destructive">*</span>
+            </Label>
             <Controller
               name="requesterId"
               control={control}
@@ -222,15 +229,20 @@ export function DemandForm({
                   options={requesterOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
+                  aria-invalid={!!errors.requesterId}
                 />
               )}
             />
             <FieldError errors={[errors.requesterId]} />
           </Field>
           <Field>
-            <Label>Setor</Label>
+            <Label>
+              Setor <span className="text-destructive">*</span>
+            </Label>
             <Controller
               name="departmentId"
               control={control}
@@ -239,15 +251,20 @@ export function DemandForm({
                   options={departmentOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
+                  aria-invalid={!!errors.departmentId}
                 />
               )}
             />
             <FieldError errors={[errors.departmentId]} />
           </Field>
           <Field>
-            <Label>Tipo de Demanda</Label>
+            <Label>
+              Tipo de Demanda <span className="text-destructive">*</span>
+            </Label>
             <Controller
               name="demandTypeId"
               control={control}
@@ -256,8 +273,11 @@ export function DemandForm({
                   options={demandTypeOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
+                  aria-invalid={!!errors.demandTypeId}
                 />
               )}
             />
@@ -265,9 +285,11 @@ export function DemandForm({
           </Field>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
-            <Label>Prioridade</Label>
+            <Label>
+              Prioridade <span className="text-destructive">*</span>
+            </Label>
             <Controller
               name="priority"
               control={control}
@@ -276,6 +298,8 @@ export function DemandForm({
                   options={priorityOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
                   aria-invalid={!!errors.priority}
@@ -285,7 +309,9 @@ export function DemandForm({
             <FieldError errors={[errors.priority]} />
           </Field>
           <Field>
-            <Label>Status</Label>
+            <Label>
+              Status <span className="text-destructive">*</span>
+            </Label>
             <Controller
               name="status"
               control={control}
@@ -294,6 +320,8 @@ export function DemandForm({
                   options={statusOptions}
                   value={field.value ?? ""}
                   onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione"
                   className="w-full"
                   aria-invalid={!!errors.status}
@@ -309,12 +337,14 @@ export function DemandForm({
           <Textarea {...register("notes")} />
           <FieldError errors={[errors.notes]} />
         </Field>
+        </fieldset>
 
-        <DialogFooter>
-          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>
+        <DialogFooter className="bg-transparent border-t-0">
+          <DialogClose render={<Button variant="outline" disabled={loading} />}>
             Cancelar
           </DialogClose>
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading || !canSubmit}>
+            {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>

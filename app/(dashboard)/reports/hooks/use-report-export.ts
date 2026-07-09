@@ -1,6 +1,8 @@
 import * as XLSX from "xlsx"
 import jsPDF from "jspdf"
 import { toast } from "sonner"
+import { apiMutate } from "@/lib/fetcher"
+import { mutateList } from "@/hooks/use-api"
 
 const statusLabels: Record<string, string> = {
   PENDING: "Pendente",
@@ -76,6 +78,13 @@ export function useReportExport() {
     }
 
     toast.success(`Relatório exportado como ${format.toUpperCase()}!`)
+
+    apiMutate("/api/exports", {
+      method: "POST",
+      body: JSON.stringify({ type: "demand_report", format: format.toUpperCase() }),
+    })
+      .then(() => mutateList("/api/exports"))
+      .catch(() => {})
   }
 
   function printReport() {

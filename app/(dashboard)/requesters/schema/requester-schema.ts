@@ -1,10 +1,11 @@
 import { z } from "zod"
+import { nameSchema, emailSchema, phoneSchema } from "@/lib/validators"
 
 export const requesterSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
-  email: z.string().min(1, "Email é obrigatório").email("Email inválido"),
-  phone: z.string().optional(),
-  status: z.enum(["active", "inactive"]),
+  name: nameSchema(),
+  email: emailSchema(true),
+  phone: phoneSchema(false),
+  status: z.enum(["active", "inactive"], { message: "Status é obrigatório" }),
 })
 
 export type RequesterFormData = z.infer<typeof requesterSchema>

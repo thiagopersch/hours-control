@@ -15,6 +15,7 @@ import { useDemandTypes, useCreate, useUpdate, mutateList } from "@/hooks/use-ap
 import { FetchError } from "@/lib/fetcher"
 import useSWRMutation from "swr/mutation"
 import { apiMutate } from "@/lib/fetcher"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function DemandTypesPage() {
   const { data: types, error, isLoading } = useDemandTypes()
@@ -25,23 +26,21 @@ export default function DemandTypesPage() {
     (url: string, { arg }: { arg: { id: string } }) =>
       apiMutate(`${url}/${arg.id}`, { method: "DELETE" })
   )
-  const [editing, setEditing] = useState<DemandType | null>(null)
+  const modal = useCrudModal<DemandType>()
   const [deleting, setDeleting] = useState<DemandType | null>(null)
-  const [open, setOpen] = useState(false)
 
   const mutating = isCreating || isUpdating || isDeleting
 
   async function handleSubmit(data: DemandTypeFormData) {
     try {
-      if (editing) {
-        await updateItem({ ...data, id: editing.id } as any)
+      if (modal.editing) {
+        await updateItem({ ...data, id: modal.editing.id } as any)
         toast.success("Tipo de demanda atualizado com sucesso!")
       } else {
         await createItem(data as any)
         toast.success("Tipo de demanda criado com sucesso!")
       }
-      setOpen(false)
-      setEditing(null)
+      modal.close()
       await mutateList("/api/demand-types")
     } catch (err) {
       if (err instanceof FetchError) {
@@ -68,15 +67,10 @@ export default function DemandTypesPage() {
     }
   }
 
-  function handleEdit(dt: DemandType) {
-    setEditing(dt)
-    setOpen(true)
-  }
-
   if (isLoading) return <div className="flex items-center justify-center py-20"><Spinner className="size-8" /></div>
   if (error) return <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive">Erro ao carregar: {error.message}</div>
 
-  const columns = getDemandTypeColumns({ onEdit: handleEdit, onDelete: setDeleting })
+  const columns = getDemandTypeColumns({ onEdit: modal.openEdit, onDelete: setDeleting })
 
   return (
     <div className="space-y-6">
@@ -85,11 +79,11 @@ export default function DemandTypesPage() {
           <h1 className="text-2xl font-bold tracking-tight">Tipos de Demanda</h1>
           <p className="text-muted-foreground">Gerencie os tipos de demanda</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Novo Tipo</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Novo Tipo</Button>} />
           <DemandTypeForm
-            key={editing?.id ?? "new"}
-            defaultValues={editing ?? undefined}
+            key={modal.sessionId}
+            defaultValues={modal.editing ?? undefined}
             onSubmit={handleSubmit}
             loading={mutating}
           />

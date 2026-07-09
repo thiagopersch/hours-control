@@ -1,7 +1,8 @@
 import { z } from "zod"
+import { nameSchema } from "@/lib/validators"
 
 export const tagSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
+  name: nameSchema(),
   color: z.string().optional(),
 })
 

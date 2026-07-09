@@ -5,6 +5,8 @@ declare module 'next-auth' {
     organizationId?: string;
     organizationSlug?: string;
     permissions?: string[];
+    mustChangePassword?: boolean;
+    isSuperAdmin?: boolean;
   };
 
   type Session = {
@@ -13,7 +15,10 @@ declare module 'next-auth' {
       organizationId: string;
       organizationSlug: string;
       permissions: string[];
+      mustChangePassword: boolean;
+      isSuperAdmin: boolean;
     } & DefaultSession['user'];
+    mustChangePassword?: boolean;
   };
 }
 
@@ -23,5 +28,7 @@ declare module 'next-auth/jwt' {
     organizationId: string;
     organizationSlug: string;
     permissions: string[];
+    mustChangePassword?: boolean;
+    isSuperAdmin?: boolean;
   };
 }

@@ -50,28 +50,7 @@ import {
   Columns3,
   Inbox,
 } from "lucide-react"
-
-const COMBINING_DIACRITIC_MIN = 0x0300
-const COMBINING_DIACRITIC_MAX = 0x036f
-
-function toSearchableString(value: unknown): string {
-  if (value == null) return ""
-  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
-    return String(value)
-  }
-  if (value instanceof Date) return value.toISOString()
-  return ""
-}
-
-function normalizeForSearch(value: unknown): string {
-  let withoutDiacritics = ""
-  for (const char of toSearchableString(value).normalize("NFD")) {
-    const code = char.codePointAt(0) ?? 0
-    if (code >= COMBINING_DIACRITIC_MIN && code <= COMBINING_DIACRITIC_MAX) continue
-    withoutDiacritics += char
-  }
-  return withoutDiacritics.toLowerCase().replace(/[^a-z0-9]+/g, "")
-}
+import { normalizeForSearch } from "@/lib/search"
 
 const accentInsensitiveFilter: FilterFn<any> = (row, columnId, filterValue) => {
   return normalizeForSearch(row.getValue(columnId)).includes(
@@ -121,9 +100,9 @@ export function DataTable<TData, TValue>({
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-4">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         {showSearch && (
-          <div className="relative max-w-sm flex-1">
+          <div className="relative min-w-[180px] max-w-sm flex-1">
             <SearchIcon className="pointer-events-none absolute left-2.5 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
             <Input
               placeholder={searchPlaceholder}
@@ -133,7 +112,7 @@ export function DataTable<TData, TValue>({
             />
           </div>
         )}
-        <div className="flex items-center gap-2 ml-auto">
+        <div className="flex flex-wrap items-center gap-2 ml-auto">
           <span className="text-sm text-muted-foreground whitespace-nowrap">
             Itens por página
           </span>
@@ -163,7 +142,7 @@ export function DataTable<TData, TValue>({
                 <DropdownMenuSeparator />
                 {table
                 .getAllColumns()
-                .filter((col) => col.getCanHide())
+                .filter((col) => col.getCanHide() && col.id !== "actions")
                 .map((col) => {
                   const label =
                     typeof col.columnDef.header === "string"
@@ -260,7 +239,7 @@ export function DataTable<TData, TValue>({
         </Table>
       </div>
 
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-3">
         <p className="text-sm text-muted-foreground">
           {filteredCount === 0
             ? "0 registro(s)"

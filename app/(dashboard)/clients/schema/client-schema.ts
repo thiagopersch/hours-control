@@ -1,15 +1,16 @@
 import { z } from "zod"
+import { nameSchema, emailSchema, phoneSchema, documentSchema, optionalNameSchema } from "@/lib/validators"
 
 export const clientSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
-  legalName: z.string().optional(),
-  document: z.string().optional(),
-  email: z.string().email("Email inválido").optional().or(z.literal("")),
-  phone: z.string().optional(),
-  responsible: z.string().optional(),
+  name: nameSchema(),
+  legalName: optionalNameSchema("Razão Social"),
+  document: documentSchema(false),
+  email: emailSchema(false),
+  phone: phoneSchema(false),
+  responsible: optionalNameSchema("Responsável"),
   color: z.string().optional(),
   notes: z.string().optional(),
-  status: z.enum(["active", "inactive"]),
+  status: z.enum(["active", "inactive"], { message: "Status é obrigatório" }),
 })
 
 export type ClientFormData = z.infer<typeof clientSchema>

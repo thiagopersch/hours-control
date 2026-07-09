@@ -3,13 +3,14 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { Pencil, Trash2 } from "lucide-react"
 import { formatCurrency, formatDate } from "@/lib/utils"
 
 export type Contract = {
   id: string
   clientId: string
-  clientName: string
+  client: { id: string; name: string }
   contractedHours: number
   hourlyRate: number
   startDate: string
@@ -27,15 +28,19 @@ function formatBalance(minutes: number): string {
   return `${sign}${String(h).padStart(2, "0")}:${String(m).padStart(2, "0")}`
 }
 
+function formatDueDateLabel(days: number): string {
+  return `${days} ${days > 1 ? "dias" : "dia"}`
+}
+
 function getDueDateStatus(endDate: string): { label: string; className: string } {
   const days = Math.ceil((new Date(endDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24))
   if (days <= 3) {
-    return { label: `${days}d`, className: "bg-red-500/15 text-red-600 dark:text-red-400" }
+    return { label: formatDueDateLabel(days), className: "bg-red-500/15 text-red-600 dark:text-red-400" }
   }
   if (days <= 7) {
-    return { label: `${days}d`, className: "bg-amber-500/15 text-amber-600 dark:text-amber-400" }
+    return { label: formatDueDateLabel(days), className: "bg-amber-500/15 text-amber-600 dark:text-amber-400" }
   }
-  return { label: `${days}d`, className: "bg-green-500/15 text-green-600 dark:text-green-400" }
+  return { label: formatDueDateLabel(days), className: "bg-green-500/15 text-green-600 dark:text-green-400" }
 }
 
 type ContractColumnsProps = {
@@ -49,7 +54,8 @@ export function getContractColumns({
 }: ContractColumnsProps): ColumnDef<Contract>[] {
   return [
     {
-      accessorKey: "clientName",
+      id: "client",
+      accessorFn: (row) => row.client?.name ?? "-",
       header: "Cliente",
     },
     {
@@ -89,11 +95,11 @@ export function getContractColumns({
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const variantMap: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-          ACTIVE: "default",
-          SUSPENDED: "secondary",
-          EXPIRED: "outline",
-          CANCELLED: "destructive",
+        const colorMap: Record<string, string> = {
+          ACTIVE: "#22c55e",
+          SUSPENDED: "#eab308",
+          EXPIRED: "#6b7280",
+          CANCELLED: "#ef4444",
         }
         const labelMap: Record<string, string> = {
           ACTIVE: "Ativo",
@@ -102,9 +108,10 @@ export function getContractColumns({
           CANCELLED: "Cancelado",
         }
         return (
-          <Badge variant={variantMap[row.original.status] || "secondary"}>
-            {labelMap[row.original.status] || row.original.status}
-          </Badge>
+          <StatusBadge
+            color={colorMap[row.original.status] ?? "#6b7280"}
+            label={labelMap[row.original.status] || row.original.status}
+          />
         )
       },
     },

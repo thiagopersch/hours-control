@@ -2,6 +2,7 @@
 
 import { useTheme } from "next-themes"
 import { signOut, useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,7 +14,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
 import {
+  Bell,
   LogOut,
   Menu,
   Moon,
@@ -28,6 +31,7 @@ type HeaderProps = {
 export function Header({ onMenuClick }: HeaderProps) {
   const { theme, setTheme } = useTheme()
   const { data: session } = useSession()
+  const router = useRouter()
 
   const initials = session?.user?.name
     ? session.user.name
@@ -53,6 +57,21 @@ export function Header({ onMenuClick }: HeaderProps) {
       </div>
 
       <div className="flex items-center gap-2">
+        <Tooltip>
+          <TooltipTrigger
+            render={
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/notifications")}
+              />
+            }
+          >
+            <Bell className="h-5 w-5" />
+          </TooltipTrigger>
+          <TooltipContent>Notificações</TooltipContent>
+        </Tooltip>
+
         <Button
           variant="ghost"
           size="icon"

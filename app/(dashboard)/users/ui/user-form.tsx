@@ -1,18 +1,15 @@
 "use client"
 
+import { useState } from "react"
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { Checkbox } from "@/components/ui/checkbox"
+import { PasswordInput } from "@/components/ui/password-input"
+import { MultiSelect } from "@/components/ui/multi-select"
+import { Spinner } from "@/components/ui/spinner"
 import {
   DialogContent,
   DialogHeader,
@@ -22,7 +19,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 import { Field, FieldError } from "@/components/ui/field"
-import { userSchema, type UserFormData } from "../schema/user-schema"
+import { getUserSchema, type UserFormData } from "../schema/user-schema"
 
 type UserFormProps = {
   roles: { id: string; name: string }[]
@@ -35,32 +32,44 @@ export function UserForm({
   roles,
   defaultValues,
   onSubmit,
-  loading,
+  loading = false,
 }: UserFormProps) {
   const isEditing = !!defaultValues?.id
+  const [showPassword, setShowPassword] = useState(!isEditing)
 
   const {
     register,
     handleSubmit,
     control,
-    watch,
     setValue,
-    reset,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<UserFormData>({
-    resolver: zodResolver(userSchema),
+    resolver: zodResolver(getUserSchema(isEditing)),
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
       email: "",
       password: "",
       status: "active",
+      mustChangePassword: false,
       roleIds: [],
       ...defaultValues,
     },
   })
 
+  const roleOptions = roles.map((role) => ({ value: role.id, label: role.name }))
+  const canSubmit = isValid && (!isEditing || isDirty)
+
+  function toggleShowPassword() {
+    setShowPassword((prev) => {
+      if (prev) setValue("password", "")
+      return !prev
+    })
+  }
+
   return (
-    <DialogContent className="sm:max-w-lg">
+    <DialogContent className="sm:max-w-xl">
       <DialogHeader>
         <DialogTitle>
           {isEditing ? "Editar Usuário" : "Novo Usuário"}
@@ -68,7 +77,39 @@ export function UserForm({
         <DialogDescription>Preencha os dados do usuário abaixo.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <fieldset disabled={loading} className="contents">
+        <div className="flex items-center gap-5">
+          <Controller
+            name="status"
+            control={control}
+            render={({ field }) => (
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox
+                  checked={field.value === "active"}
+                  onCheckedChange={(checked: boolean) => field.onChange(checked ? "active" : "inactive")}
+                  aria-invalid={!!errors.status}
+                />
+                Ativo
+              </label>
+            )}
+          />
+          <Controller
+            name="mustChangePassword"
+            control={control}
+            render={({ field }) => (
+              <label className="flex items-center gap-2 text-sm cursor-pointer">
+                <Checkbox
+                  checked={!!field.value}
+                  onCheckedChange={(checked: boolean) => field.onChange(checked)}
+                />
+                Alterar a senha no primeiro acesso
+              </label>
+            )}
+          />
+        </div>
+        <FieldError errors={[errors.status]} />
+
         <Field>
           <Label>
             Nome <span className="text-destructive">*</span>
@@ -85,86 +126,69 @@ export function UserForm({
           <FieldError errors={[errors.email]} />
         </Field>
 
-        {!isEditing && (
-          <Field>
-            <Label>
-              Senha <span className="text-destructive">*</span>
-            </Label>
-            <Input type="password" aria-invalid={!!errors.password} {...register("password")} />
-            <FieldError errors={[errors.password]} />
-          </Field>
+        {isEditing && !showPassword && (
+          <Button type="button" variant="outline" size="sm" onClick={toggleShowPassword}>
+            Alterar senha
+          </Button>
         )}
 
-        {isEditing && (
+        {showPassword && (
           <Field>
-            <Label>Nova Senha (deixe em branco para manter)</Label>
-            <Input type="password" aria-invalid={!!errors.password} {...register("password")} />
+            <div className="flex items-center justify-between">
+              <Label>
+                {isEditing ? "Nova Senha" : "Senha"} {!isEditing && <span className="text-destructive">*</span>}
+              </Label>
+              {isEditing && (
+                <Button type="button" variant="ghost" size="sm" onClick={toggleShowPassword}>
+                  Cancelar alteração
+                </Button>
+              )}
+            </div>
+            <Controller
+              name="password"
+              control={control}
+              render={({ field }) => (
+                <PasswordInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
+                  aria-invalid={!!errors.password}
+                  showStrength
+                />
+              )}
+            />
             <FieldError errors={[errors.password]} />
           </Field>
         )}
 
         <Field>
-          <Label>Status</Label>
+          <Label>
+            Perfis <span className="text-destructive">*</span>
+          </Label>
           <Controller
-            name="status"
+            name="roleIds"
             control={control}
             render={({ field }) => (
-              <Select
-                value={field.value}
-                onValueChange={(val) => {
-                  if (val !== null) field.onChange(val)
-                }}
-              >
-                <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
-                  <SelectValue placeholder="Selecione..." />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="active">
-                    <span className="inline-block size-2 rounded-full bg-green-500" />
-                    Ativo
-                  </SelectItem>
-                  <SelectItem value="inactive">
-                    <span className="inline-block size-2 rounded-full bg-gray-400" />
-                    Inativo
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <MultiSelect
+                options={roleOptions}
+                value={field.value ?? []}
+                onValueChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={loading}
+                placeholder="Selecione os perfis"
+                aria-invalid={!!errors.roleIds}
+              />
             )}
           />
-          <FieldError errors={[errors.status]} />
-        </Field>
-
-        <Field>
-          <Label>Perfis</Label>
-          <div className="flex flex-wrap gap-2 mt-1">
-            {roles.map((role) => {
-              const watchedRoleIds = watch("roleIds") ?? []
-              return (
-                <label
-                  key={role.id}
-                  className="flex items-center gap-1.5 text-sm cursor-pointer"
-                >
-                  <Checkbox
-                    checked={watchedRoleIds.includes(role.id)}
-                    onCheckedChange={(checked: boolean) => {
-                      if (checked) {
-                        setValue("roleIds", [...watchedRoleIds, role.id])
-                      } else {
-                        setValue("roleIds", watchedRoleIds.filter((id: string) => id !== role.id))
-                      }
-                    }}
-                  />
-                  {role.name}
-                </label>
-              )
-            })}
-          </div>
           <FieldError errors={[errors.roleIds]} />
         </Field>
+        </fieldset>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
-          <Button type="submit" disabled={loading}>
+          <DialogClose render={<Button variant="outline" disabled={loading} />}>Cancelar</DialogClose>
+          <Button type="submit" disabled={loading || !canSubmit}>
+            {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>

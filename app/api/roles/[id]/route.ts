@@ -79,12 +79,16 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
   const { id } = await params
   const existing = await prisma.role.findFirst({
     where: { id, organizationId },
+    include: { _count: { select: { userRoles: true } } },
   })
 
   if (!existing) return NextResponse.json({ error: "Role not found" }, { status: 404 })
 
-  if (existing.isSystem) {
-    return NextResponse.json({ error: "Cannot delete system role" }, { status: 400 })
+  if (existing._count.userRoles > 0) {
+    return NextResponse.json(
+      { error: "Existem usuários vinculados a este perfil" },
+      { status: 409 }
+    )
   }
 
   await prisma.role.delete({

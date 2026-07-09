@@ -12,36 +12,30 @@ import { ClientDeleteDialog } from "./ui/client-delete-dialog"
 import type { ClientFormData } from "./schema/client-schema"
 import { useClients, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-clients"
 import { FetchError, apiMutate } from "@/lib/fetcher"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function ClientsPage() {
   const { data: clients, error, isLoading } = useClients()
   const { trigger: createClient, isMutating: isCreating } = useCreate("/api/clients")
   const { trigger: updateClient, isMutating: isUpdating } = useUpdate("/api/clients")
   const { trigger: removeClient, isMutating: isDeleting } = useRemove("/api/clients")
-  const [editingClient, setEditingClient] = useState<Client | null>(null)
+  const modal = useCrudModal<Client>()
   const [deletingClient, setDeletingClient] = useState<Client | null>(null)
-  const [open, setOpen] = useState(false)
 
   async function handleSubmit(data: ClientFormData) {
     try {
-      if (editingClient) {
-        await updateClient({ ...data, id: editingClient.id })
+      if (modal.editing) {
+        await updateClient({ ...data, id: modal.editing.id })
         toast.success("Cliente atualizado com sucesso!")
       } else {
         await createClient(data)
         toast.success("Cliente criado com sucesso!")
       }
       mutateList("/api/clients")
-      setOpen(false)
-      setEditingClient(null)
+      modal.close()
     } catch (err) {
       toast.error(err instanceof FetchError ? err.message : "Erro ao salvar")
     }
-  }
-
-  function handleEdit(client: Client) {
-    setEditingClient(client)
-    setOpen(true)
   }
 
   async function handleDelete() {
@@ -69,7 +63,7 @@ export default function ClientsPage() {
   }
 
   const columns = getClientColumns({
-    onEdit: handleEdit,
+    onEdit: modal.openEdit,
     onDelete: setDeletingClient,
     onToggleFavorite: (client) => { void handleToggleFavorite(client) },
   })
@@ -84,11 +78,11 @@ export default function ClientsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Clientes</h1>
           <p className="text-muted-foreground">Gerencie os clientes cadastrados</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditingClient(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Novo Cliente</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Novo Cliente</Button>} />
           <ClientForm
-            key={editingClient?.id ?? "new"}
-            defaultValues={editingClient ?? undefined}
+            key={modal.sessionId}
+            defaultValues={modal.editing ?? undefined}
             onSubmit={handleSubmit}
             loading={isCreating || isUpdating}
           />

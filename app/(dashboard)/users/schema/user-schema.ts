@@ -1,11 +1,17 @@
 import { z } from "zod"
+import { nameSchema, emailSchema, passwordSchema } from "@/lib/validators"
 
-export const userSchema = z.object({
-  name: z.string().min(1, "Nome é obrigatório"),
-  email: z.string().email("Email inválido"),
-  password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres").optional().or(z.literal("")),
-  status: z.enum(["active", "inactive"]),
-  roleIds: z.array(z.string()).optional(),
-})
+export function getUserSchema(isEditing: boolean) {
+  return z.object({
+    name: nameSchema(),
+    email: emailSchema(true),
+    password: passwordSchema(!isEditing),
+    status: z.enum(["active", "inactive"], { message: "Status é obrigatório" }),
+    mustChangePassword: z.boolean().optional(),
+    roleIds: z.array(z.string()).min(1, "Selecione ao menos um perfil"),
+  })
+}
+
+export const userSchema = getUserSchema(false)
 
 export type UserFormData = z.infer<typeof userSchema>

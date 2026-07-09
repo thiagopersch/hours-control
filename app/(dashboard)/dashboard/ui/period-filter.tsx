@@ -50,10 +50,12 @@ export function PeriodFilter({
         }}
       >
         <SelectTrigger className="w-[110px]" size="sm">
-          <SelectValue placeholder="Ano" />
+          <SelectValue placeholder="Ano">
+            {(selected: string | null) => (selected && selected !== 'all' ? selected : 'Todos os períodos')}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
-          <SelectItem value="all">Todos os anos</SelectItem>
+          <SelectItem value="all">Todos os períodos</SelectItem>
           {years.map((y) => (
             <SelectItem key={y} value={String(y)}>
               {y}
@@ -71,7 +73,10 @@ export function PeriodFilter({
         disabled={!year}
       >
         <SelectTrigger className="w-[140px]" size="sm">
-          <SelectValue placeholder="Mês" />
+          <SelectValue placeholder="Mês">
+            {(selected: string | null) =>
+              selected && selected !== 'all' ? monthNames[Number(selected) - 1] : 'Todos os meses'}
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todos os meses</SelectItem>

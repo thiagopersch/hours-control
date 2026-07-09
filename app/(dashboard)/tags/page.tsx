@@ -14,6 +14,7 @@ import { TagForm } from "./ui/tag-form"
 import type { TagFormData } from "./schema/tag-schema"
 import { TagDeleteDialog } from "./ui/tag-delete-dialog"
 import { useTags, useCreate, useUpdate, mutateList } from "./hooks/use-tags"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function TagsPage() {
   const { data: tags, error, isLoading } = useTags()
@@ -24,23 +25,21 @@ export default function TagsPage() {
     (url: string, { arg }: { arg: { id: string } }) =>
       apiMutate(`${url}/${arg.id}`, { method: "DELETE" })
   )
-  const [editing, setEditing] = useState<Tag | null>(null)
+  const modal = useCrudModal<Tag>()
   const [deleting, setDeleting] = useState<Tag | null>(null)
-  const [open, setOpen] = useState(false)
 
   const mutating = isCreating || isUpdating || isDeleting
 
   async function handleSubmit(data: TagFormData) {
     try {
-      if (editing) {
-        await updateItem({ ...data, id: editing.id } as any)
+      if (modal.editing) {
+        await updateItem({ ...data, id: modal.editing.id } as any)
         toast.success("Tag atualizada com sucesso!")
       } else {
         await createItem(data as any)
         toast.success("Tag criada com sucesso!")
       }
-      setOpen(false)
-      setEditing(null)
+      modal.close()
       await mutateList("/api/tags")
     } catch (err) {
       if (err instanceof FetchError) {
@@ -67,15 +66,10 @@ export default function TagsPage() {
     }
   }
 
-  function handleEdit(tag: Tag) {
-    setEditing(tag)
-    setOpen(true)
-  }
-
   if (isLoading) return <div className="flex items-center justify-center py-20"><Spinner className="size-8" /></div>
   if (error) return <div className="rounded-lg border border-destructive/50 bg-destructive/10 p-4 text-destructive">Erro ao carregar: {error.message}</div>
 
-  const columns = getTagColumns({ onEdit: handleEdit, onDelete: setDeleting })
+  const columns = getTagColumns({ onEdit: modal.openEdit, onDelete: setDeleting })
 
   return (
     <div className="space-y-6">
@@ -84,11 +78,11 @@ export default function TagsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Tags</h1>
           <p className="text-muted-foreground">Gerencie as tags para classificação</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Nova Tag</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Nova Tag</Button>} />
           <TagForm
-            key={editing?.id ?? "new"}
-            defaultValues={editing ?? undefined}
+            key={modal.sessionId}
+            defaultValues={modal.editing ?? undefined}
             onSubmit={handleSubmit}
             loading={mutating}
           />

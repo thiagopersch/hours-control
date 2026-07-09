@@ -5,6 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { Spinner } from "@/components/ui/spinner"
 import {
   DialogContent,
   DialogHeader,
@@ -25,16 +26,18 @@ type TagFormProps = {
 export function TagForm({
   defaultValues,
   onSubmit,
-  loading,
+  loading = false,
 }: TagFormProps) {
+  const isEditing = !!defaultValues
   const {
     register,
     handleSubmit,
     watch,
-    reset,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<TagFormData>({
     resolver: zodResolver(tagSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
       color: "#6b7280",
@@ -43,17 +46,19 @@ export function TagForm({
   })
 
   const colorValue = watch("color")
+  const canSubmit = isValid && (!isEditing || isDirty)
 
   return (
     <DialogContent className="sm:max-w-md">
       <DialogHeader>
         <DialogTitle>
-          {defaultValues?.name ? "Editar Tag" : "Nova Tag"}
+          {isEditing ? "Editar Tag" : "Nova Tag"}
         </DialogTitle>
         <DialogDescription>Preencha os dados da tag abaixo.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <fieldset disabled={loading} className="contents">
         <Field>
           <Label>
             Nome <span className="text-destructive">*</span>
@@ -70,10 +75,12 @@ export function TagForm({
           </div>
           <FieldError errors={[errors.color]} />
         </Field>
+        </fieldset>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
-          <Button type="submit" disabled={loading}>
+          <DialogClose render={<Button variant="outline" disabled={loading} />}>Cancelar</DialogClose>
+          <Button type="submit" disabled={loading || !canSubmit}>
+            {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>

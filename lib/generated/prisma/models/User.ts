@@ -33,6 +33,8 @@ export type UserMinAggregateOutputType = {
   passwordHash: string | null
   phone: string | null
   status: string | null
+  mustChangePassword: boolean | null
+  isSuperAdmin: boolean | null
   lastLoginAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -49,6 +51,8 @@ export type UserMaxAggregateOutputType = {
   passwordHash: string | null
   phone: string | null
   status: string | null
+  mustChangePassword: boolean | null
+  isSuperAdmin: boolean | null
   lastLoginAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -65,6 +69,8 @@ export type UserCountAggregateOutputType = {
   passwordHash: number
   phone: number
   status: number
+  mustChangePassword: number
+  isSuperAdmin: number
   lastLoginAt: number
   createdAt: number
   updatedAt: number
@@ -83,6 +89,8 @@ export type UserMinAggregateInputType = {
   passwordHash?: true
   phone?: true
   status?: true
+  mustChangePassword?: true
+  isSuperAdmin?: true
   lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
@@ -99,6 +107,8 @@ export type UserMaxAggregateInputType = {
   passwordHash?: true
   phone?: true
   status?: true
+  mustChangePassword?: true
+  isSuperAdmin?: true
   lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
@@ -115,6 +125,8 @@ export type UserCountAggregateInputType = {
   passwordHash?: true
   phone?: true
   status?: true
+  mustChangePassword?: true
+  isSuperAdmin?: true
   lastLoginAt?: true
   createdAt?: true
   updatedAt?: true
@@ -204,6 +216,8 @@ export type UserGroupByOutputType = {
   passwordHash: string | null
   phone: string | null
   status: string
+  mustChangePassword: boolean
+  isSuperAdmin: boolean
   lastLoginAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -241,6 +255,8 @@ export type UserWhereInput = {
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   status?: Prisma.StringFilter<"User"> | string
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -268,6 +284,8 @@ export type UserOrderByWithRelationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -298,6 +316,8 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   status?: Prisma.StringFilter<"User"> | string
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -325,6 +345,8 @@ export type UserOrderByWithAggregationInput = {
   passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   status?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -347,6 +369,8 @@ export type UserScalarWhereWithAggregatesInput = {
   passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   phone?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null
   status?: Prisma.StringWithAggregatesFilter<"User"> | string
+  mustChangePassword?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolWithAggregatesFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string
@@ -363,6 +387,8 @@ export type UserCreateInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -389,6 +415,8 @@ export type UserUncheckedCreateInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -415,6 +443,8 @@ export type UserUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -441,6 +471,8 @@ export type UserUncheckedUpdateInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -467,6 +499,8 @@ export type UserCreateManyInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -483,6 +517,8 @@ export type UserUpdateManyMutationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -498,6 +534,8 @@ export type UserUncheckedUpdateManyInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -524,6 +562,8 @@ export type UserCountOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -540,6 +580,8 @@ export type UserMaxOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -556,6 +598,8 @@ export type UserMinOrderByAggregateInput = {
   passwordHash?: Prisma.SortOrder
   phone?: Prisma.SortOrder
   status?: Prisma.SortOrder
+  mustChangePassword?: Prisma.SortOrder
+  isSuperAdmin?: Prisma.SortOrder
   lastLoginAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -613,6 +657,10 @@ export type UserUncheckedUpdateManyWithoutOrganizationNestedInput = {
   update?: Prisma.UserUpdateWithWhereUniqueWithoutOrganizationInput | Prisma.UserUpdateWithWhereUniqueWithoutOrganizationInput[]
   updateMany?: Prisma.UserUpdateManyWithWhereWithoutOrganizationInput | Prisma.UserUpdateManyWithWhereWithoutOrganizationInput[]
   deleteMany?: Prisma.UserScalarWhereInput | Prisma.UserScalarWhereInput[]
+}
+
+export type BoolFieldUpdateOperationsInput = {
+  set?: boolean
 }
 
 export type UserCreateNestedOneWithoutAccountsInput = {
@@ -768,6 +816,8 @@ export type UserCreateWithoutOrganizationInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -793,6 +843,8 @@ export type UserUncheckedCreateWithoutOrganizationInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -847,6 +899,8 @@ export type UserScalarWhereInput = {
   passwordHash?: Prisma.StringNullableFilter<"User"> | string | null
   phone?: Prisma.StringNullableFilter<"User"> | string | null
   status?: Prisma.StringFilter<"User"> | string
+  mustChangePassword?: Prisma.BoolFilter<"User"> | boolean
+  isSuperAdmin?: Prisma.BoolFilter<"User"> | boolean
   lastLoginAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"User"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string
@@ -863,6 +917,8 @@ export type UserCreateWithoutAccountsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -888,6 +944,8 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -929,6 +987,8 @@ export type UserUpdateWithoutAccountsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -954,6 +1014,8 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -979,6 +1041,8 @@ export type UserCreateWithoutSessionsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1004,6 +1068,8 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1045,6 +1111,8 @@ export type UserUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1070,6 +1138,8 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1095,6 +1165,8 @@ export type UserCreateWithoutUserRolesInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1120,6 +1192,8 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1161,6 +1235,8 @@ export type UserUpdateWithoutUserRolesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1186,6 +1262,8 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1211,6 +1289,8 @@ export type UserCreateWithoutUploadedAttachmentsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1236,6 +1316,8 @@ export type UserUncheckedCreateWithoutUploadedAttachmentsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1277,6 +1359,8 @@ export type UserUpdateWithoutUploadedAttachmentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1302,6 +1386,8 @@ export type UserUncheckedUpdateWithoutUploadedAttachmentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1327,6 +1413,8 @@ export type UserCreateWithoutCommentsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1352,6 +1440,8 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1393,6 +1483,8 @@ export type UserUpdateWithoutCommentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1418,6 +1510,8 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1443,6 +1537,8 @@ export type UserCreateWithoutNotificationsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1468,6 +1564,8 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1509,6 +1607,8 @@ export type UserUpdateWithoutNotificationsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1534,6 +1634,8 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1559,6 +1661,8 @@ export type UserCreateWithoutNotificationSettingsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1584,6 +1688,8 @@ export type UserUncheckedCreateWithoutNotificationSettingsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1625,6 +1731,8 @@ export type UserUpdateWithoutNotificationSettingsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1650,6 +1758,8 @@ export type UserUncheckedUpdateWithoutNotificationSettingsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1675,6 +1785,8 @@ export type UserCreateWithoutAuditLogsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1700,6 +1812,8 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1741,6 +1855,8 @@ export type UserUpdateWithoutAuditLogsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1766,6 +1882,8 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1791,6 +1909,8 @@ export type UserCreateWithoutExportsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1816,6 +1936,8 @@ export type UserUncheckedCreateWithoutExportsInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1857,6 +1979,8 @@ export type UserUpdateWithoutExportsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1882,6 +2006,8 @@ export type UserUncheckedUpdateWithoutExportsInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1907,6 +2033,8 @@ export type UserCreateWithoutDashboardPreferencesInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1932,6 +2060,8 @@ export type UserUncheckedCreateWithoutDashboardPreferencesInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1973,6 +2103,8 @@ export type UserUpdateWithoutDashboardPreferencesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1998,6 +2130,8 @@ export type UserUncheckedUpdateWithoutDashboardPreferencesInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2023,6 +2157,8 @@ export type UserCreateManyOrganizationInput = {
   passwordHash?: string | null
   phone?: string | null
   status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -2038,6 +2174,8 @@ export type UserUpdateWithoutOrganizationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2063,6 +2201,8 @@ export type UserUncheckedUpdateWithoutOrganizationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2088,6 +2228,8 @@ export type UserUncheckedUpdateManyWithoutOrganizationInput = {
   passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
   lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -2206,6 +2348,8 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordHash?: boolean
   phone?: boolean
   status?: boolean
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2234,6 +2378,8 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   phone?: boolean
   status?: boolean
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2251,6 +2397,8 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   passwordHash?: boolean
   phone?: boolean
   status?: boolean
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2268,6 +2416,8 @@ export type UserSelectScalar = {
   passwordHash?: boolean
   phone?: boolean
   status?: boolean
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
   lastLoginAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -2275,7 +2425,7 @@ export type UserSelectScalar = {
   organizationId?: boolean
 }
 
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "passwordHash" | "phone" | "status" | "lastLoginAt" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId", ExtArgs["result"]["user"]>
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "emailVerified" | "image" | "passwordHash" | "phone" | "status" | "mustChangePassword" | "isSuperAdmin" | "lastLoginAt" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId", ExtArgs["result"]["user"]>
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   accounts?: boolean | Prisma.User$accountsArgs<ExtArgs>
@@ -2321,6 +2471,8 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     passwordHash: string | null
     phone: string | null
     status: string
+    mustChangePassword: boolean
+    isSuperAdmin: boolean
     lastLoginAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -2768,6 +2920,8 @@ export interface UserFieldRefs {
   readonly passwordHash: Prisma.FieldRef<"User", 'String'>
   readonly phone: Prisma.FieldRef<"User", 'String'>
   readonly status: Prisma.FieldRef<"User", 'String'>
+  readonly mustChangePassword: Prisma.FieldRef<"User", 'Boolean'>
+  readonly isSuperAdmin: Prisma.FieldRef<"User", 'Boolean'>
   readonly lastLoginAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>

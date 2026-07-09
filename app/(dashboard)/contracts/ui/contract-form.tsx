@@ -2,7 +2,6 @@
 
 import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { format } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,6 +17,7 @@ import {
 import { Field, FieldError } from "@/components/ui/field"
 import { DatePicker } from "@/components/ui/date-picker"
 import { ColoredSelect } from "@/components/ui/colored-select"
+import { Spinner } from "@/components/ui/spinner"
 import { contractSchema, type ContractFormData } from "../schema/contract-schema"
 
 const statusOptions = [
@@ -38,16 +38,18 @@ export function ContractForm({
   clients,
   defaultValues,
   onSubmit,
-  loading,
+  loading = false,
 }: ContractFormProps) {
+  const isEditing = !!defaultValues
   const {
     register,
     handleSubmit,
     control,
-    reset,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<ContractFormData>({
     resolver: zodResolver(contractSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: {
       clientId: "",
       contractedHours: 0,
@@ -64,16 +66,19 @@ export function ContractForm({
     color: c.color,
   }))
 
+  const canSubmit = isValid && (!isEditing || isDirty)
+
   return (
     <DialogContent className="sm:max-w-lg">
       <DialogHeader>
         <DialogTitle>
-          {defaultValues?.clientId ? "Editar Contrato" : "Novo Contrato"}
+          {isEditing ? "Editar Contrato" : "Novo Contrato"}
         </DialogTitle>
         <DialogDescription>Preencha os dados do contrato abaixo.</DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <fieldset disabled={loading} className="contents">
         <Field>
           <Label>
             Cliente <span className="text-destructive">*</span>
@@ -86,6 +91,8 @@ export function ContractForm({
                 options={clientOptions}
                 value={field.value}
                 onValueChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={loading}
                 placeholder="Selecione um cliente"
                 aria-invalid={!!errors.clientId}
               />
@@ -94,7 +101,7 @@ export function ContractForm({
           <FieldError errors={[errors.clientId]} />
         </Field>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>
               Horas Contratadas <span className="text-destructive">*</span>
@@ -122,7 +129,7 @@ export function ContractForm({
           </Field>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>
               Data Início <span className="text-destructive">*</span>
@@ -134,6 +141,8 @@ export function ContractForm({
                 <DatePicker
                   value={field.value}
                   onChange={(date) => field.onChange(date)}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione a data"
                   aria-invalid={!!errors.startDate}
                 />
@@ -152,6 +161,8 @@ export function ContractForm({
                 <DatePicker
                   value={field.value}
                   onChange={(date) => field.onChange(date)}
+                  onBlur={field.onBlur}
+                  disabled={loading}
                   placeholder="Selecione a data"
                   aria-invalid={!!errors.endDate}
                 />
@@ -171,6 +182,8 @@ export function ContractForm({
                 options={statusOptions}
                 value={field.value}
                 onValueChange={field.onChange}
+                onBlur={field.onBlur}
+                disabled={loading}
                 placeholder="Selecione o status"
                 aria-invalid={!!errors.status}
               />
@@ -184,10 +197,12 @@ export function ContractForm({
           <Textarea {...register("notes")} />
           <FieldError errors={[errors.notes]} />
         </Field>
+        </fieldset>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>Cancelar</DialogClose>
-          <Button type="submit" disabled={loading}>
+          <DialogClose render={<Button variant="outline" disabled={loading} />}>Cancelar</DialogClose>
+          <Button type="submit" disabled={loading || !canSubmit}>
+            {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>

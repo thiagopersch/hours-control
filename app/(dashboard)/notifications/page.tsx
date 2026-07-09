@@ -47,7 +47,8 @@ const typeLabels: Record<string, string> = {
 }
 
 export default function NotificationsPage() {
-  const { data: notifications, error, isLoading } = useNotifications()
+  const { data: notificationsResponse, error, isLoading } = useNotifications()
+  const notifications: Notification[] = notificationsResponse?.data ?? []
   const { trigger: updateNotification } = useUpdate("/api/notifications")
   const { trigger: removeNotification } = useRemove("/api/notifications")
 
@@ -64,7 +65,7 @@ export default function NotificationsPage() {
 
   async function markAllAsRead() {
     try {
-      const unread = notifications?.filter((n: Notification) => !n.read) ?? []
+      const unread = notifications.filter((n: Notification) => !n.read)
       await Promise.all(unread.map((n: Notification) => updateNotification({ id: n.id, read: true } as any)))
       await mutateList("/api/notifications")
       toast.success("Todas as notificações marcadas como lidas!")
@@ -176,7 +177,7 @@ export default function NotificationsPage() {
           <Spinner className="size-6" />
         </div>
       ) : (
-        <DataTable columns={columns} data={notifications ?? []} showSearch searchPlaceholder="Buscar por título..." />
+        <DataTable columns={columns} data={notifications} showSearch searchPlaceholder="Buscar por título..." />
       )}
 
       <AlertDialog open={!!deleting} onOpenChange={(v) => { if (!v) setDeleting(null) }}>

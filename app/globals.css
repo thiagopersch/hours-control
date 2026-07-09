@@ -131,3 +131,18 @@
     cursor: pointer;
   }
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  #report-preview,
+  #report-preview * {
+    visibility: visible;
+  }
+  #report-preview {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+  }
+}

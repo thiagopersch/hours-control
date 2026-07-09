@@ -16,9 +16,11 @@ import type { DemandFormData } from "./schema/demand-schema"
 import { useDemands, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-demands"
 import useSWR from "swr"
 import { fetcher, FetchError } from "@/lib/fetcher"
+import { useCrudModal } from "@/hooks/use-crud-modal"
 
 export default function DemandsPage() {
-  const { data: demands, error, isLoading } = useDemands()
+  const { data: demandsResponse, error, isLoading } = useDemands()
+  const demands = demandsResponse?.data ?? []
   const { data: analysts } = useSWR<any[]>("/api/analysts", fetcher)
   const { data: clients } = useSWR<any[]>("/api/clients", fetcher)
   const { data: requesters } = useSWR<any[]>("/api/requesters", fetcher)
@@ -29,9 +31,8 @@ export default function DemandsPage() {
   const { trigger: updateDemand, isMutating: updating } = useUpdate("/api/demands")
   const { trigger: removeDemand, isMutating: removing } = useRemove("/api/demands")
 
-  const [editing, setEditing] = useState<Demand | null>(null)
+  const modal = useCrudModal<Demand>()
   const [deleting, setDeleting] = useState<Demand | null>(null)
-  const [open, setOpen] = useState(false)
 
   async function handleSubmit(data: Record<string, unknown>) {
     try {
@@ -39,16 +40,15 @@ export default function DemandsPage() {
       const payload = { ...data, durationMinutes: totalMinutes }
       delete (payload as any).durationHours
 
-      if (editing) {
-        await updateDemand({ id: editing.id, ...payload } as any)
+      if (modal.editing) {
+        await updateDemand({ id: modal.editing.id, ...payload } as any)
         toast.success("Demanda atualizada com sucesso!")
       } else {
         await createDemand(payload as any)
         toast.success("Demanda criada com sucesso!")
       }
       await mutateList("/api/demands")
-      setOpen(false)
-      setEditing(null)
+      modal.close()
     } catch (err) {
       toast.error(err instanceof FetchError ? err.message : "Erro ao salvar demanda")
     }
@@ -66,12 +66,7 @@ export default function DemandsPage() {
     }
   }
 
-  function handleEdit(demand: Demand) {
-    setEditing(demand)
-    setOpen(true)
-  }
-
-  const columns = getDemandColumns({ onEdit: handleEdit, onDelete: setDeleting })
+  const columns = getDemandColumns({ onEdit: modal.openEdit, onDelete: setDeleting })
   const loading = creating || updating || removing
 
   if (error) {
@@ -91,30 +86,30 @@ export default function DemandsPage() {
           <h1 className="text-2xl font-bold tracking-tight">Demandas</h1>
           <p className="text-muted-foreground">Gerencie as demandas e apontamentos de horas</p>
         </div>
-        <Dialog open={open} onOpenChange={(v) => { setOpen(v); if (!v) setEditing(null) }}>
-          <DialogTrigger render={<Button><Plus className="size-4" /> Nova Demanda</Button>} />
+        <Dialog open={modal.open} onOpenChange={modal.onOpenChange}>
+          <DialogTrigger render={<Button onClick={modal.openCreate}><Plus className="size-4" /> Nova Demanda</Button>} />
           <DemandForm
-            key={editing?.id ?? "new"}
+            key={modal.sessionId}
             analysts={analysts ?? []}
             clients={clients ?? []}
             requesters={requesters ?? []}
             departments={departments ?? []}
             demandTypes={demandTypes ?? []}
             defaultValues={
-              editing
+              modal.editing
                 ? {
-                    date: editing.date,
-                    analystId: editing.analyst?.id ?? "",
-                    clientId: editing.client?.id ?? "",
-                    requesterId: editing.requester?.id ?? "",
-                    departmentId: editing.department?.id ?? "",
-                    demandTypeId: editing.demandType?.id ?? "",
-                    name: editing.name,
-                    description: editing.description,
-                    durationMinutes: editing.durationMinutes,
-                    priority: editing.priority,
-                    status: editing.status,
-                    notes: editing.notes,
+                    date: modal.editing.date,
+                    analystId: modal.editing.analyst?.id ?? "",
+                    clientId: modal.editing.client?.id ?? "",
+                    requesterId: modal.editing.requester?.id ?? "",
+                    departmentId: modal.editing.department?.id ?? "",
+                    demandTypeId: modal.editing.demandType?.id ?? "",
+                    name: modal.editing.name,
+                    description: modal.editing.description,
+                    durationMinutes: modal.editing.durationMinutes,
+                    priority: modal.editing.priority,
+                    status: modal.editing.status,
+                    notes: modal.editing.notes,
                   }
                 : undefined
             }
@@ -129,7 +124,7 @@ export default function DemandsPage() {
           <Spinner className="size-6" />
         </div>
       ) : (
-        <DataTable columns={columns} data={demands ?? []} showSearch searchPlaceholder="Buscar por nome, cliente, analista..." />
+        <DataTable columns={columns} data={demands} showSearch searchPlaceholder="Buscar por nome, cliente, analista..." />
       )}
 
       <DemandDeleteDialog

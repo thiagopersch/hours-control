@@ -48,15 +48,31 @@ export function usePermissions() {
   return useSWR<any[]>("/api/permissions", fetcher)
 }
 
+export function useExports() {
+  return useSWR<any[]>("/api/exports", fetcher)
+}
+
+export function useOrganizations() {
+  return useSWR<any[]>("/api/organizations", fetcher)
+}
+
+export type PaginatedResponse<T> = {
+  data: T[]
+  total: number
+  page: number
+  limit: number
+  totalPages: number
+}
+
 export function useNotifications(unreadOnly?: boolean) {
-  return useSWR<any[]>(
+  return useSWR<PaginatedResponse<any>>(
     listKey("/api/notifications", unreadOnly ? { unread: "true" } : undefined),
     fetcher
   )
 }
 
 export function useDemands(filters?: Record<string, string>) {
-  return useSWR<any[]>(listKey("/api/demands", filters), fetcher)
+  return useSWR<PaginatedResponse<any>>(listKey("/api/demands", filters), fetcher)
 }
 
 export type DemandStats = {

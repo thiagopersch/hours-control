@@ -41,8 +41,13 @@ export function useReportFilters() {
 }
 
 export function useReportData(appliedFilters: Record<string, string> | undefined) {
-  const demands = useDemands(appliedFilters)
+  const demandsQuery = useDemands(appliedFilters ? { ...appliedFilters, limit: "1000" } : undefined)
   const clients = useSWR<any[]>("/api/clients", fetcher)
   const analysts = useSWR<any[]>("/api/analysts", fetcher)
+  const demands = {
+    data: demandsQuery.data?.data,
+    error: demandsQuery.error,
+    isLoading: demandsQuery.isLoading,
+  }
   return { demands, clients, analysts }
 }

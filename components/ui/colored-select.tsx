@@ -18,6 +18,8 @@ type ColoredSelectProps = {
   options: ColoredSelectOption[]
   value?: string
   onValueChange?: (value: string) => void
+  onBlur?: () => void
+  disabled?: boolean
   placeholder?: string
   className?: string
   "aria-invalid"?: boolean
@@ -27,6 +29,8 @@ export function ColoredSelect({
   options,
   value,
   onValueChange,
+  onBlur,
+  disabled,
   placeholder,
   className,
   "aria-invalid": ariaInvalid,
@@ -38,11 +42,15 @@ export function ColoredSelect({
   return (
     <Select
       value={value}
+      disabled={disabled}
       onValueChange={(val) => {
         if (val !== null) onValueChange?.(val)
       }}
+      onOpenChange={(open) => {
+        if (!open) onBlur?.()
+      }}
     >
-      <SelectTrigger className={className} aria-invalid={ariaInvalid}>
+      <SelectTrigger className={className} aria-invalid={ariaInvalid} onBlur={onBlur}>
         <SelectValue placeholder={placeholder}>
           {(selected: string | null) => {
             const option = sortedOptions.find((o) => o.value === selected)

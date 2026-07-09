@@ -3,8 +3,14 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { Pencil, Trash2 } from "lucide-react"
 import { formatCurrency } from "@/lib/utils"
+
+const statusColors: Record<string, string> = {
+  active: "#22c55e",
+  inactive: "#6b7280",
+}
 
 export type Analyst = {
   id: string
@@ -70,9 +76,10 @@ export function getAnalystColumns({
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
-        <Badge variant={row.original.status === "active" ? "default" : "secondary"}>
-          {row.original.status === "active" ? "Ativo" : "Inativo"}
-        </Badge>
+        <StatusBadge
+          color={statusColors[row.original.status]}
+          label={row.original.status === "active" ? "Ativo" : "Inativo"}
+        />
       ),
     },
     {

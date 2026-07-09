@@ -3,6 +3,7 @@
 import { ColumnDef } from "@tanstack/react-table"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { StatusBadge } from "@/components/ui/status-badge"
 import { Pencil, Trash2 } from "lucide-react"
 import { formatDuration, formatDate } from "@/lib/utils"
 
@@ -36,12 +37,12 @@ const priorityLabels: Record<string, string> = {
   URGENT: "Urgente",
 }
 
-const statusVariants: Record<string, "default" | "secondary" | "outline" | "destructive"> = {
-  PENDING: "secondary",
-  IN_PROGRESS: "default",
-  COMPLETED: "outline",
-  ON_HOLD: "secondary",
-  CANCELLED: "destructive",
+const statusColors: Record<string, string> = {
+  PENDING: "#94a3b8",
+  IN_PROGRESS: "#3b82f6",
+  COMPLETED: "#22c55e",
+  ON_HOLD: "#f59e0b",
+  CANCELLED: "#ef4444",
 }
 
 const statusLabels: Record<string, string> = {
@@ -92,9 +93,10 @@ export function getDemandColumns({
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => (
-        <Badge variant={statusVariants[row.original.status] || "secondary"}>
-          {statusLabels[row.original.status] || row.original.status}
-        </Badge>
+        <StatusBadge
+          color={statusColors[row.original.status] ?? "#6b7280"}
+          label={statusLabels[row.original.status] || row.original.status}
+        />
       ),
     },
     {

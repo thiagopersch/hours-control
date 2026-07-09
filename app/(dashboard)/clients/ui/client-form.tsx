@@ -1,19 +1,15 @@
 "use client"
 
-import { useForm } from "react-hook-form"
+import { useForm, Controller } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Controller } from "react-hook-form"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
+import { PhoneInput } from "@/components/ui/phone-input"
+import { DocumentInput } from "@/components/ui/document-input"
+import { ColoredSelect } from "@/components/ui/colored-select"
+import { Spinner } from "@/components/ui/spinner"
 import {
   DialogContent,
   DialogHeader,
@@ -25,6 +21,11 @@ import {
 import { Field, FieldError } from "@/components/ui/field"
 import { clientSchema, type ClientFormData } from "../schema/client-schema"
 
+const statusOptions = [
+  { value: "active", label: "Ativo", color: "#22c55e" },
+  { value: "inactive", label: "Inativo", color: "#6b7280" },
+]
+
 type ClientFormProps = {
   defaultValues?: Partial<ClientFormData>
   onSubmit: (data: ClientFormData) => void
@@ -34,16 +35,18 @@ type ClientFormProps = {
 export function ClientForm({
   defaultValues,
   onSubmit,
-  loading,
+  loading = false,
 }: ClientFormProps) {
+  const isEditing = !!defaultValues
   const {
     register,
     control,
     handleSubmit,
-    reset,
-    formState: { errors },
+    formState: { errors, isValid, isDirty },
   } = useForm<ClientFormData>({
     resolver: zodResolver(clientSchema),
+    mode: "onBlur",
+    reValidateMode: "onChange",
     defaultValues: {
       name: "",
       legalName: "",
@@ -58,18 +61,21 @@ export function ClientForm({
     },
   })
 
+  const canSubmit = isValid && (!isEditing || isDirty)
+
   return (
     <DialogContent className="sm:max-w-lg">
       <DialogHeader>
         <DialogTitle>
-          {defaultValues?.name ? "Editar Cliente" : "Novo Cliente"}
+          {isEditing ? "Editar Cliente" : "Novo Cliente"}
         </DialogTitle>
         <DialogDescription>
           Preencha os dados do cliente abaixo.
         </DialogDescription>
       </DialogHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
+        <fieldset disabled={loading} className="contents">
         <Field>
           <Label>
             Nome <span className="text-destructive">*</span>
@@ -78,7 +84,7 @@ export function ClientForm({
           <FieldError errors={[errors.name]} />
         </Field>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>Razão Social</Label>
             <Input aria-invalid={!!errors.legalName} {...register("legalName")} />
@@ -86,12 +92,24 @@ export function ClientForm({
           </Field>
           <Field>
             <Label>Documento (CPF/CNPJ)</Label>
-            <Input aria-invalid={!!errors.document} {...register("document")} />
+            <Controller
+              name="document"
+              control={control}
+              render={({ field }) => (
+                <DocumentInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
+                  aria-invalid={!!errors.document}
+                />
+              )}
+            />
             <FieldError errors={[errors.document]} />
           </Field>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>Email</Label>
             <Input type="email" aria-invalid={!!errors.email} {...register("email")} />
@@ -99,7 +117,19 @@ export function ClientForm({
           </Field>
           <Field>
             <Label>Telefone</Label>
-            <Input aria-invalid={!!errors.phone} {...register("phone")} />
+            <Controller
+              name="phone"
+              control={control}
+              render={({ field }) => (
+                <PhoneInput
+                  value={field.value}
+                  onChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
+                  aria-invalid={!!errors.phone}
+                />
+              )}
+            />
             <FieldError errors={[errors.phone]} />
           </Field>
         </div>
@@ -110,38 +140,30 @@ export function ClientForm({
           <FieldError errors={[errors.responsible]} />
         </Field>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
           <Field>
             <Label>Cor</Label>
             <Input type="color" aria-invalid={!!errors.color} {...register("color")} className="h-8 p-1" />
             <FieldError errors={[errors.color]} />
           </Field>
           <Field>
-            <Label>Status</Label>
+            <Label>
+              Status <span className="text-destructive">*</span>
+            </Label>
             <Controller
               name="status"
               control={control}
               render={({ field }) => (
-                <Select
+                <ColoredSelect
+                  options={statusOptions}
                   value={field.value}
-                  onValueChange={(val) => {
-                    if (val !== null) field.onChange(val)
-                  }}
-                >
-                  <SelectTrigger className="w-full" aria-invalid={!!errors.status}>
-                    <SelectValue placeholder="Selecione..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="active">
-                      <span className="inline-block size-2 rounded-full bg-green-500" />
-                      Ativo
-                    </SelectItem>
-                    <SelectItem value="inactive">
-                      <span className="inline-block size-2 rounded-full bg-gray-400" />
-                      Inativo
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                  onValueChange={field.onChange}
+                  onBlur={field.onBlur}
+                  disabled={loading}
+                  placeholder="Selecione..."
+                  className="w-full"
+                  aria-invalid={!!errors.status}
+                />
               )}
             />
             <FieldError errors={[errors.status]} />
@@ -153,12 +175,14 @@ export function ClientForm({
           <Textarea {...register("notes")} />
           <FieldError errors={[errors.notes]} />
         </Field>
+        </fieldset>
 
         <DialogFooter>
-          <DialogClose render={<Button variant="outline" onClick={() => reset()} />}>
+          <DialogClose render={<Button variant="outline" disabled={loading} />}>
             Cancelar
           </DialogClose>
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading || !canSubmit}>
+            {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
         </DialogFooter>
