@@ -1,10 +1,13 @@
+import { RouteProgress } from '@/components/route-progress';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { cn } from '@/lib/utils';
 import type { Metadata } from 'next';
 import { ThemeProvider } from 'next-themes';
 import { Geist, Geist_Mono, Outfit } from 'next/font/google';
+import { Suspense } from 'react';
 import './globals.css';
+import Loading from './loading';
 const outfit = Outfit({ subsets: ['latin'], variable: '--font-sans' });
 
 const geistSans = Geist({
@@ -48,6 +51,9 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
+          <Suspense fallback={<Loading />}>
+            <RouteProgress />
+          </Suspense>
           <TooltipProvider>{children}</TooltipProvider>
           <Toaster richColors closeButton />
         </ThemeProvider>

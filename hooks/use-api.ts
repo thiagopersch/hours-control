@@ -82,6 +82,18 @@ export type DemandStats = {
   byStatus: { status: string; count: number }[]
   byClient: { clientId: string; clientName: string; count: number; totalMinutes: number }[]
   byAnalyst: { analystId: string; analystName: string; analystColor: string; count: number; totalMinutes: number }[]
+  byDepartment: { departmentId: string | null; departmentName: string; count: number; totalMinutes: number }[]
+  byDemandType: { demandTypeId: string | null; demandTypeName: string; demandTypeColor: string; count: number; totalMinutes: number }[]
+  byPriority: { priority: string; count: number; avgMinutes: number }[]
+  clientFinancials: {
+    clientId: string
+    clientName: string
+    contractedHours: number
+    consumedHours: number
+    revenue: number
+    cost: number
+    margin: number
+  }[]
 }
 
 export function useDemandStats(filters?: Record<string, string>) {

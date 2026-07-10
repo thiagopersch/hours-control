@@ -1,3 +1,5 @@
+import { beginRequest, endRequest } from "@/lib/loading-store"
+
 export class FetchError extends Error {
   status: number
   constructor(message: string, status: number) {
@@ -7,12 +9,17 @@ export class FetchError extends Error {
 }
 
 export async function fetcher<T = unknown>(url: string): Promise<T> {
-  const res = await fetch(url)
-  if (!res.ok) {
-    const body = await res.json().catch(() => ({ error: res.statusText }))
-    throw new FetchError(body.error ?? res.statusText, res.status)
+  beginRequest()
+  try {
+    const res = await fetch(url)
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({ error: res.statusText }))
+      throw new FetchError(body.error ?? res.statusText, res.status)
+    }
+    return await res.json()
+  } finally {
+    endRequest()
   }
-  return res.json()
 }
 
 export async function apiMutate<T = unknown>(

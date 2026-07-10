@@ -1,17 +1,6 @@
 'use client';
 
-import { ChevronDown, ChevronLeft, ChevronRight } from 'lucide-react';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import { Button } from '@/components/ui/button';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import { Separator } from '@/components/ui/separator';
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from '@/components/ui/tooltip';
 import {
   Collapsible,
   CollapsibleContent,
@@ -23,29 +12,51 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Separator } from '@/components/ui/separator';
+import { SheetClose } from '@/components/ui/sheet';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import {
+  isNavGroup,
+  navItems,
+  type NavGroup,
+  type NavLeaf,
+} from '@/lib/nav-items';
 import { hasPermission } from '@/lib/permissions';
-import { navItems, isNavGroup, type NavLeaf, type NavGroup } from '@/lib/nav-items';
+import { cn } from '@/lib/utils';
+import { ChevronDown, ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { useSession } from 'next-auth/react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useState } from 'react';
 
 type SidebarProps = {
   onNavClick?: () => void;
   variant?: 'desktop' | 'mobile';
-}
+};
 
 export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(true);
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const { data: session } = useSession();
-  const permissions = (session?.user as any)?.permissions as string[] | undefined;
-  const isSuperAdmin = (session?.user as any)?.isSuperAdmin as boolean | undefined;
+  const permissions = (session?.user as any)?.permissions as
+    | string[]
+    | undefined;
+  const isSuperAdmin = (session?.user as any)?.isSuperAdmin as
+    | boolean
+    | undefined;
 
   const isCollapsed = variant === 'mobile' ? false : collapsed;
 
   function canSee(item: NavLeaf) {
     if (item.superAdminOnly && !isSuperAdmin) return false;
-    if (item.resource && !hasPermission(permissions, item.resource)) return false;
+    if (item.resource && !hasPermission(permissions, item.resource))
+      return false;
     return true;
   }
 
@@ -131,7 +142,10 @@ export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
           </Tooltip>
           <DropdownMenuContent side="right" align="start">
             {visibleItems.map((item) => (
-              <DropdownMenuItem key={item.href} render={<Link href={item.href} onClick={onNavClick} />}>
+              <DropdownMenuItem
+                key={item.href}
+                render={<Link href={item.href} onClick={onNavClick} />}
+              >
                 <item.icon className="size-4" />
                 {item.label}
               </DropdownMenuItem>
@@ -147,7 +161,9 @@ export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
       <Collapsible
         key={group.label}
         open={open}
-        onOpenChange={(next) => setOpenGroups((prev) => ({ ...prev, [group.label]: next }))}
+        onOpenChange={(next) =>
+          setOpenGroups((prev) => ({ ...prev, [group.label]: next }))
+        }
       >
         <CollapsibleTrigger
           className={cn(
@@ -157,7 +173,12 @@ export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
         >
           <GroupIcon className="h-5 w-5 shrink-0" />
           <span className="flex-1 text-left">{group.label}</span>
-          <ChevronDown className={cn('h-4 w-4 shrink-0 transition-transform', open && 'rotate-180')} />
+          <ChevronDown
+            className={cn(
+              'h-4 w-4 shrink-0 transition-transform',
+              open && 'rotate-180',
+            )}
+          />
         </CollapsibleTrigger>
         <CollapsibleContent className="flex flex-col gap-1 py-1 pl-4">
           {visibleItems.map(renderLeaf)}
@@ -169,7 +190,7 @@ export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
   return (
     <aside
       className={cn(
-        'relative flex flex-col border-r bg-card transition-[width] duration-300 ease-in-out',
+        'relative flex h-full flex-col border-r bg-card transition-[width] duration-300 ease-in-out',
         isCollapsed ? 'w-16' : 'w-64',
       )}
     >
@@ -178,14 +199,27 @@ export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
           HC
         </div>
         {!isCollapsed && (
-          <span className="font-semibold text-sm">HoursControl</span>
+          <span className="flex-1 font-semibold text-sm">HoursControl</span>
+        )}
+        {variant === 'mobile' && (
+          <SheetClose
+            render={
+              <Button variant="ghost" size="icon-sm" aria-label="Fechar menu" />
+            }
+          >
+            <X className="h-4 w-4" />
+          </SheetClose>
         )}
       </div>
 
       <ScrollArea className="flex-1 py-2">
         <nav className="flex flex-col gap-1 px-2">
           {navItems.map((entry) =>
-            isNavGroup(entry) ? renderGroup(entry) : (canSee(entry) ? renderLeaf(entry) : null)
+            isNavGroup(entry)
+              ? renderGroup(entry)
+              : canSee(entry)
+                ? renderLeaf(entry)
+                : null,
           )}
         </nav>
       </ScrollArea>

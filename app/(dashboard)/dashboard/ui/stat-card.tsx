@@ -1,7 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton"
 import type { LucideIcon } from "lucide-react"
 
-export function StatCard({ title, value, icon: Icon }: { title: string; value: number; icon: LucideIcon }) {
+export function StatCard({ title, value, icon: Icon }: { title: string; value: number | string; icon: LucideIcon }) {
   return (
     <div className="rounded-xl border bg-card p-6 shadow-sm">
       <div className="flex items-center justify-between">

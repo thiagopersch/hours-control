@@ -1,8 +1,7 @@
-"use client"
+'use client';
 
-import { useTheme } from "next-themes"
-import { signOut, useSession } from "next-auth/react"
-import { useRouter } from "next/navigation"
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,36 +10,34 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Button } from "@/components/ui/button"
-import { Avatar, AvatarFallback } from "@/components/ui/avatar"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip"
+} from '@/components/ui/dropdown-menu';
 import {
-  Bell,
-  LogOut,
-  Menu,
-  Moon,
-  Sun,
-  User,
-} from "lucide-react"
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
+import { Bell, LogOut, Menu, Moon, Sun, User } from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
+import { useTheme } from 'next-themes';
+import { useRouter } from 'next/navigation';
 
 type HeaderProps = {
-  onMenuClick?: () => void
-}
+  onMenuClick?: () => void;
+};
 
 export function Header({ onMenuClick }: HeaderProps) {
-  const { theme, setTheme } = useTheme()
-  const { data: session } = useSession()
-  const router = useRouter()
+  const { theme, setTheme } = useTheme();
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const initials = session?.user?.name
     ? session.user.name
-        .split(" ")
+        .split(' ')
         .map((n: string) => n[0])
-        .join("")
+        .join('')
         .toUpperCase()
         .slice(0, 2)
-    : "U"
+    : 'U';
 
   return (
     <header className="flex h-14 items-center justify-between border-b bg-card px-6">
@@ -63,7 +60,7 @@ export function Header({ onMenuClick }: HeaderProps) {
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => router.push("/notifications")}
+                onClick={() => router.push('/notifications')}
               />
             }
           >
@@ -75,7 +72,7 @@ export function Header({ onMenuClick }: HeaderProps) {
         <Button
           variant="ghost"
           size="icon"
-          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
         >
           <Sun className="h-5 w-5 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
           <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
@@ -91,7 +88,7 @@ export function Header({ onMenuClick }: HeaderProps) {
             <DropdownMenuGroup>
               <DropdownMenuLabel>
                 <div className="flex flex-col">
-                  <span>{session?.user?.name ?? "Usuário"}</span>
+                  <span>{session?.user?.name ?? 'Usuário'}</span>
                   <span className="text-xs font-normal text-muted-foreground">
                     {session?.user?.email}
                   </span>
@@ -104,7 +101,10 @@ export function Header({ onMenuClick }: HeaderProps) {
               Perfil
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/login" })}>
+            <DropdownMenuItem
+              onClick={() => signOut({ callbackUrl: '/login' })}
+              className="hover:bg-red-600/70! cursor-pointer hover:text-red-300!"
+            >
               <LogOut className="mr-2 h-4 w-4" />
               Sair
             </DropdownMenuItem>
@@ -112,5 +112,5 @@ export function Header({ onMenuClick }: HeaderProps) {
         </DropdownMenu>
       </div>
     </header>
-  )
+  );
 }

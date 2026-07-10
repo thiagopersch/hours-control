@@ -38,6 +38,10 @@ export async function GET(request: NextRequest) {
     statusCounts,
     clientStats,
     analystStats,
+    departmentStats,
+    demandTypeStats,
+    priorityStats,
+    clientAnalystStats,
     monthlyEvolution,
   ] = await Promise.all([
     prisma.demand.count({ where: whereBase }),
@@ -64,6 +68,39 @@ export async function GET(request: NextRequest) {
       _sum: { durationMinutes: true },
       orderBy: { _sum: { durationMinutes: "desc" } },
       take: 10,
+    }),
+
+    prisma.demand.groupBy({
+      by: ["departmentId"],
+      where: whereBase,
+      _count: { id: true },
+      _sum: { durationMinutes: true },
+      orderBy: { _sum: { durationMinutes: "desc" } },
+      take: 10,
+    }),
+
+    prisma.demand.groupBy({
+      by: ["demandTypeId"],
+      where: whereBase,
+      _count: { id: true },
+      _sum: { durationMinutes: true },
+      orderBy: { _sum: { durationMinutes: "desc" } },
+      take: 10,
+    }),
+
+    prisma.demand.groupBy({
+      by: ["priority"],
+      where: whereBase,
+      _count: { id: true },
+      _avg: { durationMinutes: true },
+    }),
+
+    // Per client+analyst breakdown, used to compute labor cost per client
+    // (durationMinutes × Analyst.hourlyRate) without exposing per-demand data.
+    prisma.demand.groupBy({
+      by: ["clientId", "analystId"],
+      where: whereBase,
+      _sum: { durationMinutes: true },
     }),
 
     (() => {
@@ -101,22 +138,83 @@ export async function GET(request: NextRequest) {
     })(),
   ])
 
-  const clientNames = clientStats.length
+  // Active contracts define the "hours sold" (contractedHours) and the
+  // billing rate (hourlyRate) used for contract utilization and margin.
+  const activeContracts = await prisma.clientContract.findMany({
+    where: { status: "ACTIVE", client: { organizationId }, deletedAt: null },
+    select: { clientId: true, contractedHours: true, hourlyRate: true },
+  })
+
+  const clientIdsForNames = new Set([
+    ...clientStats.map((c) => c.clientId),
+    ...activeContracts.map((c) => c.clientId),
+  ])
+  const clientNames = clientIdsForNames.size
     ? await prisma.client.findMany({
-        where: { id: { in: clientStats.map((c) => c.clientId) }, organizationId },
+        where: { id: { in: [...clientIdsForNames] }, organizationId },
         select: { id: true, name: true },
       })
     : []
 
-  const analystNames = analystStats.length
+  const analystIdsForNames = new Set([
+    ...analystStats.map((a) => a.analystId),
+    ...clientAnalystStats.map((a) => a.analystId),
+  ])
+  const analystNames = analystIdsForNames.size
     ? await prisma.analyst.findMany({
-        where: { id: { in: analystStats.map((a) => a.analystId) }, organizationId },
+        where: { id: { in: [...analystIdsForNames] }, organizationId },
+        select: { id: true, name: true, color: true, hourlyRate: true },
+      })
+    : []
+
+  const departmentIds = departmentStats.map((d) => d.departmentId).filter((id): id is string => !!id)
+  const departmentNames = departmentIds.length
+    ? await prisma.department.findMany({
+        where: { id: { in: departmentIds }, organizationId },
+        select: { id: true, name: true },
+      })
+    : []
+
+  const demandTypeIds = demandTypeStats.map((d) => d.demandTypeId).filter((id): id is string => !!id)
+  const demandTypeNames = demandTypeIds.length
+    ? await prisma.demandType.findMany({
+        where: { id: { in: demandTypeIds }, organizationId },
         select: { id: true, name: true, color: true },
       })
     : []
 
   const clientMap = new Map(clientNames.map((c) => [c.id, c.name]))
   const analystMap = new Map(analystNames.map((a) => [a.id, a]))
+  const departmentMap = new Map(departmentNames.map((d) => [d.id, d.name]))
+  const demandTypeMap = new Map(demandTypeNames.map((d) => [d.id, d]))
+  const contractByClient = new Map(activeContracts.map((c) => [c.clientId, c]))
+
+  // Labor cost and total minutes per client, derived from the same
+  // client+analyst breakdown (not capped at top 10, unlike `clientStats`).
+  const costByClient = new Map<string, number>()
+  const minutesByClient = new Map<string, number>()
+  for (const row of clientAnalystStats) {
+    const hourlyRate = analystMap.get(row.analystId)?.hourlyRate ?? 0
+    const minutes = row._sum.durationMinutes ?? 0
+    const cost = (minutes / 60) * hourlyRate
+    costByClient.set(row.clientId, (costByClient.get(row.clientId) ?? 0) + cost)
+    minutesByClient.set(row.clientId, (minutesByClient.get(row.clientId) ?? 0) + minutes)
+  }
+
+  const clientFinancials = [...contractByClient.entries()].map(([clientId, contract]) => {
+    const consumedMinutes = minutesByClient.get(clientId) ?? 0
+    const revenue = (consumedMinutes / 60) * contract.hourlyRate
+    const cost = costByClient.get(clientId) ?? 0
+    return {
+      clientId,
+      clientName: clientMap.get(clientId) ?? "Unknown",
+      contractedHours: contract.contractedHours,
+      consumedHours: consumedMinutes / 60,
+      revenue,
+      cost,
+      margin: revenue - cost,
+    }
+  })
 
   return NextResponse.json({
     total: totalDemands,
@@ -143,5 +241,24 @@ export async function GET(request: NextRequest) {
       totalMinutes: Number(m.total),
       count: Number(m.count),
     })),
+    byDepartment: departmentStats.map((d) => ({
+      departmentId: d.departmentId,
+      departmentName: d.departmentId ? departmentMap.get(d.departmentId) ?? "Unknown" : "Sem setor",
+      count: d._count.id,
+      totalMinutes: d._sum.durationMinutes ?? 0,
+    })),
+    byDemandType: demandTypeStats.map((d) => ({
+      demandTypeId: d.demandTypeId,
+      demandTypeName: d.demandTypeId ? demandTypeMap.get(d.demandTypeId)?.name ?? "Unknown" : "Sem tipo",
+      demandTypeColor: d.demandTypeId ? demandTypeMap.get(d.demandTypeId)?.color ?? "#6366f1" : "#6b7280",
+      count: d._count.id,
+      totalMinutes: d._sum.durationMinutes ?? 0,
+    })),
+    byPriority: priorityStats.map((p) => ({
+      priority: p.priority,
+      count: p._count.id,
+      avgMinutes: p._avg.durationMinutes ?? 0,
+    })),
+    clientFinancials,
   })
 }

@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
-import { Sidebar } from '@/components/sidebar';
 import { Header } from '@/components/header';
+import { Sidebar } from '@/components/sidebar';
 import { Sheet, SheetContent } from '@/components/ui/sheet';
+import { useState } from 'react';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -11,7 +11,11 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex h-screen overflow-hidden">
       <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-        <SheetContent side="left" className="w-[80%] p-0">
+        <SheetContent
+          side="left"
+          showCloseButton={false}
+          className="w-auto max-md:max-w-64 p-0"
+        >
           <Sidebar variant="mobile" onNavClick={() => setMobileOpen(false)} />
         </SheetContent>
       </Sheet>

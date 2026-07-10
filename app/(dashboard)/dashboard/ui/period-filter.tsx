@@ -49,9 +49,11 @@ export function PeriodFilter({
           if (v === 'all') onMonthChange('');
         }}
       >
-        <SelectTrigger className="w-[110px]" size="sm">
+        <SelectTrigger className="w-40 max-md:w-full" size="sm">
           <SelectValue placeholder="Ano">
-            {(selected: string | null) => (selected && selected !== 'all' ? selected : 'Todos os períodos')}
+            {(selected: string | null) =>
+              selected && selected !== 'all' ? selected : 'Todos os períodos'
+            }
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
@@ -72,10 +74,13 @@ export function PeriodFilter({
         }}
         disabled={!year}
       >
-        <SelectTrigger className="w-[140px]" size="sm">
+        <SelectTrigger className="w-36 max-md:w-full" size="sm">
           <SelectValue placeholder="Mês">
             {(selected: string | null) =>
-              selected && selected !== 'all' ? monthNames[Number(selected) - 1] : 'Todos os meses'}
+              selected && selected !== 'all'
+                ? monthNames[Number(selected) - 1]
+                : 'Todos os meses'
+            }
           </SelectValue>
         </SelectTrigger>
         <SelectContent>
