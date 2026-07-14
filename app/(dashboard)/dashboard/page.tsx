@@ -81,9 +81,12 @@ function utilizationColor(pct: number) {
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  const canViewFinancials =
-    !!(session?.user as any)?.isSuperAdmin ||
-    hasPermission((session?.user as any)?.permissions, 'analyst');
+  const isSuperAdmin = !!(session?.user as any)?.isSuperAdmin;
+  const permissions = (session?.user as any)?.permissions;
+  const canViewFinancials = isSuperAdmin || hasPermission(permissions, 'analyst');
+  const canViewClients = isSuperAdmin || hasPermission(permissions, 'client');
+  const canViewAnalysts = isSuperAdmin || hasPermission(permissions, 'analyst');
+  const canViewContracts = isSuperAdmin || hasPermission(permissions, 'contract');
 
   const { year, setYear, month, setMonth, filters } = usePeriodFilter();
   const {
@@ -91,9 +94,9 @@ export default function DashboardPage() {
     error: statsError,
     isLoading: statsLoading,
   } = useDemandStats(filters);
-  const { data: clients } = useClients();
-  const { data: analysts } = useAnalysts();
-  const { data: contracts } = useContracts();
+  const { data: clients } = useClients({ enabled: canViewClients });
+  const { data: analysts } = useAnalysts({ enabled: canViewAnalysts });
+  const { data: contracts } = useContracts({ enabled: canViewContracts });
 
   const evolutionRef = useRef<HTMLDivElement>(null);
   const statusRef = useRef<HTMLDivElement>(null);
@@ -250,17 +253,23 @@ export default function DashboardPage() {
               value={formatDuration(totalMinutes)}
               icon={CalendarClock}
             />
-            <StatCard
-              title="Clientes"
-              value={counts.clients}
-              icon={Building2}
-            />
-            <StatCard title="Analistas" value={counts.analysts} icon={Users} />
-            <StatCard
-              title="Contratos ativos"
-              value={counts.contracts}
-              icon={FileText}
-            />
+            {canViewClients && (
+              <StatCard
+                title="Clientes"
+                value={counts.clients}
+                icon={Building2}
+              />
+            )}
+            {canViewAnalysts && (
+              <StatCard title="Analistas" value={counts.analysts} icon={Users} />
+            )}
+            {canViewContracts && (
+              <StatCard
+                title="Contratos ativos"
+                value={counts.contracts}
+                icon={FileText}
+              />
+            )}
           </>
         )}
       </div>

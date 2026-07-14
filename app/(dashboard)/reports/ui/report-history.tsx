@@ -1,10 +1,14 @@
 "use client"
 
+import Link from "next/link"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
 import { History, Download } from "lucide-react"
 import { formatDateTime } from "@/lib/utils"
 import { useExports } from "@/hooks/use-api"
+
+const MAX_VISIBLE = 3
 
 const statusVariants: Record<string, "default" | "secondary" | "destructive" | "outline"> = {
   COMPLETED: "outline",
@@ -25,6 +29,8 @@ export function ReportHistory() {
 
   if (isLoading || !exports?.length) return null
 
+  const visibleExports = exports.slice(0, MAX_VISIBLE)
+
   return (
     <Card>
       <CardHeader>
@@ -34,7 +40,7 @@ export function ReportHistory() {
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {exports.map((exp: any) => (
+        {visibleExports.map((exp: any) => (
           <div
             key={exp.id}
             className="flex items-center justify-between gap-2 rounded-lg border px-3 py-2 text-sm"
@@ -55,6 +61,11 @@ export function ReportHistory() {
             </div>
           </div>
         ))}
+        {exports.length > MAX_VISIBLE && (
+          <Button variant="outline" className="w-full" nativeButton={false} render={<Link href="/reports/history" />}>
+            Ver todos
+          </Button>
+        )}
       </CardContent>
     </Card>
   )

@@ -2,10 +2,10 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { z } from "zod"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { logger } from "@/lib/logger"
-import { getDemandAnalystScope } from "@/lib/scope"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
+import { canAccessRecord } from "@/lib/policy"
 
 const demandCreateSchema = z.object({
   date: z.string().min(1),
@@ -24,11 +24,9 @@ const demandCreateSchema = z.object({
 })
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "demand", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const { searchParams } = request.nextUrl
   const clientId = searchParams.get("clientId")
@@ -42,23 +40,27 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "50", 10)
   const skip = (page - 1) * limit
 
-  const where: Record<string, unknown> = {
-    client: { organizationId },
-    deletedAt: null,
-  }
-  if (clientId) where.clientId = clientId
-  if (analystId) where.analystId = analystId
-
-  const scopedAnalystId = getDemandAnalystScope(session)
-  if (scopedAnalystId) where.analystId = scopedAnalystId
-  if (status) where.status = status
-  if (priority) where.priority = priority
-  if (search) where.name = { contains: search, mode: "insensitive" }
+  const filters: Record<string, unknown> = {}
+  if (clientId) filters.clientId = clientId
+  if (analystId) filters.analystId = analystId
+  if (status) filters.status = status
+  if (priority) filters.priority = priority
+  if (search) filters.name = { contains: search, mode: "insensitive" }
   if (startDate || endDate) {
     const dateFilter: { gte?: Date; lte?: Date } = {}
     if (startDate) dateFilter.gte = new Date(startDate)
     if (endDate) dateFilter.lte = new Date(endDate)
-    where.date = dateFilter
+    filters.date = dateFilter
+  }
+
+  // `scopeWhere` and `filters` are ANDed rather than merged into one object
+  // so a caller's own query params (e.g. ?analystId=) can never overwrite -
+  // and thereby bypass - the security scope filter, even if both touch the
+  // same field.
+  const where: Record<string, unknown> = {
+    client: { organizationId },
+    deletedAt: null,
+    AND: [scopeWhere, filters],
   }
 
   const [demands, total] = await Promise.all([
@@ -89,11 +91,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "demand", "create")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const body = await request.json()
   const parsed = demandCreateSchema.safeParse(body)
@@ -105,9 +105,13 @@ export async function POST(request: NextRequest) {
   }
   const { tags, ...demandData } = parsed.data
 
-  const scopedAnalystId = getDemandAnalystScope(session)
-  if (scopedAnalystId && demandData.analystId !== scopedAnalystId) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  // A user restricted to OWN can only ever create demands attributed to
+  // themselves - never on behalf of another analyst/client.
+  if (!canAccessRecord(session, "demand", "create", demandData)) {
+    return NextResponse.json(
+      { error: "Você não tem permissão para criar esta demanda." },
+      { status: 403 }
+    )
   }
 
   try {
@@ -124,10 +128,10 @@ export async function POST(request: NextRequest) {
     const demand = await prisma.demand.create({
       data: {
         ...demandData,
-        requesterId: demandData.requesterId || null,
-        departmentId: demandData.departmentId || null,
-        demandTypeId: demandData.demandTypeId || null,
-        notes: demandData.notes || null,
+        requesterId: demandData.requesterId ?? null,
+        departmentId: demandData.departmentId ?? null,
+        demandTypeId: demandData.demandTypeId ?? null,
+        notes: demandData.notes ?? null,
         date: new Date(demandData.date),
         demandTags: tags?.length
           ? {

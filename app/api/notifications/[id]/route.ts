@@ -1,39 +1,37 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure, assertRecordAccess } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "notification", "read")
+  if (isGuardFailure(guard)) return guard
+  const { session } = guard
 
   const { id } = await params
   const notification = await prisma.notification.findFirst({
-    where: { id, userId: session.user.id },
+    where: { id, user: { organizationId: session.user.organizationId } },
   })
 
-  if (!notification) return NextResponse.json({ error: "Notification not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "notification", "read", notification)
+  if (denied) return denied
 
   return NextResponse.json(notification)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "notification", "update")
+  if (isGuardFailure(guard)) return guard
+  const { session } = guard
 
   const { id } = await params
   const existing = await prisma.notification.findFirst({
-    where: { id, userId: session.user.id },
+    where: { id, user: { organizationId: session.user.organizationId } },
   })
 
-  if (!existing) return NextResponse.json({ error: "Notification not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "notification", "update", existing)
+  if (denied) return denied
 
   const notification = await prisma.notification.update({
     where: { id },
@@ -44,18 +42,17 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "notification", "delete")
+  if (isGuardFailure(guard)) return guard
+  const { session } = guard
 
   const { id } = await params
   const existing = await prisma.notification.findFirst({
-    where: { id, userId: session.user.id },
+    where: { id, user: { organizationId: session.user.organizationId } },
   })
 
-  if (!existing) return NextResponse.json({ error: "Notification not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "notification", "delete", existing)
+  if (denied) return denied
 
   await prisma.notification.delete({
     where: { id },

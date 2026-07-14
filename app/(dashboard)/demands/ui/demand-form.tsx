@@ -10,15 +10,8 @@ import { Label } from "@/components/ui/label"
 import { DatePicker } from "@/components/ui/date-picker"
 import { ColoredSelect } from "@/components/ui/colored-select"
 import { Spinner } from "@/components/ui/spinner"
-import {
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose,
-} from "@/components/ui/dialog"
-import { Field, FieldError, FieldDescription } from "@/components/ui/field"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Field, FieldError } from "@/components/ui/field"
 import { demandSchema, type DemandFormData } from "../schema/demand-schema"
 
 const priorityOptions = [
@@ -46,6 +39,7 @@ type DemandFormProps = {
   /** When set, the analyst field is locked to this id (analysts restricted to their own demands) */
   lockedAnalystId?: string
   onSubmit: (data: DemandFormData) => void
+  onCancel: () => void
   loading?: boolean
 }
 
@@ -58,6 +52,7 @@ export function DemandForm({
   defaultValues,
   lockedAnalystId,
   onSubmit,
+  onCancel,
   loading = false,
 }: DemandFormProps) {
   const isEditing = !!defaultValues
@@ -98,17 +93,18 @@ export function DemandForm({
   const canSubmit = isValid && (!isEditing || isDirty)
 
   return (
-    <DialogContent className="sm:max-w-3xl">
-      <DialogHeader>
-        <DialogTitle>
+    <Card className="mx-auto w-full max-w-3xl">
+      <CardHeader>
+        <CardTitle>
           {isEditing ? "Editar Demanda" : "Nova Demanda"}
-        </DialogTitle>
-        <DialogDescription>
+        </CardTitle>
+        <CardDescription>
           Preencha os dados da demanda abaixo.
-        </DialogDescription>
-      </DialogHeader>
+        </CardDescription>
+      </CardHeader>
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5 max-h-[75vh] overflow-y-auto overflow-x-hidden pr-1">
+      <CardContent>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-5">
         <fieldset disabled={loading} className="contents">
         <Field>
           <Label>
@@ -170,7 +166,6 @@ export function DemandForm({
                 {...register("durationMinutes", { valueAsNumber: true })}
               />
             </div>
-            <FieldDescription>Informe valores inteiros de horas (HH) e minutos (MM)</FieldDescription>
             <FieldError errors={[errors.durationHours ?? errors.durationMinutes]} />
           </Field>
         </div>
@@ -345,16 +340,17 @@ export function DemandForm({
         </Field>
         </fieldset>
 
-        <DialogFooter className="bg-transparent border-t-0">
-          <DialogClose render={<Button variant="outline" disabled={loading} />}>
+        <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
+          <Button type="button" variant="outline" disabled={loading} onClick={onCancel}>
             Cancelar
-          </DialogClose>
+          </Button>
           <Button type="submit" disabled={loading || !canSubmit}>
             {loading && <Spinner />}
             {loading ? "Salvando..." : "Salvar"}
           </Button>
-        </DialogFooter>
+        </div>
       </form>
-    </DialogContent>
+      </CardContent>
+    </Card>
   )
 }

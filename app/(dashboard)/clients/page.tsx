@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import { useSession } from "next-auth/react"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
 import { DataTable } from "@/components/data-table"
@@ -13,8 +14,16 @@ import type { ClientFormData } from "./schema/client-schema"
 import { useClients, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-clients"
 import { FetchError, apiMutate } from "@/lib/fetcher"
 import { useCrudModal } from "@/hooks/use-crud-modal"
+import { hasPermission } from "@/lib/permissions"
 
 export default function ClientsPage() {
+  const { data: session } = useSession()
+  const isSuperAdmin = !!(session?.user as any)?.isSuperAdmin
+  const permissions = (session?.user as any)?.permissions
+  const canFavorite = isSuperAdmin || hasPermission(permissions, "client", "favorite")
+  const canUpdate = isSuperAdmin || hasPermission(permissions, "client", "update")
+  const canDelete = isSuperAdmin || hasPermission(permissions, "client", "delete")
+
   const { data: clients, error, isLoading } = useClients()
   const { trigger: createClient, isMutating: isCreating } = useCreate("/api/clients")
   const { trigger: updateClient, isMutating: isUpdating } = useUpdate("/api/clients")
@@ -66,6 +75,9 @@ export default function ClientsPage() {
     onEdit: modal.openEdit,
     onDelete: setDeletingClient,
     onToggleFavorite: (client) => { void handleToggleFavorite(client) },
+    canFavorite,
+    canUpdate,
+    canDelete,
   })
 
   if (isLoading) return <div className="flex items-center justify-center py-20"><span className="text-muted-foreground">Carregando...</span></div>

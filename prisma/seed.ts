@@ -42,7 +42,18 @@ async function main() {
     update: {},
     create: {
       name: 'user',
-      description: 'Usuário padrão',
+      description: 'Usuário padrão (analista)',
+      isSystem: true,
+      organizationId: org.id,
+    },
+  });
+
+  const clientRole = await prisma.role.upsert({
+    where: { organizationId_name: { organizationId: org.id, name: 'cliente' } },
+    update: {},
+    create: {
+      name: 'cliente',
+      description: 'Portal do cliente - acesso restrito às próprias demandas',
       isSystem: true,
       organizationId: org.id,
     },
@@ -62,11 +73,16 @@ async function main() {
     'report',
     'notification',
     'settings',
+    'team',
   ];
-  const actions = ['create', 'read', 'update', 'delete'];
+  const baseActions = ['create', 'read', 'update', 'delete'];
+  const resourceActions: Record<string, string[]> = {
+    demand: [...baseActions, 'export', 'import', 'approve', 'configure'],
+    client: [...baseActions, 'favorite'],
+  };
 
   for (const resource of resources) {
-    for (const action of actions) {
+    for (const action of resourceActions[resource] ?? baseActions) {
       await prisma.permission.upsert({
         where: { resource_action: { resource, action } },
         update: {},
@@ -84,13 +100,22 @@ async function main() {
           permissionId: permission.id,
         },
       },
-      update: {},
-      create: { roleId: adminRole.id, permissionId: permission.id },
+      update: { scope: 'ALL' },
+      create: { roleId: adminRole.id, permissionId: permission.id, scope: 'ALL' },
     });
   }
 
-  const userPermissions = ['demand:create', 'demand:read', 'demand:update'];
-  for (const key of userPermissions) {
+  // Demand/analyst access is restricted to the analyst's own records; the
+  // remaining resources are read-only reference data an analyst must be able
+  // to see to populate the demand form's dropdowns (client, requester,
+  // department, demand type pickers), so those are granted company-wide.
+  const userOwnPermissions = ['demand:create', 'demand:read', 'demand:update', 'analyst:read'];
+  const userReferencePermissions = ['client:read', 'requester:read', 'department:read', 'demand_type:read'];
+  const userPermissionScopes: Record<string, 'OWN' | 'COMPANY'> = {
+    ...Object.fromEntries(userOwnPermissions.map((k) => [k, 'OWN' as const])),
+    ...Object.fromEntries(userReferencePermissions.map((k) => [k, 'COMPANY' as const])),
+  };
+  for (const [key, scope] of Object.entries(userPermissionScopes)) {
     const permission = allPermissions.find(
       (p: { resource: string; action: string }) =>
         `${p.resource}:${p.action}` === key,
@@ -103,10 +128,31 @@ async function main() {
             permissionId: permission.id,
           },
         },
-        update: {},
-        create: { roleId: userRole.id, permissionId: permission.id },
+        update: { scope },
+        create: { roleId: userRole.id, permissionId: permission.id, scope },
       });
     }
+  }
+
+  const clientPortalPermission = allPermissions.find(
+    (p: { resource: string; action: string }) =>
+      `${p.resource}:${p.action}` === 'demand:read',
+  );
+  if (clientPortalPermission) {
+    await prisma.rolePermission.upsert({
+      where: {
+        roleId_permissionId: {
+          roleId: clientRole.id,
+          permissionId: clientPortalPermission.id,
+        },
+      },
+      update: { scope: 'OWN' },
+      create: {
+        roleId: clientRole.id,
+        permissionId: clientPortalPermission.id,
+        scope: 'OWN',
+      },
+    });
   }
 
   const adminUser = await prisma.user.upsert({
@@ -126,6 +172,26 @@ async function main() {
     create: { userId: adminUser.id, roleId: adminRole.id },
   });
 
+  const team = await prisma.team.upsert({
+    where: { organizationId_name: { organizationId: org.id, name: 'Suporte N1' } },
+    update: {},
+    create: {
+      name: 'Suporte N1',
+      organizationId: org.id,
+    },
+  });
+
+  const department = await prisma.department.upsert({
+    where: { id: 'seed-department-1' },
+    update: {},
+    create: {
+      id: 'seed-department-1',
+      name: 'TI',
+      description: 'Tecnologia da Informação',
+      organizationId: org.id,
+    },
+  });
+
   const analyst = await prisma.analyst.upsert({
     where: { id: 'seed-analyst-1' },
     update: {},
@@ -139,6 +205,8 @@ async function main() {
       hourlyRate: 85.0,
       color: '#6366f1',
       organizationId: org.id,
+      teamId: team.id,
+      departmentId: department.id,
     },
   });
 
@@ -156,6 +224,26 @@ async function main() {
       color: '#22c55e',
       organizationId: org.id,
     },
+  });
+
+  const clientPortalUser = await prisma.user.upsert({
+    where: { email: 'cliente@exemplo.com' },
+    update: {},
+    create: {
+      name: 'Carlos Mendes',
+      email: 'cliente@exemplo.com',
+      passwordHash,
+      organizationId: org.id,
+    },
+  });
+  await prisma.client.update({
+    where: { id: client.id },
+    data: { userId: clientPortalUser.id },
+  });
+  await prisma.userRole.upsert({
+    where: { userId_roleId: { userId: clientPortalUser.id, roleId: clientRole.id } },
+    update: {},
+    create: { userId: clientPortalUser.id, roleId: clientRole.id },
   });
 
   await prisma.clientContract.upsert({
@@ -183,17 +271,6 @@ async function main() {
     },
   });
 
-  const department = await prisma.department.upsert({
-    where: { id: 'seed-department-1' },
-    update: {},
-    create: {
-      id: 'seed-department-1',
-      name: 'TI',
-      description: 'Tecnologia da Informação',
-      organizationId: org.id,
-    },
-  });
-
   const demandType = await prisma.demandType.upsert({
     where: { id: 'seed-demand-type-1' },
     update: {},
@@ -202,6 +279,49 @@ async function main() {
       name: 'Suporte',
       description: 'Suporte técnico',
       color: '#a855f7',
+      organizationId: org.id,
+    },
+  });
+
+  // Second analyst + second client, used to verify cross-user/cross-client isolation
+  const analystUser2 = await prisma.user.upsert({
+    where: { email: 'maria.analista@exemplo.com' },
+    update: {},
+    create: {
+      name: 'Maria Analista',
+      email: 'maria.analista@exemplo.com',
+      passwordHash,
+      organizationId: org.id,
+    },
+  });
+  await prisma.userRole.upsert({
+    where: { userId_roleId: { userId: analystUser2.id, roleId: userRole.id } },
+    update: {},
+    create: { userId: analystUser2.id, roleId: userRole.id },
+  });
+  const analyst2 = await prisma.analyst.upsert({
+    where: { id: 'seed-analyst-2' },
+    update: {},
+    create: {
+      id: 'seed-analyst-2',
+      name: 'Maria Analista',
+      email: 'maria.analista@exemplo.com',
+      role: 'Analista de Suporte',
+      level: 2,
+      hourlyRate: 75.0,
+      color: '#ec4899',
+      organizationId: org.id,
+      userId: analystUser2.id,
+    },
+  });
+
+  const client2 = await prisma.client.upsert({
+    where: { id: 'seed-client-2' },
+    update: {},
+    create: {
+      id: 'seed-client-2',
+      name: 'Cliente B Ltda',
+      color: '#f59e0b',
       organizationId: org.id,
     },
   });
@@ -222,6 +342,23 @@ async function main() {
       clientId: client.id,
       requesterId: requester.id,
       departmentId: department.id,
+      demandTypeId: demandType.id,
+    },
+  });
+
+  await prisma.demand.upsert({
+    where: { id: 'seed-demand-2' },
+    update: {},
+    create: {
+      id: 'seed-demand-2',
+      name: 'Migração de servidor',
+      description: 'Demanda de teste pertencente a outro analista e outro cliente, usada para validar isolamento de dados.',
+      date: new Date('2026-06-20'),
+      durationMinutes: 180,
+      priority: 'HIGH',
+      status: 'IN_PROGRESS',
+      analystId: analyst2.id,
+      clientId: client2.id,
       demandTypeId: demandType.id,
     },
   });

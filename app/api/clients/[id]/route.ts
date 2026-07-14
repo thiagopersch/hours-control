@@ -1,39 +1,37 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure, assertRecordAccess } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "client", "read")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const client = await prisma.client.findFirst({
     where: { id, organizationId, deletedAt: null },
   })
 
-  if (!client) return NextResponse.json({ error: "Client not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "client", "read", client)
+  if (denied) return denied
 
   return NextResponse.json(client)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "client", "update")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.client.findFirst({
     where: { id, organizationId, deletedAt: null },
   })
 
-  if (!existing) return NextResponse.json({ error: "Client not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "client", "update", existing)
+  if (denied) return denied
 
   const body = await request.json()
   const client = await prisma.client.update({
@@ -45,18 +43,17 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "client", "delete")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.client.findFirst({
     where: { id, organizationId, deletedAt: null },
   })
 
-  if (!existing) return NextResponse.json({ error: "Client not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "client", "delete", existing)
+  if (denied) return denied
 
   await prisma.client.update({
     where: { id },
@@ -67,23 +64,22 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 }
 
 export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "client", "favorite")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.client.findFirst({
     where: { id, organizationId, deletedAt: null },
   })
 
-  if (!existing) return NextResponse.json({ error: "Client not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "client", "favorite", existing)
+  if (denied) return denied
 
   const body = await request.json()
   const client = await prisma.client.update({
     where: { id },
-    data: body,
+    data: { favorite: body.favorite },
   })
 
   return NextResponse.json(client)

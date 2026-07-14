@@ -52,64 +52,83 @@ enum ExportFormat {
   JSON
 }
 
+enum PermissionScope {
+  NONE
+  OWN
+  TEAM
+  DEPARTMENT
+  COMPANY
+  ALL
+}
+
 // ─── Multi-tenant ───────────────────────────────────────────────
 
 model Organization {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   name      String
-  slug      String   @unique
+  slug      String    @unique
   document  String?
-  plan      String   @default("free")
-  status    String   @default("active")
+  plan      String    @default("free")
+  status    String    @default("active")
   configs   Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
   deletedAt DateTime?
 
-  users         User[]
-  roles         Role[]
-  analysts      Analyst[]
-  clients       Client[]
-  requesters    Requester[]
-  departments   Department[]
-  demandTypes   DemandType[]
-  tags          Tag[]
-  auditLogs     AuditLog[]
-  exports       Export[]
+  users       User[]
+  roles       Role[]
+  teams       Team[]
+  analysts    Analyst[]
+  clients     Client[]
+  requesters  Requester[]
+  departments Department[]
+  demandTypes DemandType[]
+  tags        Tag[]
+  auditLogs   AuditLog[]
+  exports     Export[]
 }
 
 // ─── Auth.js tables ────────────────────────────────────────────
 
 model User {
-  id            String   @id @default(cuid())
-  name          String?
-  email         String   @unique
-  emailVerified DateTime?
-  image         String?
-  passwordHash  String?
-  phone         String?
-  status        String   @default("active")
-  mustChangePassword Boolean @default(false)
-  isSuperAdmin  Boolean  @default(false)
-  lastLoginAt   DateTime?
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
-  deletedAt     DateTime?
+  id                 String    @id @default(cuid())
+  name               String?
+  email              String    @unique
+  emailVerified      DateTime?
+  image              String?
+  passwordHash       String?
+  phone              String?
+  status             String    @default("active")
+  mustChangePassword Boolean   @default(false)
+  isSuperAdmin       Boolean   @default(false)
+  lastLoginAt        DateTime?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  deletedAt          DateTime?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  accounts            Account[]
-  sessions            Session[]
-  userRoles           UserRole[]
-  comments            Comment[]
-  notifications       Notification[]
+  accounts             Account[]
+  sessions             Session[]
+  userRoles            UserRole[]
+  comments             Comment[]
+  notifications        Notification[]
   notificationSettings NotificationSetting[]
-  auditLogs           AuditLog[]
-  exports             Export[]
+  auditLogs            AuditLog[]
+  exports              Export[]
   dashboardPreferences DashboardPreference?
-  uploadedAttachments  Attachment[] @relation("UploadedAttachments")
+  uploadedAttachments  Attachment[]          @relation("UploadedAttachments")
   analyst              Analyst?
+  client               Client?               @relation("ClientPortalUser")
+
+  createdClients     Client[]         @relation("ClientCreatedBy")
+  createdRequesters  Requester[]      @relation("RequesterCreatedBy")
+  createdDepartments Department[]     @relation("DepartmentCreatedBy")
+  createdDemandTypes DemandType[]     @relation("DemandTypeCreatedBy")
+  createdTags        Tag[]            @relation("TagCreatedBy")
+  createdContracts   ClientContract[] @relation("ClientContractCreatedBy")
+  createdAnalysts    Analyst[]        @relation("AnalystCreatedBy")
 }
 
 model Account {
@@ -151,12 +170,12 @@ model VerificationToken {
 // ─── RBAC ───────────────────────────────────────────────────────
 
 model Role {
-  id             String   @id @default(cuid())
-  name           String
-  description    String?
-  isSystem       Boolean  @default(false)
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id          String   @id @default(cuid())
+  name        String
+  description String?
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
@@ -168,7 +187,7 @@ model Role {
 }
 
 model Permission {
-  id          String   @id @default(cuid())
+  id          String  @id @default(cuid())
   resource    String
   action      String
   description String?
@@ -181,6 +200,7 @@ model Permission {
 model RolePermission {
   roleId       String
   permissionId String
+  scope        PermissionScope @default(NONE)
 
   role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
   permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
@@ -198,23 +218,40 @@ model UserRole {
   @@id([userId, roleId])
 }
 
+// ─── Teams ──────────────────────────────────────────────────────
+
+model Team {
+  id        String    @id @default(cuid())
+  name      String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id])
+
+  members Analyst[]
+
+  @@unique([organizationId, name])
+}
+
 // ─── Analysts ───────────────────────────────────────────────────
 
 model Analyst {
-  id           String   @id @default(cuid())
-  name         String
-  email        String?
-  phone        String?
-  role         String?
-  hourlyRate   Float?   @map("hourly_rate")
-  status       String   @default("active")
-  photo        String?
-  team         String?
-  color        String   @default("#6366f1")
-  level        Int      @default(1)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  deletedAt    DateTime?
+  id         String    @id @default(cuid())
+  name       String
+  email      String?
+  phone      String?
+  role       String?
+  hourlyRate Float?    @map("hourly_rate")
+  status     String    @default("active")
+  photo      String?
+  team       String?
+  color      String    @default("#6366f1")
+  level      Int       @default(1)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  deletedAt  DateTime?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
@@ -222,95 +259,135 @@ model Analyst {
   userId String? @unique
   user   User?   @relation(fields: [userId], references: [id])
 
+  teamId  String?
+  teamRef Team?   @relation(fields: [teamId], references: [id])
+
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id], name: "AnalystHomeDepartment")
+
+  createdById String?
+  createdBy   User?   @relation("AnalystCreatedBy", fields: [createdById], references: [id])
+
   demands Demand[]
+
+  @@index([organizationId])
 }
 
 // ─── Clients ────────────────────────────────────────────────────
 
 model Client {
-  id             String   @id @default(cuid())
-  name           String
-  legalName      String?  @map("legal_name")
-  document       String?
-  email          String?
-  phone          String?
-  responsible    String?
-  color          String   @default("#22c55e")
-  notes          String?  @db.Text
-  favorite       Boolean  @default(false)
-  status         String   @default("active")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
-  deletedAt      DateTime?
+  id          String    @id @default(cuid())
+  name        String
+  legalName   String?   @map("legal_name")
+  document    String?
+  email       String?
+  phone       String?
+  responsible String?
+  color       String    @default("#22c55e")
+  notes       String?   @db.Text
+  favorite    Boolean   @default(false)
+  status      String    @default("active")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
+  userId String? @unique
+  user   User?   @relation("ClientPortalUser", fields: [userId], references: [id])
+
+  createdById String?
+  createdBy   User?   @relation("ClientCreatedBy", fields: [createdById], references: [id])
+
   contracts ClientContract[]
   demands   Demand[]
+
+  @@index([organizationId])
 }
 
 model ClientContract {
-  id               String         @id @default(cuid())
-  contractedHours  Int            @map("contracted_hours")
-  hourlyRate       Float          @map("hourly_rate")
-  startDate        DateTime       @map("start_date")
-  endDate          DateTime?      @map("end_date")
-  status           ContractStatus @default(ACTIVE)
-  notes            String?        @db.Text
-  createdAt        DateTime       @default(now())
-  updatedAt        DateTime       @updatedAt
-  deletedAt        DateTime?
+  id              String         @id @default(cuid())
+  contractedHours Int            @map("contracted_hours")
+  hourlyRate      Float          @map("hourly_rate")
+  startDate       DateTime       @map("start_date")
+  endDate         DateTime?      @map("end_date")
+  status          ContractStatus @default(ACTIVE)
+  notes           String?        @db.Text
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  deletedAt       DateTime?
 
   clientId String
   client   Client @relation(fields: [clientId], references: [id], onDelete: Cascade)
+
+  createdById String?
+  createdBy   User?   @relation("ClientContractCreatedBy", fields: [createdById], references: [id])
+
+  @@index([clientId])
 }
 
 // ─── Support Structure ─────────────────────────────────────────
 
 model Requester {
-  id         String   @id @default(cuid())
-  name       String
-  email      String?
-  phone      String?
-  status     String   @default("active")
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  deletedAt  DateTime?
+  id        String    @id @default(cuid())
+  name      String
+  email     String?
+  phone     String?
+  status    String    @default("active")
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
+  createdById String?
+  createdBy   User?   @relation("RequesterCreatedBy", fields: [createdById], references: [id])
+
   demands Demand[]
+
+  @@index([organizationId])
 }
 
 model Department {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
-  description String?  @db.Text
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?   @db.Text
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
-  demands Demand[]
+  createdById String?
+  createdBy   User?   @relation("DepartmentCreatedBy", fields: [createdById], references: [id])
+
+  demands         Demand[]
+  homeForAnalysts Analyst[] @relation("AnalystHomeDepartment")
+
+  @@index([organizationId])
 }
 
 model DemandType {
-  id          String   @id @default(cuid())
+  id          String    @id @default(cuid())
   name        String
-  description String?  @db.Text
-  color       String   @default("#a855f7")
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  description String?   @db.Text
+  color       String    @default("#a855f7")
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
   deletedAt   DateTime?
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
+  createdById String?
+  createdBy   User?   @relation("DemandTypeCreatedBy", fields: [createdById], references: [id])
+
   demands Demand[]
+
+  @@index([organizationId])
 }
 
 // ─── Core: Demands ──────────────────────────────────────────────
@@ -330,21 +407,29 @@ model Demand {
   updatedAt       DateTime     @updatedAt
   deletedAt       DateTime?
 
-  analystId      String    @map("analyst_id")
-  clientId       String    @map("client_id")
-  requesterId    String?   @map("requester_id")
-  departmentId   String?   @map("department_id")
-  demandTypeId   String?   @map("demand_type_id")
+  analystId    String  @map("analyst_id")
+  clientId     String  @map("client_id")
+  requesterId  String? @map("requester_id")
+  departmentId String? @map("department_id")
+  demandTypeId String? @map("demand_type_id")
 
-  analyst     Analyst     @relation(fields: [analystId], references: [id])
-  client      Client      @relation(fields: [clientId], references: [id])
-  requester   Requester?  @relation(fields: [requesterId], references: [id])
-  department  Department? @relation(fields: [departmentId], references: [id])
-  demandType  DemandType? @relation(fields: [demandTypeId], references: [id])
+  analyst    Analyst     @relation(fields: [analystId], references: [id])
+  client     Client      @relation(fields: [clientId], references: [id])
+  requester  Requester?  @relation(fields: [requesterId], references: [id])
+  department Department? @relation(fields: [departmentId], references: [id])
+  demandType DemandType? @relation(fields: [demandTypeId], references: [id])
 
   attachments Attachment[]
   comments    Comment[]
   demandTags  DemandTag[]
+
+  @@index([clientId])
+  @@index([analystId])
+  @@index([departmentId])
+  @@index([demandTypeId])
+  @@index([status])
+  @@index([date])
+  @@index([deletedAt])
 }
 
 // ─── Attachments & Comments ─────────────────────────────────────
@@ -374,8 +459,8 @@ model Comment {
   demandId String
   demand   Demand @relation(fields: [demandId], references: [id], onDelete: Cascade)
 
-  userId   String
-  user     User @relation(fields: [userId], references: [id])
+  userId String
+  user   User   @relation(fields: [userId], references: [id])
 
   parentId String?
   parent   Comment?  @relation("CommentReplies", fields: [parentId], references: [id])
@@ -385,14 +470,17 @@ model Comment {
 // ─── Tags ───────────────────────────────────────────────────────
 
 model Tag {
-  id             String   @id @default(cuid())
-  name           String
-  color          String   @default("#8b5cf6")
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id        String   @id @default(cuid())
+  name      String
+  color     String   @default("#8b5cf6")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
+
+  createdById String?
+  createdBy   User?   @relation("TagCreatedBy", fields: [createdById], references: [id])
 
   demandTags DemandTag[]
 
@@ -412,25 +500,25 @@ model DemandTag {
 // ─── Notifications ──────────────────────────────────────────────
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   type      String
   title     String
-  body      String   @db.Text
+  body      String    @db.Text
   data      Json?
   readAt    DateTime?
-  createdAt DateTime @default(now())
+  createdAt DateTime  @default(now())
 
   userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
 model NotificationSetting {
-  id      String               @id @default(cuid())
+  id      String              @id @default(cuid())
   channel NotificationChannel
-  enabled Boolean              @default(true)
+  enabled Boolean             @default(true)
 
   userId String
-  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, channel])
 }
@@ -463,29 +551,29 @@ model AuditLog {
 // ─── Exports ────────────────────────────────────────────────────
 
 model Export {
-  id         String       @id @default(cuid())
-  type       String
-  format     ExportFormat
-  filters    Json?
-  status     ExportStatus @default(PENDING)
-  fileUrl    String?      @map("file_url")
-  error      String?      @db.Text
-  createdAt  DateTime     @default(now())
-  completedAt DateTime?   @map("completed_at")
+  id          String       @id @default(cuid())
+  type        String
+  format      ExportFormat
+  filters     Json?
+  status      ExportStatus @default(PENDING)
+  fileUrl     String?      @map("file_url")
+  error       String?      @db.Text
+  createdAt   DateTime     @default(now())
+  completedAt DateTime?    @map("completed_at")
 
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id])
 
   userId String
-  user   User @relation(fields: [userId], references: [id])
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 // ─── User Preferences ───────────────────────────────────────────
 
 model DashboardPreference {
-  id        String @id @default(cuid())
-  widgets   Json?
-  layout    Json?
+  id      String @id @default(cuid())
+  widgets Json?
+  layout  Json?
 
   userId String @unique
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)

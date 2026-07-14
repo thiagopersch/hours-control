@@ -8,16 +8,16 @@ function listKey(url: string, params?: Record<string, string>) {
   return `${url}?${qs}`
 }
 
-export function useClients() {
-  return useSWR<any[]>("/api/clients", fetcher)
+export function useClients(options?: { enabled?: boolean }) {
+  return useSWR<any[]>(options?.enabled === false ? null : "/api/clients", fetcher)
 }
 
-export function useAnalysts() {
-  return useSWR<any[]>("/api/analysts", fetcher)
+export function useAnalysts(options?: { enabled?: boolean }) {
+  return useSWR<any[]>(options?.enabled === false ? null : "/api/analysts", fetcher)
 }
 
-export function useContracts() {
-  return useSWR<any[]>("/api/contracts", fetcher)
+export function useContracts(options?: { enabled?: boolean }) {
+  return useSWR<any[]>(options?.enabled === false ? null : "/api/contracts", fetcher)
 }
 
 export function useRequesters() {

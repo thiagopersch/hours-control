@@ -226,6 +226,23 @@ export type IntNullableWithAggregatesFilter<$PrismaModel = never> = {
   _max?: Prisma.NestedIntNullableFilter<$PrismaModel>
 }
 
+export type EnumPermissionScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionScope | Prisma.EnumPermissionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPermissionScopeFilter<$PrismaModel> | $Enums.PermissionScope
+}
+
+export type EnumPermissionScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionScope | Prisma.EnumPermissionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPermissionScopeWithAggregatesFilter<$PrismaModel> | $Enums.PermissionScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPermissionScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPermissionScopeFilter<$PrismaModel>
+}
+
 export type FloatNullableFilter<$PrismaModel = never> = {
   equals?: number | Prisma.FloatFieldRefInput<$PrismaModel> | null
   in?: number[] | Prisma.ListFloatFieldRefInput<$PrismaModel> | null
@@ -605,6 +622,23 @@ export type NestedFloatNullableFilter<$PrismaModel = never> = {
   gt?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   gte?: number | Prisma.FloatFieldRefInput<$PrismaModel>
   not?: Prisma.NestedFloatNullableFilter<$PrismaModel> | number | null
+}
+
+export type NestedEnumPermissionScopeFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionScope | Prisma.EnumPermissionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPermissionScopeFilter<$PrismaModel> | $Enums.PermissionScope
+}
+
+export type NestedEnumPermissionScopeWithAggregatesFilter<$PrismaModel = never> = {
+  equals?: $Enums.PermissionScope | Prisma.EnumPermissionScopeFieldRefInput<$PrismaModel>
+  in?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  notIn?: $Enums.PermissionScope[] | Prisma.ListEnumPermissionScopeFieldRefInput<$PrismaModel>
+  not?: Prisma.NestedEnumPermissionScopeWithAggregatesFilter<$PrismaModel> | $Enums.PermissionScope
+  _count?: Prisma.NestedIntFilter<$PrismaModel>
+  _min?: Prisma.NestedEnumPermissionScopeFilter<$PrismaModel>
+  _max?: Prisma.NestedEnumPermissionScopeFilter<$PrismaModel>
 }
 
 export type NestedFloatNullableWithAggregatesFilter<$PrismaModel = never> = {

@@ -2,10 +2,10 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { z } from "zod"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { logger } from "@/lib/logger"
-import { getDemandAnalystScope } from "@/lib/scope"
+import { requireScope, isGuardFailure, assertRecordAccess } from "@/lib/api-guard"
+import { canAccessRecord } from "@/lib/policy"
 
 const demandUpdateSchema = z.object({
   date: z.string().min(1).optional(),
@@ -23,39 +23,31 @@ const demandUpdateSchema = z.object({
   tags: z.array(z.string()).optional(),
 })
 
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+// Demand access denials use a 403 (not the usual existence-hiding 404) so the
+// frontend can distinguish "forbidden" and run its access-denied redirect flow.
+const HIDE_EXISTENCE = false
 
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const guard = await requireScope(request, "demand", "read")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
-  const scopedAnalystId = getDemandAnalystScope(session)
   const demand = await prisma.demand.findFirst({
-    where: {
-      id,
-      client: { organizationId },
-      deletedAt: null,
-      ...(scopedAnalystId ? { analystId: scopedAnalystId } : {}),
-    },
+    where: { id, client: { organizationId }, deletedAt: null },
     include: {
-      analyst: { select: { id: true, name: true, email: true, color: true } },
+      analyst: { select: { id: true, name: true, email: true, color: true, teamId: true } },
       client: { select: { id: true, name: true, document: true } },
       requester: { select: { id: true, name: true, email: true } },
       department: { select: { id: true, name: true } },
       demandType: { select: { id: true, name: true, color: true } },
       demandTags: { include: { tag: true } },
-      attachments: {
-        orderBy: { createdAt: "desc" },
-      },
+      attachments: { orderBy: { createdAt: "desc" } },
       comments: {
         include: {
           user: { select: { id: true, name: true, image: true } },
           replies: {
-            include: {
-              user: { select: { id: true, name: true, image: true } },
-            },
+            include: { user: { select: { id: true, name: true, image: true } } },
             orderBy: { createdAt: "asc" },
           },
         },
@@ -64,30 +56,25 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     },
   })
 
-  if (!demand) return NextResponse.json({ error: "Demand not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "demand", "read", demand, HIDE_EXISTENCE)
+  if (denied) return denied
 
   return NextResponse.json(demand)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "demand", "update")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
-  const scopedAnalystId = getDemandAnalystScope(session)
   const existing = await prisma.demand.findFirst({
-    where: {
-      id,
-      client: { organizationId },
-      deletedAt: null,
-      ...(scopedAnalystId ? { analystId: scopedAnalystId } : {}),
-    },
+    where: { id, client: { organizationId }, deletedAt: null },
+    include: { analyst: { select: { teamId: true } } },
   })
 
-  if (!existing) return NextResponse.json({ error: "Demand not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "demand", "update", existing, HIDE_EXISTENCE)
+  if (denied) return denied
 
   const body = await request.json()
   const parsed = demandUpdateSchema.safeParse(body)
@@ -98,12 +85,14 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
     )
   }
 
-  if (
-    scopedAnalystId &&
-    parsed.data.analystId &&
-    parsed.data.analystId !== scopedAnalystId
-  ) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 })
+  if (parsed.data.analystId || parsed.data.clientId) {
+    const merged = { ...existing, ...parsed.data }
+    if (!canAccessRecord(session, "demand", "update", merged)) {
+      return NextResponse.json(
+        { error: "Você não tem permissão para reatribuir esta demanda." },
+        { status: 403 }
+      )
+    }
   }
   const { tags, ...demandData } = parsed.data
 
@@ -116,10 +105,10 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
       where: { id },
       data: {
         ...demandData,
-        requesterId: demandData.requesterId === undefined ? undefined : demandData.requesterId || null,
-        departmentId: demandData.departmentId === undefined ? undefined : demandData.departmentId || null,
-        demandTypeId: demandData.demandTypeId === undefined ? undefined : demandData.demandTypeId || null,
-        notes: demandData.notes === undefined ? undefined : demandData.notes || null,
+        requesterId: demandData.requesterId === undefined ? undefined : demandData.requesterId ?? null,
+        departmentId: demandData.departmentId === undefined ? undefined : demandData.departmentId ?? null,
+        demandTypeId: demandData.demandTypeId === undefined ? undefined : demandData.demandTypeId ?? null,
+        notes: demandData.notes === undefined ? undefined : demandData.notes ?? null,
         date: demandData.date ? new Date(demandData.date) : undefined,
         demandTags: tags
           ? {
@@ -147,24 +136,18 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "demand", "delete")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
-  const scopedAnalystId = getDemandAnalystScope(session)
   const existing = await prisma.demand.findFirst({
-    where: {
-      id,
-      client: { organizationId },
-      deletedAt: null,
-      ...(scopedAnalystId ? { analystId: scopedAnalystId } : {}),
-    },
+    where: { id, client: { organizationId }, deletedAt: null },
+    include: { analyst: { select: { teamId: true } } },
   })
 
-  if (!existing) return NextResponse.json({ error: "Demand not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "demand", "delete", existing, HIDE_EXISTENCE)
+  if (denied) return denied
 
   await prisma.demand.update({
     where: { id },

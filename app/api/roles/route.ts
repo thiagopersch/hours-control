@@ -1,20 +1,18 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "role", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const { searchParams } = request.nextUrl
   const search = searchParams.get("search")
 
-  const where: Record<string, unknown> = { organizationId }
+  const where: Record<string, unknown> = { organizationId, ...scopeWhere }
   if (search) where.name = { contains: search, mode: "insensitive" }
 
   const roles = await prisma.role.findMany({
@@ -32,23 +30,25 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "role", "create")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId } = guard
 
   const body = await request.json()
-  const { permissionIds, ...roleData } = body
+  const { permissionScopes, ...roleData } = body
+  const grants = (permissionScopes ?? []).filter(
+    (p: { permissionId: string; scope: string }) => p.scope && p.scope !== "NONE"
+  )
 
   const role = await prisma.role.create({
     data: {
       ...roleData,
       organizationId,
-      rolePermissions: permissionIds?.length
+      rolePermissions: grants.length
         ? {
-            create: permissionIds.map((permissionId: string) => ({
-              permission: { connect: { id: permissionId } },
+            create: grants.map((p: { permissionId: string; scope: string }) => ({
+              permission: { connect: { id: p.permissionId } },
+              scope: p.scope,
             })),
           }
         : undefined,

@@ -393,6 +393,7 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   UserRole: 'UserRole',
+  Team: 'Team',
   Analyst: 'Analyst',
   Client: 'Client',
   ClientContract: 'ClientContract',
@@ -424,7 +425,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "organization" | "user" | "account" | "session" | "verificationToken" | "role" | "permission" | "rolePermission" | "userRole" | "analyst" | "client" | "clientContract" | "requester" | "department" | "demandType" | "demand" | "attachment" | "comment" | "tag" | "demandTag" | "notification" | "notificationSetting" | "auditLog" | "export" | "dashboardPreference"
+    modelProps: "organization" | "user" | "account" | "session" | "verificationToken" | "role" | "permission" | "rolePermission" | "userRole" | "team" | "analyst" | "client" | "clientContract" | "requester" | "department" | "demandType" | "demand" | "attachment" | "comment" | "tag" | "demandTag" | "notification" | "notificationSetting" | "auditLog" | "export" | "dashboardPreference"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1091,6 +1092,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         count: {
           args: Prisma.UserRoleCountArgs<ExtArgs>
           result: runtime.Types.Utils.Optional<Prisma.UserRoleCountAggregateOutputType> | number
+        }
+      }
+    }
+    Team: {
+      payload: Prisma.$TeamPayload<ExtArgs>
+      fields: Prisma.TeamFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.TeamFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.TeamFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>
+        }
+        findFirst: {
+          args: Prisma.TeamFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.TeamFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>
+        }
+        findMany: {
+          args: Prisma.TeamFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>[]
+        }
+        create: {
+          args: Prisma.TeamCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>
+        }
+        createMany: {
+          args: Prisma.TeamCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.TeamCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>[]
+        }
+        delete: {
+          args: Prisma.TeamDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>
+        }
+        update: {
+          args: Prisma.TeamUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>
+        }
+        deleteMany: {
+          args: Prisma.TeamDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.TeamUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.TeamUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>[]
+        }
+        upsert: {
+          args: Prisma.TeamUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$TeamPayload>
+        }
+        aggregate: {
+          args: Prisma.TeamAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateTeam>
+        }
+        groupBy: {
+          args: Prisma.TeamGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TeamGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.TeamCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.TeamCountAggregateOutputType> | number
         }
       }
     }
@@ -2416,7 +2491,8 @@ export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof
 
 export const RolePermissionScalarFieldEnum = {
   roleId: 'roleId',
-  permissionId: 'permissionId'
+  permissionId: 'permissionId',
+  scope: 'scope'
 } as const
 
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
@@ -2428,6 +2504,18 @@ export const UserRoleScalarFieldEnum = {
 } as const
 
 export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
+
+
+export const TeamScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  organizationId: 'organizationId'
+} as const
+
+export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
 
 
 export const AnalystScalarFieldEnum = {
@@ -2446,7 +2534,10 @@ export const AnalystScalarFieldEnum = {
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
   organizationId: 'organizationId',
-  userId: 'userId'
+  userId: 'userId',
+  teamId: 'teamId',
+  departmentId: 'departmentId',
+  createdById: 'createdById'
 } as const
 
 export type AnalystScalarFieldEnum = (typeof AnalystScalarFieldEnum)[keyof typeof AnalystScalarFieldEnum]
@@ -2467,7 +2558,9 @@ export const ClientScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  userId: 'userId',
+  createdById: 'createdById'
 } as const
 
 export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
@@ -2484,7 +2577,8 @@ export const ClientContractScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  clientId: 'clientId'
+  clientId: 'clientId',
+  createdById: 'createdById'
 } as const
 
 export type ClientContractScalarFieldEnum = (typeof ClientContractScalarFieldEnum)[keyof typeof ClientContractScalarFieldEnum]
@@ -2499,7 +2593,8 @@ export const RequesterScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type RequesterScalarFieldEnum = (typeof RequesterScalarFieldEnum)[keyof typeof RequesterScalarFieldEnum]
@@ -2512,7 +2607,8 @@ export const DepartmentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
@@ -2526,7 +2622,8 @@ export const DemandTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type DemandTypeScalarFieldEnum = (typeof DemandTypeScalarFieldEnum)[keyof typeof DemandTypeScalarFieldEnum]
@@ -2590,7 +2687,8 @@ export const TagScalarFieldEnum = {
   color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]
@@ -2780,6 +2878,20 @@ export type IntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'In
  * Reference to a field of type 'Int[]'
  */
 export type ListIntFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Int[]'>
+    
+
+
+/**
+ * Reference to a field of type 'PermissionScope'
+ */
+export type EnumPermissionScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PermissionScope'>
+    
+
+
+/**
+ * Reference to a field of type 'PermissionScope[]'
+ */
+export type ListEnumPermissionScopeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PermissionScope[]'>
     
 
 
@@ -2999,6 +3111,7 @@ export type GlobalOmitConfig = {
   permission?: Prisma.PermissionOmit
   rolePermission?: Prisma.RolePermissionOmit
   userRole?: Prisma.UserRoleOmit
+  team?: Prisma.TeamOmit
   analyst?: Prisma.AnalystOmit
   client?: Prisma.ClientOmit
   clientContract?: Prisma.ClientContractOmit

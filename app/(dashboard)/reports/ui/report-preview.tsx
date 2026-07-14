@@ -79,22 +79,28 @@ export function ReportPreview({ applied, isLoading, error, demands }: ReportPrev
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead>Demanda</TableHead>
-                  <TableHead>Cliente</TableHead>
-                  <TableHead>Analista</TableHead>
                   <TableHead>Data</TableHead>
-                  <TableHead>Duração</TableHead>
+                  <TableHead>Nome do Analista</TableHead>
+                  <TableHead>Horas Executadas</TableHead>
+                  <TableHead>Demanda</TableHead>
+                  <TableHead>Descrição</TableHead>
+                  <TableHead>Solicitante</TableHead>
+                  <TableHead>Setor</TableHead>
+                  <TableHead>Cliente</TableHead>
                   <TableHead>Status</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {demands.map((d: any) => (
                   <TableRow key={d.id}>
-                    <TableCell className="font-medium max-w-[200px] truncate">{d.name}</TableCell>
-                    <TableCell>{d.client?.name ?? "-"}</TableCell>
-                    <TableCell>{d.analyst?.name ?? "-"}</TableCell>
                     <TableCell>{d.date ? formatDate(d.date) : "-"}</TableCell>
+                    <TableCell>{d.analyst?.name ?? "-"}</TableCell>
                     <TableCell>{d.durationMinutes != null ? formatDuration(d.durationMinutes) : "-"}</TableCell>
+                    <TableCell className="font-medium max-w-[200px] truncate">{d.name}</TableCell>
+                    <TableCell className="max-w-[200px] truncate">{d.description ?? "-"}</TableCell>
+                    <TableCell>{d.requester?.name ?? "-"}</TableCell>
+                    <TableCell>{d.department?.name ?? "-"}</TableCell>
+                    <TableCell>{d.client?.name ?? "-"}</TableCell>
                     <TableCell>
                       <Badge variant={statusVariants[d.status] ?? "outline"}>
                         {statusLabels[d.status] ?? d.status}

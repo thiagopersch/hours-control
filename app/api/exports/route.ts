@@ -2,8 +2,8 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { z } from "zod"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 const exportCreateSchema = z.object({
   type: z.string().min(1),
@@ -12,16 +12,14 @@ const exportCreateSchema = z.object({
 })
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "report", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const exports = await prisma.export.findMany({
-    where: { organizationId },
+    where: { organizationId, ...scopeWhere },
     orderBy: { createdAt: "desc" },
-    take: 20,
+    take: 100,
     include: { user: { select: { name: true } } },
   })
 
@@ -29,12 +27,10 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user?.id) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+  const guard = await requireScope(request, "report", "create")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
   const userId = session.user.id
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
 
   const body = await request.json()
   const parsed = exportCreateSchema.safeParse(body)

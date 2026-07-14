@@ -29,12 +29,18 @@ type ClientColumnsProps = {
   onEdit: (client: Client) => void
   onDelete: (client: Client) => void
   onToggleFavorite: (client: Client) => void
+  canFavorite?: boolean
+  canUpdate?: boolean
+  canDelete?: boolean
 }
 
 export function getClientColumns({
   onEdit,
   onDelete,
   onToggleFavorite,
+  canFavorite = true,
+  canUpdate = true,
+  canDelete = true,
 }: ClientColumnsProps): ColumnDef<Client>[] {
   return [
     {
@@ -42,20 +48,22 @@ export function getClientColumns({
       header: "Nome",
       cell: ({ row }) => (
         <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            className="shrink-0"
-            onClick={() => { onToggleFavorite(row.original) }}
-          >
-            <Star
-              className={`size-4 ${
-                row.original.favorite
-                  ? "fill-amber-400 text-amber-400"
-                  : "text-muted-foreground"
-              }`}
-            />
-          </Button>
+          {canFavorite && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              className="shrink-0"
+              onClick={() => { onToggleFavorite(row.original) }}
+            >
+              <Star
+                className={`size-4 ${
+                  row.original.favorite
+                    ? "fill-amber-400 text-amber-400"
+                    : "text-muted-foreground"
+                }`}
+              />
+            </Button>
+          )}
           <div
             className="size-2 rounded-full shrink-0"
             style={{ backgroundColor: row.original.color || "#6b7280" }}
@@ -86,20 +94,24 @@ export function getClientColumns({
       id: "actions",
       cell: ({ row }) => (
         <div className="flex items-center gap-1">
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => onEdit(row.original)}
-          >
-            <Pencil className="size-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon-sm"
-            onClick={() => onDelete(row.original)}
-          >
-            <Trash2 className="size-4 text-destructive" />
-          </Button>
+          {canUpdate && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => onEdit(row.original)}
+            >
+              <Pencil className="size-4" />
+            </Button>
+          )}
+          {canDelete && (
+            <Button
+              variant="ghost"
+              size="icon-sm"
+              onClick={() => onDelete(row.original)}
+            >
+              <Trash2 className="size-4 text-destructive" />
+            </Button>
+          )}
         </div>
       ),
     },

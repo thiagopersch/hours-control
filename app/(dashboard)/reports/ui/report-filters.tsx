@@ -123,7 +123,7 @@ export function ReportFiltersCard({
 
         <div className="space-y-2">
           <p className="text-sm font-medium">Exportar como</p>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2 min-[420px]:grid-cols-2">
             <Button variant="outline" className="justify-start" onClick={() => onExport("xlsx")}>
               <FileSpreadsheet className="size-4" />
               XLSX

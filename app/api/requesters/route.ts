@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "requester", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const { searchParams } = request.nextUrl
   const status = searchParams.get("status")
@@ -18,6 +16,7 @@ export async function GET(request: NextRequest) {
   const where: Record<string, unknown> = {
     organizationId,
     deletedAt: null,
+    ...scopeWhere,
   }
   if (status) where.status = status
   if (search) where.name = { contains: search, mode: "insensitive" }
@@ -31,16 +30,14 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "requester", "create")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const body = await request.json()
 
   const requester = await prisma.requester.create({
-    data: body,
+    data: { ...body, organizationId, createdById: session.user.id },
   })
 
   return NextResponse.json(requester, { status: 201 })

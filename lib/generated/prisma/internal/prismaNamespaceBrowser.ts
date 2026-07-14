@@ -60,6 +60,7 @@ export const ModelName = {
   Permission: 'Permission',
   RolePermission: 'RolePermission',
   UserRole: 'UserRole',
+  Team: 'Team',
   Analyst: 'Analyst',
   Client: 'Client',
   ClientContract: 'ClientContract',
@@ -193,7 +194,8 @@ export type PermissionScalarFieldEnum = (typeof PermissionScalarFieldEnum)[keyof
 
 export const RolePermissionScalarFieldEnum = {
   roleId: 'roleId',
-  permissionId: 'permissionId'
+  permissionId: 'permissionId',
+  scope: 'scope'
 } as const
 
 export type RolePermissionScalarFieldEnum = (typeof RolePermissionScalarFieldEnum)[keyof typeof RolePermissionScalarFieldEnum]
@@ -205,6 +207,18 @@ export const UserRoleScalarFieldEnum = {
 } as const
 
 export type UserRoleScalarFieldEnum = (typeof UserRoleScalarFieldEnum)[keyof typeof UserRoleScalarFieldEnum]
+
+
+export const TeamScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  deletedAt: 'deletedAt',
+  organizationId: 'organizationId'
+} as const
+
+export type TeamScalarFieldEnum = (typeof TeamScalarFieldEnum)[keyof typeof TeamScalarFieldEnum]
 
 
 export const AnalystScalarFieldEnum = {
@@ -223,7 +237,10 @@ export const AnalystScalarFieldEnum = {
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
   organizationId: 'organizationId',
-  userId: 'userId'
+  userId: 'userId',
+  teamId: 'teamId',
+  departmentId: 'departmentId',
+  createdById: 'createdById'
 } as const
 
 export type AnalystScalarFieldEnum = (typeof AnalystScalarFieldEnum)[keyof typeof AnalystScalarFieldEnum]
@@ -244,7 +261,9 @@ export const ClientScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  userId: 'userId',
+  createdById: 'createdById'
 } as const
 
 export type ClientScalarFieldEnum = (typeof ClientScalarFieldEnum)[keyof typeof ClientScalarFieldEnum]
@@ -261,7 +280,8 @@ export const ClientContractScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  clientId: 'clientId'
+  clientId: 'clientId',
+  createdById: 'createdById'
 } as const
 
 export type ClientContractScalarFieldEnum = (typeof ClientContractScalarFieldEnum)[keyof typeof ClientContractScalarFieldEnum]
@@ -276,7 +296,8 @@ export const RequesterScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type RequesterScalarFieldEnum = (typeof RequesterScalarFieldEnum)[keyof typeof RequesterScalarFieldEnum]
@@ -289,7 +310,8 @@ export const DepartmentScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type DepartmentScalarFieldEnum = (typeof DepartmentScalarFieldEnum)[keyof typeof DepartmentScalarFieldEnum]
@@ -303,7 +325,8 @@ export const DemandTypeScalarFieldEnum = {
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
   deletedAt: 'deletedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type DemandTypeScalarFieldEnum = (typeof DemandTypeScalarFieldEnum)[keyof typeof DemandTypeScalarFieldEnum]
@@ -367,7 +390,8 @@ export const TagScalarFieldEnum = {
   color: 'color',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
-  organizationId: 'organizationId'
+  organizationId: 'organizationId',
+  createdById: 'createdById'
 } as const
 
 export type TagScalarFieldEnum = (typeof TagScalarFieldEnum)[keyof typeof TagScalarFieldEnum]

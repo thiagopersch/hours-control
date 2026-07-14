@@ -34,6 +34,7 @@ export type RequesterMinAggregateOutputType = {
   updatedAt: Date | null
   deletedAt: Date | null
   organizationId: string | null
+  createdById: string | null
 }
 
 export type RequesterMaxAggregateOutputType = {
@@ -46,6 +47,7 @@ export type RequesterMaxAggregateOutputType = {
   updatedAt: Date | null
   deletedAt: Date | null
   organizationId: string | null
+  createdById: string | null
 }
 
 export type RequesterCountAggregateOutputType = {
@@ -58,6 +60,7 @@ export type RequesterCountAggregateOutputType = {
   updatedAt: number
   deletedAt: number
   organizationId: number
+  createdById: number
   _all: number
 }
 
@@ -72,6 +75,7 @@ export type RequesterMinAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  createdById?: true
 }
 
 export type RequesterMaxAggregateInputType = {
@@ -84,6 +88,7 @@ export type RequesterMaxAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  createdById?: true
 }
 
 export type RequesterCountAggregateInputType = {
@@ -96,6 +101,7 @@ export type RequesterCountAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  createdById?: true
   _all?: true
 }
 
@@ -181,6 +187,7 @@ export type RequesterGroupByOutputType = {
   updatedAt: Date
   deletedAt: Date | null
   organizationId: string
+  createdById: string | null
   _count: RequesterCountAggregateOutputType | null
   _min: RequesterMinAggregateOutputType | null
   _max: RequesterMaxAggregateOutputType | null
@@ -214,7 +221,9 @@ export type RequesterWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Requester"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Requester"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Requester"> | string
+  createdById?: Prisma.StringNullableFilter<"Requester"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }
 
@@ -228,7 +237,9 @@ export type RequesterOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
   demands?: Prisma.DemandOrderByRelationAggregateInput
 }
 
@@ -245,7 +256,9 @@ export type RequesterWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Requester"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Requester"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Requester"> | string
+  createdById?: Prisma.StringNullableFilter<"Requester"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }, "id">
 
@@ -259,6 +272,7 @@ export type RequesterOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.RequesterCountOrderByAggregateInput
   _max?: Prisma.RequesterMaxOrderByAggregateInput
   _min?: Prisma.RequesterMinOrderByAggregateInput
@@ -277,6 +291,7 @@ export type RequesterScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Requester"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Requester"> | Date | string | null
   organizationId?: Prisma.StringWithAggregatesFilter<"Requester"> | string
+  createdById?: Prisma.StringNullableWithAggregatesFilter<"Requester"> | string | null
 }
 
 export type RequesterCreateInput = {
@@ -289,6 +304,7 @@ export type RequesterCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutRequestersInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedRequestersInput
   demands?: Prisma.DemandCreateNestedManyWithoutRequesterInput
 }
 
@@ -302,6 +318,7 @@ export type RequesterUncheckedCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutRequesterInput
 }
 
@@ -315,6 +332,7 @@ export type RequesterUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutRequestersNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedRequestersNestedInput
   demands?: Prisma.DemandUpdateManyWithoutRequesterNestedInput
 }
 
@@ -328,6 +346,7 @@ export type RequesterUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutRequesterNestedInput
 }
 
@@ -341,6 +360,7 @@ export type RequesterCreateManyInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  createdById?: string | null
 }
 
 export type RequesterUpdateManyMutationInput = {
@@ -364,6 +384,7 @@ export type RequesterUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type RequesterListRelationFilter = {
@@ -386,6 +407,7 @@ export type RequesterCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type RequesterMaxOrderByAggregateInput = {
@@ -398,6 +420,7 @@ export type RequesterMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type RequesterMinOrderByAggregateInput = {
@@ -410,6 +433,7 @@ export type RequesterMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type RequesterNullableScalarRelationFilter = {
@@ -459,6 +483,48 @@ export type RequesterUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.RequesterScalarWhereInput | Prisma.RequesterScalarWhereInput[]
 }
 
+export type RequesterCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.RequesterCreateWithoutCreatedByInput, Prisma.RequesterUncheckedCreateWithoutCreatedByInput> | Prisma.RequesterCreateWithoutCreatedByInput[] | Prisma.RequesterUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RequesterCreateOrConnectWithoutCreatedByInput | Prisma.RequesterCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.RequesterCreateManyCreatedByInputEnvelope
+  connect?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+}
+
+export type RequesterUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.RequesterCreateWithoutCreatedByInput, Prisma.RequesterUncheckedCreateWithoutCreatedByInput> | Prisma.RequesterCreateWithoutCreatedByInput[] | Prisma.RequesterUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RequesterCreateOrConnectWithoutCreatedByInput | Prisma.RequesterCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.RequesterCreateManyCreatedByInputEnvelope
+  connect?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+}
+
+export type RequesterUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.RequesterCreateWithoutCreatedByInput, Prisma.RequesterUncheckedCreateWithoutCreatedByInput> | Prisma.RequesterCreateWithoutCreatedByInput[] | Prisma.RequesterUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RequesterCreateOrConnectWithoutCreatedByInput | Prisma.RequesterCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.RequesterUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.RequesterUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.RequesterCreateManyCreatedByInputEnvelope
+  set?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  disconnect?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  delete?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  connect?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  update?: Prisma.RequesterUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.RequesterUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.RequesterUpdateManyWithWhereWithoutCreatedByInput | Prisma.RequesterUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.RequesterScalarWhereInput | Prisma.RequesterScalarWhereInput[]
+}
+
+export type RequesterUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.RequesterCreateWithoutCreatedByInput, Prisma.RequesterUncheckedCreateWithoutCreatedByInput> | Prisma.RequesterCreateWithoutCreatedByInput[] | Prisma.RequesterUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.RequesterCreateOrConnectWithoutCreatedByInput | Prisma.RequesterCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.RequesterUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.RequesterUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.RequesterCreateManyCreatedByInputEnvelope
+  set?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  disconnect?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  delete?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  connect?: Prisma.RequesterWhereUniqueInput | Prisma.RequesterWhereUniqueInput[]
+  update?: Prisma.RequesterUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.RequesterUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.RequesterUpdateManyWithWhereWithoutCreatedByInput | Prisma.RequesterUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.RequesterScalarWhereInput | Prisma.RequesterScalarWhereInput[]
+}
+
 export type RequesterCreateNestedOneWithoutDemandsInput = {
   create?: Prisma.XOR<Prisma.RequesterCreateWithoutDemandsInput, Prisma.RequesterUncheckedCreateWithoutDemandsInput>
   connectOrCreate?: Prisma.RequesterCreateOrConnectWithoutDemandsInput
@@ -484,6 +550,7 @@ export type RequesterCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedRequestersInput
   demands?: Prisma.DemandCreateNestedManyWithoutRequesterInput
 }
 
@@ -496,6 +563,7 @@ export type RequesterUncheckedCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutRequesterInput
 }
 
@@ -538,6 +606,59 @@ export type RequesterScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Requester"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Requester"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Requester"> | string
+  createdById?: Prisma.StringNullableFilter<"Requester"> | string | null
+}
+
+export type RequesterCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutRequestersInput
+  demands?: Prisma.DemandCreateNestedManyWithoutRequesterInput
+}
+
+export type RequesterUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  demands?: Prisma.DemandUncheckedCreateNestedManyWithoutRequesterInput
+}
+
+export type RequesterCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.RequesterWhereUniqueInput
+  create: Prisma.XOR<Prisma.RequesterCreateWithoutCreatedByInput, Prisma.RequesterUncheckedCreateWithoutCreatedByInput>
+}
+
+export type RequesterCreateManyCreatedByInputEnvelope = {
+  data: Prisma.RequesterCreateManyCreatedByInput | Prisma.RequesterCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type RequesterUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.RequesterWhereUniqueInput
+  update: Prisma.XOR<Prisma.RequesterUpdateWithoutCreatedByInput, Prisma.RequesterUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.RequesterCreateWithoutCreatedByInput, Prisma.RequesterUncheckedCreateWithoutCreatedByInput>
+}
+
+export type RequesterUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.RequesterWhereUniqueInput
+  data: Prisma.XOR<Prisma.RequesterUpdateWithoutCreatedByInput, Prisma.RequesterUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type RequesterUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.RequesterScalarWhereInput
+  data: Prisma.XOR<Prisma.RequesterUpdateManyMutationInput, Prisma.RequesterUncheckedUpdateManyWithoutCreatedByInput>
 }
 
 export type RequesterCreateWithoutDemandsInput = {
@@ -550,6 +671,7 @@ export type RequesterCreateWithoutDemandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutRequestersInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedRequestersInput
 }
 
 export type RequesterUncheckedCreateWithoutDemandsInput = {
@@ -562,6 +684,7 @@ export type RequesterUncheckedCreateWithoutDemandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  createdById?: string | null
 }
 
 export type RequesterCreateOrConnectWithoutDemandsInput = {
@@ -590,6 +713,7 @@ export type RequesterUpdateWithoutDemandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutRequestersNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedRequestersNestedInput
 }
 
 export type RequesterUncheckedUpdateWithoutDemandsInput = {
@@ -602,6 +726,7 @@ export type RequesterUncheckedUpdateWithoutDemandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type RequesterCreateManyOrganizationInput = {
@@ -613,6 +738,7 @@ export type RequesterCreateManyOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  createdById?: string | null
 }
 
 export type RequesterUpdateWithoutOrganizationInput = {
@@ -624,6 +750,7 @@ export type RequesterUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedRequestersNestedInput
   demands?: Prisma.DemandUpdateManyWithoutRequesterNestedInput
 }
 
@@ -636,6 +763,7 @@ export type RequesterUncheckedUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutRequesterNestedInput
 }
 
@@ -648,6 +776,57 @@ export type RequesterUncheckedUpdateManyWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type RequesterCreateManyCreatedByInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  status?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+}
+
+export type RequesterUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutRequestersNestedInput
+  demands?: Prisma.DemandUpdateManyWithoutRequesterNestedInput
+}
+
+export type RequesterUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  demands?: Prisma.DemandUncheckedUpdateManyWithoutRequesterNestedInput
+}
+
+export type RequesterUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -691,7 +870,9 @@ export type RequesterSelect<ExtArgs extends runtime.Types.Extensions.InternalArg
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Requester$createdByArgs<ExtArgs>
   demands?: boolean | Prisma.Requester$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.RequesterCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["requester"]>
@@ -706,7 +887,9 @@ export type RequesterSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Requester$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["requester"]>
 
 export type RequesterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -719,7 +902,9 @@ export type RequesterSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ext
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Requester$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["requester"]>
 
 export type RequesterSelectScalar = {
@@ -732,25 +917,30 @@ export type RequesterSelectScalar = {
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
 }
 
-export type RequesterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "status" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId", ExtArgs["result"]["requester"]>
+export type RequesterOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "status" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId" | "createdById", ExtArgs["result"]["requester"]>
 export type RequesterInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Requester$createdByArgs<ExtArgs>
   demands?: boolean | Prisma.Requester$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.RequesterCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type RequesterIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Requester$createdByArgs<ExtArgs>
 }
 export type RequesterIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Requester$createdByArgs<ExtArgs>
 }
 
 export type $RequesterPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Requester"
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
     demands: Prisma.$DemandPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -763,6 +953,7 @@ export type $RequesterPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     updatedAt: Date
     deletedAt: Date | null
     organizationId: string
+    createdById: string | null
   }, ExtArgs["result"]["requester"]>
   composites: {}
 }
@@ -1158,6 +1349,7 @@ readonly fields: RequesterFieldRefs;
 export interface Prisma__RequesterClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.Requester$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Requester$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   demands<T extends Prisma.Requester$demandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Requester$demandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1197,6 +1389,7 @@ export interface RequesterFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Requester", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"Requester", 'DateTime'>
   readonly organizationId: Prisma.FieldRef<"Requester", 'String'>
+  readonly createdById: Prisma.FieldRef<"Requester", 'String'>
 }
     
 
@@ -1595,6 +1788,25 @@ export type RequesterDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Int
    * Limit how many Requesters to delete.
    */
   limit?: number
+}
+
+/**
+ * Requester.createdBy
+ */
+export type Requester$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

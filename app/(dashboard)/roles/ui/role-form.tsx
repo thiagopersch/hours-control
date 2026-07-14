@@ -3,12 +3,12 @@
 import { useMemo, useState } from "react"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { ChevronDown, ChevronsDownUp, ChevronsUpDown, CheckSquare, Square, SearchIcon } from "lucide-react"
+import { ChevronDown, ChevronsDownUp, ChevronsUpDown, SearchIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Checkbox } from "@/components/ui/checkbox"
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Spinner } from "@/components/ui/spinner"
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
 import {
@@ -20,7 +20,7 @@ import {
   DialogClose,
 } from "@/components/ui/dialog"
 import { Field, FieldError, FieldSet, FieldLegend } from "@/components/ui/field"
-import { roleSchema, type RoleFormData } from "../schema/role-schema"
+import { roleSchema, type RoleFormData, type PermissionScopeValue } from "../schema/role-schema"
 import { normalizeForSearch } from "@/lib/search"
 import { moduleLabel } from "@/lib/module-labels"
 
@@ -34,9 +34,25 @@ const actionLabels: Record<string, string> = {
   create: "Criar",
   update: "Editar",
   delete: "Excluir",
+  export: "Exportar",
+  import: "Importar",
+  approve: "Aprovar",
+  configure: "Configurar",
+  favorite: "Favoritar",
 }
 
-const actionOrder = ["read", "create", "update", "delete"]
+const scopeLabels: Record<PermissionScopeValue, string> = {
+  NONE: "Nenhum",
+  OWN: "Apenas próprias",
+  TEAM: "Equipe",
+  DEPARTMENT: "Departamento",
+  COMPANY: "Empresa",
+  ALL: "Todas",
+}
+
+const scopeOrder: PermissionScopeValue[] = ["NONE", "OWN", "TEAM", "DEPARTMENT", "COMPANY", "ALL"]
+
+const actionOrder = ["read", "create", "update", "delete", "export", "import", "approve", "configure", "favorite"]
 
 type RoleFormProps = {
   permissionGroups: PermissionGroup[]
@@ -65,7 +81,7 @@ export function RoleForm({
     defaultValues: {
       name: "",
       description: "",
-      permissionIds: [],
+      permissionScopes: [],
       ...defaultValues,
     },
   })
@@ -86,20 +102,30 @@ export function RoleForm({
     return sortedGroups.filter((g) => normalizeForSearch(moduleLabel(g.resource)).includes(normalizedSearch))
   }, [sortedGroups, search])
 
-  const allPermissionIds = useMemo(
-    () => permissionGroups.flatMap((g) => g.permissions.map((p) => p.id)),
-    [permissionGroups]
-  )
-
-  const watchedIds = watch("permissionIds") ?? []
+  const watchedScopes = watch("permissionScopes") ?? []
   const canSubmit = isValid && (!isEditing || isDirty)
 
-  function checkAll() {
-    setValue("permissionIds", allPermissionIds, { shouldValidate: true, shouldDirty: true })
+  function scopeFor(permissionId: string): PermissionScopeValue {
+    return watchedScopes.find((s) => s.permissionId === permissionId)?.scope ?? "NONE"
   }
 
-  function uncheckAll() {
-    setValue("permissionIds", [], { shouldValidate: true, shouldDirty: true })
+  function setScope(permissionId: string, scope: PermissionScopeValue) {
+    const rest = watchedScopes.filter((s) => s.permissionId !== permissionId)
+    setValue("permissionScopes", [...rest, { permissionId, scope }], {
+      shouldValidate: true,
+      shouldDirty: true,
+    })
+  }
+
+  function resetAll() {
+    setValue("permissionScopes", [], { shouldValidate: true, shouldDirty: true })
+  }
+
+  function grantAllCompany() {
+    const all = permissionGroups.flatMap((g) =>
+      g.permissions.map((p) => ({ permissionId: p.id, scope: "COMPANY" as PermissionScopeValue }))
+    )
+    setValue("permissionScopes", all, { shouldValidate: true, shouldDirty: true })
   }
 
   function expandAll() {
@@ -108,14 +134,6 @@ export function RoleForm({
 
   function collapseAll() {
     setExpanded(new Set())
-  }
-
-  function togglePermission(id: string, checked: boolean) {
-    if (checked) {
-      setValue("permissionIds", [...watchedIds, id], { shouldValidate: true, shouldDirty: true })
-    } else {
-      setValue("permissionIds", watchedIds.filter((pid: string) => pid !== id), { shouldValidate: true, shouldDirty: true })
-    }
   }
 
   return (
@@ -157,11 +175,11 @@ export function RoleForm({
           </div>
 
           <div className="flex flex-wrap gap-2">
-            <Button type="button" variant="outline" size="sm" onClick={checkAll}>
-              <CheckSquare className="size-3.5" /> Marcar todos
+            <Button type="button" variant="outline" size="sm" onClick={grantAllCompany}>
+              Conceder tudo (Empresa)
             </Button>
-            <Button type="button" variant="outline" size="sm" onClick={uncheckAll}>
-              <Square className="size-3.5" /> Desmarcar todos
+            <Button type="button" variant="outline" size="sm" onClick={resetAll}>
+              Remover tudo
             </Button>
             <Button type="button" variant="outline" size="sm" onClick={expandAll}>
               <ChevronsUpDown className="size-3.5" /> Expandir todos
@@ -171,7 +189,7 @@ export function RoleForm({
             </Button>
           </div>
 
-          <div className="max-h-96 overflow-y-auto space-y-1 rounded-lg border p-2">
+          <div className="max-h-[28rem] overflow-y-auto space-y-1 rounded-lg border p-2">
             {filteredGroups.length === 0 && (
               <p className="text-sm text-muted-foreground text-center py-4">Nenhum módulo encontrado.</p>
             )}
@@ -201,18 +219,25 @@ export function RoleForm({
                     <ChevronDown className={`size-4 transition-transform ${isOpen ? "rotate-180" : ""}`} />
                   </CollapsibleTrigger>
                   <CollapsibleContent>
-                    <div className="flex flex-wrap gap-3 pl-4 py-1.5">
+                    <div className="flex flex-col gap-3 pl-4 py-1.5">
                       {sortedPermissions.map((perm) => (
-                        <label
-                          key={perm.id}
-                          className="flex items-center gap-1.5 text-sm cursor-pointer"
-                        >
-                          <Checkbox
-                            checked={watchedIds.includes(perm.id)}
-                            onCheckedChange={(checked: boolean) => togglePermission(perm.id, checked)}
-                          />
-                          {actionLabels[perm.action] ?? perm.action}
-                        </label>
+                        <div key={perm.id} className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:gap-4">
+                          <span className="w-28 shrink-0 text-sm font-medium">
+                            {actionLabels[perm.action] ?? perm.action}
+                          </span>
+                          <RadioGroup
+                            value={scopeFor(perm.id)}
+                            onValueChange={(value) => setScope(perm.id, value as PermissionScopeValue)}
+                            className="grid grid-cols-2 gap-x-4 gap-y-1 sm:flex sm:flex-wrap sm:gap-4"
+                          >
+                            {scopeOrder.map((scope) => (
+                              <label key={scope} className="flex items-center gap-1.5 text-sm cursor-pointer">
+                                <RadioGroupItem value={scope} />
+                                {scopeLabels[scope]}
+                              </label>
+                            ))}
+                          </RadioGroup>
+                        </div>
                       ))}
                     </div>
                   </CollapsibleContent>
@@ -220,7 +245,7 @@ export function RoleForm({
               )
             })}
           </div>
-          <FieldError errors={[errors.permissionIds]} />
+          <FieldError errors={[errors.permissionScopes as any]} />
         </FieldSet>
         </fieldset>
 

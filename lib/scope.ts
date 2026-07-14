@@ -1,21 +1,13 @@
-import { hasPermission } from "@/lib/permissions"
-
-// The session's `user` type comes from next-auth's module augmentation, which
-// isn't fully merged across the codebase (see other `as any` casts of
-// `session.user`), so we accept a loose shape here rather than fight it.
-type SessionArg = { user?: unknown } | null | undefined
+import { getScope, type PolicySession } from "@/lib/policy"
 
 /**
  * Regular users (role "user") are analysts logged into the system and must
- * only see demands linked to their own Analyst record. Users who can manage
- * analysts (admin-level roles, via the `analyst:read` permission) or are
- * super admins see everything.
+ * only see demands linked to their own Analyst record. Users whose
+ * `analyst:read` scope is COMPANY/ALL (or super admins) see everyone's.
  */
-export function canViewAllAnalysts(session: SessionArg): boolean {
-  const user = session?.user as
-    | { isSuperAdmin?: boolean; permissions?: string[] }
-    | undefined
-  return !!user?.isSuperAdmin || hasPermission(user?.permissions, "analyst", "read")
+export function canViewAllAnalysts(session: PolicySession): boolean {
+  const scope = getScope(session, "analyst", "read")
+  return scope === "COMPANY" || scope === "ALL"
 }
 
 /**
@@ -25,9 +17,9 @@ export function canViewAllAnalysts(session: SessionArg): boolean {
  * a sentinel id that matches nothing, so they see an empty list instead of
  * everyone else's data.
  */
-export function getDemandAnalystScope(session: SessionArg): string | undefined {
+export function getDemandAnalystScope(session: PolicySession): string | undefined {
   if (canViewAllAnalysts(session)) return undefined
 
-  const user = session?.user as { analystId?: string | null } | undefined
+  const user = session?.user
   return user?.analystId ?? "__no-linked-analyst__"
 }

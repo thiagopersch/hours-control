@@ -3,10 +3,10 @@ import type { NextRequest } from "next/server"
 import { hash } from "@node-rs/argon2"
 import { z } from "zod"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { logger } from "@/lib/logger"
 import { nameSchema, emailSchema, phoneSchema, passwordSchema } from "@/lib/validators"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 const userCreateSchema = z.object({
   name: nameSchema(),
@@ -19,23 +19,27 @@ const userCreateSchema = z.object({
 })
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "user", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const { searchParams } = request.nextUrl
   const status = searchParams.get("status")
   const search = searchParams.get("search")
 
-  const where: Record<string, unknown> = { organizationId, deletedAt: null }
-  if (status) where.status = status
+  const filters: Record<string, unknown> = {}
+  if (status) filters.status = status
   if (search) {
-    where.OR = [
+    filters.OR = [
       { name: { contains: search, mode: "insensitive" } },
       { email: { contains: search, mode: "insensitive" } },
     ]
+  }
+
+  const where: Record<string, unknown> = {
+    organizationId,
+    deletedAt: null,
+    AND: [scopeWhere, filters],
   }
 
   const users = await prisma.user.findMany({
@@ -63,11 +67,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "user", "create")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId } = guard
 
   const body = await request.json()
   const parsed = userCreateSchema.safeParse(body)

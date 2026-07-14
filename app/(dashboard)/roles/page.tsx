@@ -8,11 +8,9 @@ import { Plus, AlertCircle } from "lucide-react"
 import { toast } from "sonner"
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert"
 import { Spinner } from "@/components/ui/spinner"
-import type { Role } from "./_columns"
-import { getRoleColumns } from "./_columns"
+import { getRoleColumns, type Role } from "./_columns"
 import { RoleForm } from "./ui/role-form"
 import { RoleDeleteDialog } from "./ui/role-delete-dialog"
-import type { RoleFormData } from "./schema/role-schema"
 import { useRoles, usePermissions, useCreate, useUpdate, useRemove, mutateList } from "./hooks/use-roles"
 import { FetchError } from "@/lib/fetcher"
 import { useCrudModal } from "@/hooks/use-crud-modal"
@@ -98,8 +96,11 @@ export default function RolesPage() {
                 ? {
                     name: modal.editing.name,
                     description: modal.editing.description,
-                    permissionIds: ((modal.editing as any).rolePermissions ?? []).map(
-                      (rp: any) => rp.permission?.id ?? rp.permissionId
+                    permissionScopes: ((modal.editing as any).rolePermissions ?? []).map(
+                      (rp: any) => ({
+                        permissionId: rp.permission?.id ?? rp.permissionId,
+                        scope: rp.scope ?? "NONE",
+                      })
                     ),
                   }
                 : undefined

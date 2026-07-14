@@ -2,9 +2,9 @@ import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 import { z } from "zod"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
 import { logger } from "@/lib/logger"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 const contractCreateSchema = z.object({
   clientId: z.string().min(1),
@@ -17,22 +17,23 @@ const contractCreateSchema = z.object({
 })
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "contract", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const { searchParams } = request.nextUrl
   const clientId = searchParams.get("clientId")
   const status = searchParams.get("status")
 
+  const filters: Record<string, unknown> = {}
+  if (clientId) filters.clientId = clientId
+  if (status) filters.status = status
+
   const where: Record<string, unknown> = {
     client: { organizationId },
     deletedAt: null,
+    AND: [scopeWhere, filters],
   }
-  if (clientId) where.clientId = clientId
-  if (status) where.status = status
 
   const contracts = await prisma.clientContract.findMany({
     where,
@@ -40,36 +41,38 @@ export async function GET(request: NextRequest) {
     orderBy: { startDate: "asc" },
   })
 
-  const withBalance = await Promise.all(
-    contracts.map(async (contract) => {
-      const dateFilter: Record<string, Date> = { gte: contract.startDate }
-      if (contract.endDate) dateFilter.lte = contract.endDate
-
-      const sum = await prisma.demand.aggregate({
-        where: {
-          clientId: contract.clientId,
-          deletedAt: null,
-          date: dateFilter,
-        },
-        _sum: { durationMinutes: true },
+  // One query for every contract's client instead of one `demand.aggregate`
+  // per contract (was an N+1). Each contract has its own start/end window,
+  // so the per-contract sum is computed in memory from this single fetch
+  // rather than via a single ungrouped-by-date aggregate.
+  const clientIds = [...new Set(contracts.map((c) => c.clientId))]
+  const demandsForClients = clientIds.length
+    ? await prisma.demand.findMany({
+        where: { clientId: { in: clientIds }, deletedAt: null },
+        select: { clientId: true, date: true, durationMinutes: true },
       })
+    : []
 
-      const consumedMinutes = sum._sum.durationMinutes ?? 0
-      const balanceMinutes = contract.contractedHours * 60 - consumedMinutes
-
-      return { ...contract, consumedMinutes, balanceMinutes }
-    })
-  )
+  const withBalance = contracts.map((contract) => {
+    const consumedMinutes = demandsForClients
+      .filter(
+        (d) =>
+          d.clientId === contract.clientId &&
+          d.date >= contract.startDate &&
+          (!contract.endDate || d.date <= contract.endDate)
+      )
+      .reduce((sum, d) => sum + d.durationMinutes, 0)
+    const balanceMinutes = contract.contractedHours * 60 - consumedMinutes
+    return { ...contract, consumedMinutes, balanceMinutes }
+  })
 
   return NextResponse.json(withBalance)
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "contract", "create")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const body = await request.json()
   const parsed = contractCreateSchema.safeParse(body)
@@ -94,8 +97,9 @@ export async function POST(request: NextRequest) {
         hourlyRate: data.hourlyRate,
         startDate: new Date(data.startDate),
         endDate: data.endDate ? new Date(data.endDate) : null,
-        notes: data.notes || null,
+        notes: data.notes ?? null,
         status: data.status,
+        createdById: session.user.id,
       },
       include: { client: { select: { id: true, name: true } } },
     })

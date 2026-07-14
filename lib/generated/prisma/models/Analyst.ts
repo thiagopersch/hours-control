@@ -53,6 +53,9 @@ export type AnalystMinAggregateOutputType = {
   deletedAt: Date | null
   organizationId: string | null
   userId: string | null
+  teamId: string | null
+  departmentId: string | null
+  createdById: string | null
 }
 
 export type AnalystMaxAggregateOutputType = {
@@ -72,6 +75,9 @@ export type AnalystMaxAggregateOutputType = {
   deletedAt: Date | null
   organizationId: string | null
   userId: string | null
+  teamId: string | null
+  departmentId: string | null
+  createdById: string | null
 }
 
 export type AnalystCountAggregateOutputType = {
@@ -91,6 +97,9 @@ export type AnalystCountAggregateOutputType = {
   deletedAt: number
   organizationId: number
   userId: number
+  teamId: number
+  departmentId: number
+  createdById: number
   _all: number
 }
 
@@ -122,6 +131,9 @@ export type AnalystMinAggregateInputType = {
   deletedAt?: true
   organizationId?: true
   userId?: true
+  teamId?: true
+  departmentId?: true
+  createdById?: true
 }
 
 export type AnalystMaxAggregateInputType = {
@@ -141,6 +153,9 @@ export type AnalystMaxAggregateInputType = {
   deletedAt?: true
   organizationId?: true
   userId?: true
+  teamId?: true
+  departmentId?: true
+  createdById?: true
 }
 
 export type AnalystCountAggregateInputType = {
@@ -160,6 +175,9 @@ export type AnalystCountAggregateInputType = {
   deletedAt?: true
   organizationId?: true
   userId?: true
+  teamId?: true
+  departmentId?: true
+  createdById?: true
   _all?: true
 }
 
@@ -266,6 +284,9 @@ export type AnalystGroupByOutputType = {
   deletedAt: Date | null
   organizationId: string
   userId: string | null
+  teamId: string | null
+  departmentId: string | null
+  createdById: string | null
   _count: AnalystCountAggregateOutputType | null
   _avg: AnalystAvgAggregateOutputType | null
   _sum: AnalystSumAggregateOutputType | null
@@ -308,8 +329,14 @@ export type AnalystWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Analyst"> | string
   userId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  teamId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  departmentId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  createdById?: Prisma.StringNullableFilter<"Analyst"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  teamRef?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
+  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }
 
@@ -330,8 +357,14 @@ export type AnalystOrderByWithRelationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  teamId?: Prisma.SortOrderInput | Prisma.SortOrder
+  departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  teamRef?: Prisma.TeamOrderByWithRelationInput
+  department?: Prisma.DepartmentOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
   demands?: Prisma.DemandOrderByRelationAggregateInput
 }
 
@@ -355,8 +388,14 @@ export type AnalystWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Analyst"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Analyst"> | string
+  teamId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  departmentId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  createdById?: Prisma.StringNullableFilter<"Analyst"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
   user?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  teamRef?: Prisma.XOR<Prisma.TeamNullableScalarRelationFilter, Prisma.TeamWhereInput> | null
+  department?: Prisma.XOR<Prisma.DepartmentNullableScalarRelationFilter, Prisma.DepartmentWhereInput> | null
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }, "id" | "userId">
 
@@ -377,6 +416,9 @@ export type AnalystOrderByWithAggregationInput = {
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrderInput | Prisma.SortOrder
+  teamId?: Prisma.SortOrderInput | Prisma.SortOrder
+  departmentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.AnalystCountOrderByAggregateInput
   _avg?: Prisma.AnalystAvgOrderByAggregateInput
   _max?: Prisma.AnalystMaxOrderByAggregateInput
@@ -404,6 +446,9 @@ export type AnalystScalarWhereWithAggregatesInput = {
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringWithAggregatesFilter<"Analyst"> | string
   userId?: Prisma.StringNullableWithAggregatesFilter<"Analyst"> | string | null
+  teamId?: Prisma.StringNullableWithAggregatesFilter<"Analyst"> | string | null
+  departmentId?: Prisma.StringNullableWithAggregatesFilter<"Analyst"> | string | null
+  createdById?: Prisma.StringNullableWithAggregatesFilter<"Analyst"> | string | null
 }
 
 export type AnalystCreateInput = {
@@ -423,6 +468,9 @@ export type AnalystCreateInput = {
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
   user?: Prisma.UserCreateNestedOneWithoutAnalystInput
+  teamRef?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutHomeForAnalystsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAnalystsInput
   demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
 }
 
@@ -443,6 +491,9 @@ export type AnalystUncheckedCreateInput = {
   deletedAt?: Date | string | null
   organizationId: string
   userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
 }
 
@@ -463,6 +514,9 @@ export type AnalystUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
   user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
+  teamRef?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutHomeForAnalystsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedAnalystsNestedInput
   demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
 }
 
@@ -483,6 +537,9 @@ export type AnalystUncheckedUpdateInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
 }
 
@@ -503,6 +560,9 @@ export type AnalystCreateManyInput = {
   deletedAt?: Date | string | null
   organizationId: string
   userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
 }
 
 export type AnalystUpdateManyMutationInput = {
@@ -539,6 +599,9 @@ export type AnalystUncheckedUpdateManyInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnalystListRelationFilter = {
@@ -573,6 +636,9 @@ export type AnalystCountOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  teamId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type AnalystAvgOrderByAggregateInput = {
@@ -597,6 +663,9 @@ export type AnalystMaxOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  teamId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type AnalystMinOrderByAggregateInput = {
@@ -616,6 +685,9 @@ export type AnalystMinOrderByAggregateInput = {
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
   userId?: Prisma.SortOrder
+  teamId?: Prisma.SortOrder
+  departmentId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type AnalystSumOrderByAggregateInput = {
@@ -676,10 +748,24 @@ export type AnalystCreateNestedOneWithoutUserInput = {
   connect?: Prisma.AnalystWhereUniqueInput
 }
 
+export type AnalystCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutCreatedByInput, Prisma.AnalystUncheckedCreateWithoutCreatedByInput> | Prisma.AnalystCreateWithoutCreatedByInput[] | Prisma.AnalystUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutCreatedByInput | Prisma.AnalystCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.AnalystCreateManyCreatedByInputEnvelope
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+}
+
 export type AnalystUncheckedCreateNestedOneWithoutUserInput = {
   create?: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutUserInput
   connect?: Prisma.AnalystWhereUniqueInput
+}
+
+export type AnalystUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutCreatedByInput, Prisma.AnalystUncheckedCreateWithoutCreatedByInput> | Prisma.AnalystCreateWithoutCreatedByInput[] | Prisma.AnalystUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutCreatedByInput | Prisma.AnalystCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.AnalystCreateManyCreatedByInputEnvelope
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
 }
 
 export type AnalystUpdateOneWithoutUserNestedInput = {
@@ -692,6 +778,20 @@ export type AnalystUpdateOneWithoutUserNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AnalystUpdateToOneWithWhereWithoutUserInput, Prisma.AnalystUpdateWithoutUserInput>, Prisma.AnalystUncheckedUpdateWithoutUserInput>
 }
 
+export type AnalystUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutCreatedByInput, Prisma.AnalystUncheckedCreateWithoutCreatedByInput> | Prisma.AnalystCreateWithoutCreatedByInput[] | Prisma.AnalystUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutCreatedByInput | Prisma.AnalystCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.AnalystUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.AnalystUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.AnalystCreateManyCreatedByInputEnvelope
+  set?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  disconnect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  delete?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  update?: Prisma.AnalystUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.AnalystUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.AnalystUpdateManyWithWhereWithoutCreatedByInput | Prisma.AnalystUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
+}
+
 export type AnalystUncheckedUpdateOneWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
   connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutUserInput
@@ -700,6 +800,62 @@ export type AnalystUncheckedUpdateOneWithoutUserNestedInput = {
   delete?: Prisma.AnalystWhereInput | boolean
   connect?: Prisma.AnalystWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.AnalystUpdateToOneWithWhereWithoutUserInput, Prisma.AnalystUpdateWithoutUserInput>, Prisma.AnalystUncheckedUpdateWithoutUserInput>
+}
+
+export type AnalystUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutCreatedByInput, Prisma.AnalystUncheckedCreateWithoutCreatedByInput> | Prisma.AnalystCreateWithoutCreatedByInput[] | Prisma.AnalystUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutCreatedByInput | Prisma.AnalystCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.AnalystUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.AnalystUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.AnalystCreateManyCreatedByInputEnvelope
+  set?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  disconnect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  delete?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  update?: Prisma.AnalystUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.AnalystUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.AnalystUpdateManyWithWhereWithoutCreatedByInput | Prisma.AnalystUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
+}
+
+export type AnalystCreateNestedManyWithoutTeamRefInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutTeamRefInput, Prisma.AnalystUncheckedCreateWithoutTeamRefInput> | Prisma.AnalystCreateWithoutTeamRefInput[] | Prisma.AnalystUncheckedCreateWithoutTeamRefInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutTeamRefInput | Prisma.AnalystCreateOrConnectWithoutTeamRefInput[]
+  createMany?: Prisma.AnalystCreateManyTeamRefInputEnvelope
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+}
+
+export type AnalystUncheckedCreateNestedManyWithoutTeamRefInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutTeamRefInput, Prisma.AnalystUncheckedCreateWithoutTeamRefInput> | Prisma.AnalystCreateWithoutTeamRefInput[] | Prisma.AnalystUncheckedCreateWithoutTeamRefInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutTeamRefInput | Prisma.AnalystCreateOrConnectWithoutTeamRefInput[]
+  createMany?: Prisma.AnalystCreateManyTeamRefInputEnvelope
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+}
+
+export type AnalystUpdateManyWithoutTeamRefNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutTeamRefInput, Prisma.AnalystUncheckedCreateWithoutTeamRefInput> | Prisma.AnalystCreateWithoutTeamRefInput[] | Prisma.AnalystUncheckedCreateWithoutTeamRefInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutTeamRefInput | Prisma.AnalystCreateOrConnectWithoutTeamRefInput[]
+  upsert?: Prisma.AnalystUpsertWithWhereUniqueWithoutTeamRefInput | Prisma.AnalystUpsertWithWhereUniqueWithoutTeamRefInput[]
+  createMany?: Prisma.AnalystCreateManyTeamRefInputEnvelope
+  set?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  disconnect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  delete?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  update?: Prisma.AnalystUpdateWithWhereUniqueWithoutTeamRefInput | Prisma.AnalystUpdateWithWhereUniqueWithoutTeamRefInput[]
+  updateMany?: Prisma.AnalystUpdateManyWithWhereWithoutTeamRefInput | Prisma.AnalystUpdateManyWithWhereWithoutTeamRefInput[]
+  deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
+}
+
+export type AnalystUncheckedUpdateManyWithoutTeamRefNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutTeamRefInput, Prisma.AnalystUncheckedCreateWithoutTeamRefInput> | Prisma.AnalystCreateWithoutTeamRefInput[] | Prisma.AnalystUncheckedCreateWithoutTeamRefInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutTeamRefInput | Prisma.AnalystCreateOrConnectWithoutTeamRefInput[]
+  upsert?: Prisma.AnalystUpsertWithWhereUniqueWithoutTeamRefInput | Prisma.AnalystUpsertWithWhereUniqueWithoutTeamRefInput[]
+  createMany?: Prisma.AnalystCreateManyTeamRefInputEnvelope
+  set?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  disconnect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  delete?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  update?: Prisma.AnalystUpdateWithWhereUniqueWithoutTeamRefInput | Prisma.AnalystUpdateWithWhereUniqueWithoutTeamRefInput[]
+  updateMany?: Prisma.AnalystUpdateManyWithWhereWithoutTeamRefInput | Prisma.AnalystUpdateManyWithWhereWithoutTeamRefInput[]
+  deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
 }
 
 export type NullableFloatFieldUpdateOperationsInput = {
@@ -716,6 +872,48 @@ export type IntFieldUpdateOperationsInput = {
   decrement?: number
   multiply?: number
   divide?: number
+}
+
+export type AnalystCreateNestedManyWithoutDepartmentInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutDepartmentInput, Prisma.AnalystUncheckedCreateWithoutDepartmentInput> | Prisma.AnalystCreateWithoutDepartmentInput[] | Prisma.AnalystUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutDepartmentInput | Prisma.AnalystCreateOrConnectWithoutDepartmentInput[]
+  createMany?: Prisma.AnalystCreateManyDepartmentInputEnvelope
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+}
+
+export type AnalystUncheckedCreateNestedManyWithoutDepartmentInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutDepartmentInput, Prisma.AnalystUncheckedCreateWithoutDepartmentInput> | Prisma.AnalystCreateWithoutDepartmentInput[] | Prisma.AnalystUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutDepartmentInput | Prisma.AnalystCreateOrConnectWithoutDepartmentInput[]
+  createMany?: Prisma.AnalystCreateManyDepartmentInputEnvelope
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+}
+
+export type AnalystUpdateManyWithoutDepartmentNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutDepartmentInput, Prisma.AnalystUncheckedCreateWithoutDepartmentInput> | Prisma.AnalystCreateWithoutDepartmentInput[] | Prisma.AnalystUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutDepartmentInput | Prisma.AnalystCreateOrConnectWithoutDepartmentInput[]
+  upsert?: Prisma.AnalystUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.AnalystUpsertWithWhereUniqueWithoutDepartmentInput[]
+  createMany?: Prisma.AnalystCreateManyDepartmentInputEnvelope
+  set?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  disconnect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  delete?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  update?: Prisma.AnalystUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.AnalystUpdateWithWhereUniqueWithoutDepartmentInput[]
+  updateMany?: Prisma.AnalystUpdateManyWithWhereWithoutDepartmentInput | Prisma.AnalystUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
+}
+
+export type AnalystUncheckedUpdateManyWithoutDepartmentNestedInput = {
+  create?: Prisma.XOR<Prisma.AnalystCreateWithoutDepartmentInput, Prisma.AnalystUncheckedCreateWithoutDepartmentInput> | Prisma.AnalystCreateWithoutDepartmentInput[] | Prisma.AnalystUncheckedCreateWithoutDepartmentInput[]
+  connectOrCreate?: Prisma.AnalystCreateOrConnectWithoutDepartmentInput | Prisma.AnalystCreateOrConnectWithoutDepartmentInput[]
+  upsert?: Prisma.AnalystUpsertWithWhereUniqueWithoutDepartmentInput | Prisma.AnalystUpsertWithWhereUniqueWithoutDepartmentInput[]
+  createMany?: Prisma.AnalystCreateManyDepartmentInputEnvelope
+  set?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  disconnect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  delete?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  connect?: Prisma.AnalystWhereUniqueInput | Prisma.AnalystWhereUniqueInput[]
+  update?: Prisma.AnalystUpdateWithWhereUniqueWithoutDepartmentInput | Prisma.AnalystUpdateWithWhereUniqueWithoutDepartmentInput[]
+  updateMany?: Prisma.AnalystUpdateManyWithWhereWithoutDepartmentInput | Prisma.AnalystUpdateManyWithWhereWithoutDepartmentInput[]
+  deleteMany?: Prisma.AnalystScalarWhereInput | Prisma.AnalystScalarWhereInput[]
 }
 
 export type AnalystCreateNestedOneWithoutDemandsInput = {
@@ -748,6 +946,9 @@ export type AnalystCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   user?: Prisma.UserCreateNestedOneWithoutAnalystInput
+  teamRef?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutHomeForAnalystsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAnalystsInput
   demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
 }
 
@@ -767,6 +968,9 @@ export type AnalystUncheckedCreateWithoutOrganizationInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
 }
 
@@ -816,6 +1020,9 @@ export type AnalystScalarWhereInput = {
   deletedAt?: Prisma.DateTimeNullableFilter<"Analyst"> | Date | string | null
   organizationId?: Prisma.StringFilter<"Analyst"> | string
   userId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  teamId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  departmentId?: Prisma.StringNullableFilter<"Analyst"> | string | null
+  createdById?: Prisma.StringNullableFilter<"Analyst"> | string | null
 }
 
 export type AnalystCreateWithoutUserInput = {
@@ -834,6 +1041,9 @@ export type AnalystCreateWithoutUserInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  teamRef?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutHomeForAnalystsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAnalystsInput
   demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
 }
 
@@ -853,12 +1063,69 @@ export type AnalystUncheckedCreateWithoutUserInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  teamId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
 }
 
 export type AnalystCreateOrConnectWithoutUserInput = {
   where: Prisma.AnalystWhereUniqueInput
   create: Prisma.XOR<Prisma.AnalystCreateWithoutUserInput, Prisma.AnalystUncheckedCreateWithoutUserInput>
+}
+
+export type AnalystCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  user?: Prisma.UserCreateNestedOneWithoutAnalystInput
+  teamRef?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutHomeForAnalystsInput
+  demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+  demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutCreatedByInput, Prisma.AnalystUncheckedCreateWithoutCreatedByInput>
+}
+
+export type AnalystCreateManyCreatedByInputEnvelope = {
+  data: Prisma.AnalystCreateManyCreatedByInput | Prisma.AnalystCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
 }
 
 export type AnalystUpsertWithoutUserInput = {
@@ -888,6 +1155,9 @@ export type AnalystUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  teamRef?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutHomeForAnalystsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedAnalystsNestedInput
   demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
 }
 
@@ -907,7 +1177,166 @@ export type AnalystUncheckedUpdateWithoutUserInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  update: Prisma.XOR<Prisma.AnalystUpdateWithoutCreatedByInput, Prisma.AnalystUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutCreatedByInput, Prisma.AnalystUncheckedCreateWithoutCreatedByInput>
+}
+
+export type AnalystUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  data: Prisma.XOR<Prisma.AnalystUpdateWithoutCreatedByInput, Prisma.AnalystUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type AnalystUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.AnalystScalarWhereInput
+  data: Prisma.XOR<Prisma.AnalystUpdateManyMutationInput, Prisma.AnalystUncheckedUpdateManyWithoutCreatedByInput>
+}
+
+export type AnalystCreateWithoutTeamRefInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  user?: Prisma.UserCreateNestedOneWithoutAnalystInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutHomeForAnalystsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAnalystsInput
+  demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystUncheckedCreateWithoutTeamRefInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  userId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
+  demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystCreateOrConnectWithoutTeamRefInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutTeamRefInput, Prisma.AnalystUncheckedCreateWithoutTeamRefInput>
+}
+
+export type AnalystCreateManyTeamRefInputEnvelope = {
+  data: Prisma.AnalystCreateManyTeamRefInput | Prisma.AnalystCreateManyTeamRefInput[]
+  skipDuplicates?: boolean
+}
+
+export type AnalystUpsertWithWhereUniqueWithoutTeamRefInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  update: Prisma.XOR<Prisma.AnalystUpdateWithoutTeamRefInput, Prisma.AnalystUncheckedUpdateWithoutTeamRefInput>
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutTeamRefInput, Prisma.AnalystUncheckedCreateWithoutTeamRefInput>
+}
+
+export type AnalystUpdateWithWhereUniqueWithoutTeamRefInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  data: Prisma.XOR<Prisma.AnalystUpdateWithoutTeamRefInput, Prisma.AnalystUncheckedUpdateWithoutTeamRefInput>
+}
+
+export type AnalystUpdateManyWithWhereWithoutTeamRefInput = {
+  where: Prisma.AnalystScalarWhereInput
+  data: Prisma.XOR<Prisma.AnalystUpdateManyMutationInput, Prisma.AnalystUncheckedUpdateManyWithoutTeamRefInput>
+}
+
+export type AnalystCreateWithoutDepartmentInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
+  user?: Prisma.UserCreateNestedOneWithoutAnalystInput
+  teamRef?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAnalystsInput
+  demands?: Prisma.DemandCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystUncheckedCreateWithoutDepartmentInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  userId?: string | null
+  teamId?: string | null
+  createdById?: string | null
+  demands?: Prisma.DemandUncheckedCreateNestedManyWithoutAnalystInput
+}
+
+export type AnalystCreateOrConnectWithoutDepartmentInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutDepartmentInput, Prisma.AnalystUncheckedCreateWithoutDepartmentInput>
+}
+
+export type AnalystCreateManyDepartmentInputEnvelope = {
+  data: Prisma.AnalystCreateManyDepartmentInput | Prisma.AnalystCreateManyDepartmentInput[]
+  skipDuplicates?: boolean
+}
+
+export type AnalystUpsertWithWhereUniqueWithoutDepartmentInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  update: Prisma.XOR<Prisma.AnalystUpdateWithoutDepartmentInput, Prisma.AnalystUncheckedUpdateWithoutDepartmentInput>
+  create: Prisma.XOR<Prisma.AnalystCreateWithoutDepartmentInput, Prisma.AnalystUncheckedCreateWithoutDepartmentInput>
+}
+
+export type AnalystUpdateWithWhereUniqueWithoutDepartmentInput = {
+  where: Prisma.AnalystWhereUniqueInput
+  data: Prisma.XOR<Prisma.AnalystUpdateWithoutDepartmentInput, Prisma.AnalystUncheckedUpdateWithoutDepartmentInput>
+}
+
+export type AnalystUpdateManyWithWhereWithoutDepartmentInput = {
+  where: Prisma.AnalystScalarWhereInput
+  data: Prisma.XOR<Prisma.AnalystUpdateManyMutationInput, Prisma.AnalystUncheckedUpdateManyWithoutDepartmentInput>
 }
 
 export type AnalystCreateWithoutDemandsInput = {
@@ -927,6 +1356,9 @@ export type AnalystCreateWithoutDemandsInput = {
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutAnalystsInput
   user?: Prisma.UserCreateNestedOneWithoutAnalystInput
+  teamRef?: Prisma.TeamCreateNestedOneWithoutMembersInput
+  department?: Prisma.DepartmentCreateNestedOneWithoutHomeForAnalystsInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedAnalystsInput
 }
 
 export type AnalystUncheckedCreateWithoutDemandsInput = {
@@ -946,6 +1378,9 @@ export type AnalystUncheckedCreateWithoutDemandsInput = {
   deletedAt?: Date | string | null
   organizationId: string
   userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
 }
 
 export type AnalystCreateOrConnectWithoutDemandsInput = {
@@ -981,6 +1416,9 @@ export type AnalystUpdateWithoutDemandsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
   user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
+  teamRef?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutHomeForAnalystsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedAnalystsNestedInput
 }
 
 export type AnalystUncheckedUpdateWithoutDemandsInput = {
@@ -1000,6 +1438,9 @@ export type AnalystUncheckedUpdateWithoutDemandsInput = {
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type AnalystCreateManyOrganizationInput = {
@@ -1018,6 +1459,9 @@ export type AnalystCreateManyOrganizationInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
 }
 
 export type AnalystUpdateWithoutOrganizationInput = {
@@ -1036,6 +1480,9 @@ export type AnalystUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
+  teamRef?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutHomeForAnalystsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedAnalystsNestedInput
   demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
 }
 
@@ -1055,6 +1502,9 @@ export type AnalystUncheckedUpdateWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
 }
 
@@ -1074,6 +1524,267 @@ export type AnalystUncheckedUpdateManyWithoutOrganizationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AnalystCreateManyCreatedByInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  userId?: string | null
+  teamId?: string | null
+  departmentId?: string | null
+}
+
+export type AnalystUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
+  teamRef?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutHomeForAnalystsNestedInput
+  demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AnalystCreateManyTeamRefInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  userId?: string | null
+  departmentId?: string | null
+  createdById?: string | null
+}
+
+export type AnalystUpdateWithoutTeamRefInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
+  department?: Prisma.DepartmentUpdateOneWithoutHomeForAnalystsNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedAnalystsNestedInput
+  demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateWithoutTeamRefInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateManyWithoutTeamRefInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  departmentId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type AnalystCreateManyDepartmentInput = {
+  id?: string
+  name: string
+  email?: string | null
+  phone?: string | null
+  role?: string | null
+  hourlyRate?: number | null
+  status?: string
+  photo?: string | null
+  team?: string | null
+  color?: string
+  level?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  userId?: string | null
+  teamId?: string | null
+  createdById?: string | null
+}
+
+export type AnalystUpdateWithoutDepartmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutAnalystsNestedInput
+  user?: Prisma.UserUpdateOneWithoutAnalystNestedInput
+  teamRef?: Prisma.TeamUpdateOneWithoutMembersNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedAnalystsNestedInput
+  demands?: Prisma.DemandUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateWithoutDepartmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  demands?: Prisma.DemandUncheckedUpdateManyWithoutAnalystNestedInput
+}
+
+export type AnalystUncheckedUpdateManyWithoutDepartmentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  role?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  hourlyRate?: Prisma.NullableFloatFieldUpdateOperationsInput | number | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  photo?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  team?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  level?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  teamId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 
@@ -1124,8 +1835,14 @@ export type AnalystSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs 
   deletedAt?: boolean
   organizationId?: boolean
   userId?: boolean
+  teamId?: boolean
+  departmentId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
+  teamRef?: boolean | Prisma.Analyst$teamRefArgs<ExtArgs>
+  department?: boolean | Prisma.Analyst$departmentArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Analyst$createdByArgs<ExtArgs>
   demands?: boolean | Prisma.Analyst$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.AnalystCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["analyst"]>
@@ -1147,8 +1864,14 @@ export type AnalystSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exten
   deletedAt?: boolean
   organizationId?: boolean
   userId?: boolean
+  teamId?: boolean
+  departmentId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
+  teamRef?: boolean | Prisma.Analyst$teamRefArgs<ExtArgs>
+  department?: boolean | Prisma.Analyst$departmentArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Analyst$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["analyst"]>
 
 export type AnalystSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -1168,8 +1891,14 @@ export type AnalystSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exten
   deletedAt?: boolean
   organizationId?: boolean
   userId?: boolean
+  teamId?: boolean
+  departmentId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
+  teamRef?: boolean | Prisma.Analyst$teamRefArgs<ExtArgs>
+  department?: boolean | Prisma.Analyst$departmentArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Analyst$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["analyst"]>
 
 export type AnalystSelectScalar = {
@@ -1189,22 +1918,34 @@ export type AnalystSelectScalar = {
   deletedAt?: boolean
   organizationId?: boolean
   userId?: boolean
+  teamId?: boolean
+  departmentId?: boolean
+  createdById?: boolean
 }
 
-export type AnalystOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "role" | "hourlyRate" | "status" | "photo" | "team" | "color" | "level" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId" | "userId", ExtArgs["result"]["analyst"]>
+export type AnalystOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "email" | "phone" | "role" | "hourlyRate" | "status" | "photo" | "team" | "color" | "level" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId" | "userId" | "teamId" | "departmentId" | "createdById", ExtArgs["result"]["analyst"]>
 export type AnalystInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
+  teamRef?: boolean | Prisma.Analyst$teamRefArgs<ExtArgs>
+  department?: boolean | Prisma.Analyst$departmentArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Analyst$createdByArgs<ExtArgs>
   demands?: boolean | Prisma.Analyst$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.AnalystCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type AnalystIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
+  teamRef?: boolean | Prisma.Analyst$teamRefArgs<ExtArgs>
+  department?: boolean | Prisma.Analyst$departmentArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Analyst$createdByArgs<ExtArgs>
 }
 export type AnalystIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
   user?: boolean | Prisma.Analyst$userArgs<ExtArgs>
+  teamRef?: boolean | Prisma.Analyst$teamRefArgs<ExtArgs>
+  department?: boolean | Prisma.Analyst$departmentArgs<ExtArgs>
+  createdBy?: boolean | Prisma.Analyst$createdByArgs<ExtArgs>
 }
 
 export type $AnalystPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1212,6 +1953,9 @@ export type $AnalystPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs> | null
+    teamRef: Prisma.$TeamPayload<ExtArgs> | null
+    department: Prisma.$DepartmentPayload<ExtArgs> | null
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
     demands: Prisma.$DemandPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -1231,6 +1975,9 @@ export type $AnalystPayload<ExtArgs extends runtime.Types.Extensions.InternalArg
     deletedAt: Date | null
     organizationId: string
     userId: string | null
+    teamId: string | null
+    departmentId: string | null
+    createdById: string | null
   }, ExtArgs["result"]["analyst"]>
   composites: {}
 }
@@ -1627,6 +2374,9 @@ export interface Prisma__AnalystClient<T, Null = never, ExtArgs extends runtime.
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.Analyst$userArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$userArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  teamRef<T extends Prisma.Analyst$teamRefArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$teamRefArgs<ExtArgs>>): Prisma.Prisma__TeamClient<runtime.Types.Result.GetResult<Prisma.$TeamPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  department<T extends Prisma.Analyst$departmentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$departmentArgs<ExtArgs>>): Prisma.Prisma__DepartmentClient<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.Analyst$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   demands<T extends Prisma.Analyst$demandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Analyst$demandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1673,6 +2423,9 @@ export interface AnalystFieldRefs {
   readonly deletedAt: Prisma.FieldRef<"Analyst", 'DateTime'>
   readonly organizationId: Prisma.FieldRef<"Analyst", 'String'>
   readonly userId: Prisma.FieldRef<"Analyst", 'String'>
+  readonly teamId: Prisma.FieldRef<"Analyst", 'String'>
+  readonly departmentId: Prisma.FieldRef<"Analyst", 'String'>
+  readonly createdById: Prisma.FieldRef<"Analyst", 'String'>
 }
     
 
@@ -2077,6 +2830,63 @@ export type AnalystDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.Inter
  * Analyst.user
  */
 export type Analyst$userArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
+}
+
+/**
+ * Analyst.teamRef
+ */
+export type Analyst$teamRefArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Team
+   */
+  select?: Prisma.TeamSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Team
+   */
+  omit?: Prisma.TeamOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TeamInclude<ExtArgs> | null
+  where?: Prisma.TeamWhereInput
+}
+
+/**
+ * Analyst.department
+ */
+export type Analyst$departmentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Department
+   */
+  select?: Prisma.DepartmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Department
+   */
+  omit?: Prisma.DepartmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartmentInclude<ExtArgs> | null
+  where?: Prisma.DepartmentWhereInput
+}
+
+/**
+ * Analyst.createdBy
+ */
+export type Analyst$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the User
    */

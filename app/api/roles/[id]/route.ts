@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure, assertRecordAccess } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "role", "read")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const role = await prisma.role.findFirst({
@@ -22,38 +20,44 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
     },
   })
 
-  if (!role) return NextResponse.json({ error: "Role not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "role", "read", role)
+  if (denied) return denied
 
   return NextResponse.json(role)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "role", "update")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.role.findFirst({
     where: { id, organizationId },
   })
 
-  if (!existing) return NextResponse.json({ error: "Role not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "role", "update", existing)
+  if (denied) return denied
 
   const body = await request.json()
-  const { permissionIds, ...roleData } = body
+  const { permissionScopes, ...roleData } = body
+  const grants = permissionScopes
+    ? (permissionScopes as { permissionId: string; scope: string }[]).filter(
+        (p) => p.scope && p.scope !== "NONE"
+      )
+    : undefined
 
   const role = await prisma.role.update({
     where: { id },
     data: {
       ...roleData,
-      ...(permissionIds
+      ...(grants
         ? {
             rolePermissions: {
               deleteMany: {},
-              create: permissionIds.map((permissionId: string) => ({
-                permission: { connect: { id: permissionId } },
+              create: grants.map((p) => ({
+                permission: { connect: { id: p.permissionId } },
+                scope: p.scope,
               })),
             },
           }
@@ -70,11 +74,9 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "role", "delete")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.role.findFirst({
@@ -82,7 +84,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
     include: { _count: { select: { userRoles: true } } },
   })
 
-  if (!existing) return NextResponse.json({ error: "Role not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "role", "delete", existing)
+  if (denied) return denied
+  if (!existing) return NextResponse.json({ error: "Não encontrado" }, { status: 404 })
 
   if (existing._count.userRoles > 0) {
     return NextResponse.json(

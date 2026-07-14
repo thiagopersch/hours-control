@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "notification", "read")
+  if (isGuardFailure(guard)) return guard
+  const { session, scopeWhere } = guard
 
   const userId = session.user.id
   const { searchParams } = request.nextUrl
@@ -18,7 +16,12 @@ export async function GET(request: NextRequest) {
   const limit = parseInt(searchParams.get("limit") ?? "50", 10)
   const skip = (page - 1) * limit
 
-  const where: Record<string, unknown> = { userId }
+  // Notifications have no organizationId column - org isolation is via the
+  // owning user's organization, enforced through this relation filter.
+  const where: Record<string, unknown> = {
+    user: { organizationId: session.user.organizationId },
+    ...scopeWhere,
+  }
   if (unreadOnly) where.readAt = null
 
   const [notifications, total] = await Promise.all([
@@ -44,11 +47,9 @@ export async function GET(request: NextRequest) {
 }
 
 export async function POST(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "notification", "create")
+  if (isGuardFailure(guard)) return guard
+  const { session } = guard
 
   const body = await request.json()
 

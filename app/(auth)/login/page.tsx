@@ -87,6 +87,8 @@ function LoginForm() {
         return;
       }
 
+      toast.success('Login realizado com sucesso', { position: 'bottom-center' });
+
       const callbackUrl = searchParams.get('callbackUrl') ?? '/dashboard';
       router.push(callbackUrl);
       router.refresh();

@@ -1,39 +1,37 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import { requireScope, isGuardFailure, assertRecordAccess } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "tag", "read")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const tag = await prisma.tag.findFirst({
     where: { id, organizationId },
   })
 
-  if (!tag) return NextResponse.json({ error: "Tag not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "tag", "read", tag)
+  if (denied) return denied
 
   return NextResponse.json(tag)
 }
 
 export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "tag", "update")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.tag.findFirst({
     where: { id, organizationId },
   })
 
-  if (!existing) return NextResponse.json({ error: "Tag not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "tag", "update", existing)
+  if (denied) return denied
 
   const body = await request.json()
   const tag = await prisma.tag.update({
@@ -45,18 +43,17 @@ export async function PUT(request: NextRequest, { params }: { params: Promise<{ 
 }
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "tag", "delete")
+  if (isGuardFailure(guard)) return guard
+  const { session, organizationId } = guard
 
   const { id } = await params
   const existing = await prisma.tag.findFirst({
     where: { id, organizationId },
   })
 
-  if (!existing) return NextResponse.json({ error: "Tag not found" }, { status: 404 })
+  const denied = assertRecordAccess(session, "tag", "delete", existing)
+  if (denied) return denied
 
   await prisma.tag.delete({
     where: { id },

@@ -24,7 +24,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             where: { email },
             include: {
               organization: true,
-              analyst: { select: { id: true } },
+              analyst: { select: { id: true, teamId: true, departmentId: true } },
+              client: { select: { id: true } },
               userRoles: {
                 include: {
                   role: {
@@ -50,9 +51,26 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             data: { lastLoginAt: new Date() },
           })
 
-          const permissions = user.userRoles.flatMap((ur: typeof user.userRoles[0]) =>
-            ur.role.rolePermissions.map((rp: typeof ur.role.rolePermissions[0]) => rp.permission)
+          const rolePermissions = user.userRoles.flatMap(
+            (ur: typeof user.userRoles[0]) => ur.role.rolePermissions
           )
+          // Multiple roles can grant the same resource:action at different
+          // scopes - keep the widest one (ALL > COMPANY > DEPARTMENT > TEAM > OWN > NONE).
+          const scopeRank: Record<string, number> = {
+            NONE: 0, OWN: 1, TEAM: 2, DEPARTMENT: 3, COMPANY: 4, ALL: 5,
+          }
+          const permissionMap = new Map<string, { resource: string; action: string; scope: string }>()
+          for (const rp of rolePermissions) {
+            const key = `${rp.permission.resource}:${rp.permission.action}`
+            const existing = permissionMap.get(key)
+            if (!existing || scopeRank[rp.scope] > scopeRank[existing.scope]) {
+              permissionMap.set(key, {
+                resource: rp.permission.resource,
+                action: rp.permission.action,
+                scope: rp.scope,
+              })
+            }
+          }
 
           return {
             id: user.id,
@@ -64,7 +82,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             mustChangePassword: user.mustChangePassword,
             isSuperAdmin: user.isSuperAdmin,
             analystId: user.analyst?.id ?? null,
-            permissions: permissions.map((p: typeof permissions[0]) => `${p.resource}:${p.action}`),
+            teamId: user.analyst?.teamId ?? null,
+            departmentId: user.analyst?.departmentId ?? null,
+            clientId: user.client?.id ?? null,
+            permissions: Array.from(permissionMap.values()),
           }
         } catch (error) {
           logger.error({ error }, "Authentication error")
@@ -83,6 +104,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         token.mustChangePassword = (user as any).mustChangePassword
         token.isSuperAdmin = (user as any).isSuperAdmin
         token.analystId = (user as any).analystId
+        token.teamId = (user as any).teamId
+        token.departmentId = (user as any).departmentId
+        token.clientId = (user as any).clientId
       }
       if (trigger === "update" && session && "mustChangePassword" in session) {
         token.mustChangePassword = session.mustChangePassword
@@ -98,6 +122,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         ;(session.user as any).mustChangePassword = token.mustChangePassword
         ;(session.user as any).isSuperAdmin = token.isSuperAdmin
         ;(session.user as any).analystId = token.analystId
+        ;(session.user as any).teamId = token.teamId
+        ;(session.user as any).departmentId = token.departmentId
+        ;(session.user as any).clientId = token.clientId
       }
       return session
     },

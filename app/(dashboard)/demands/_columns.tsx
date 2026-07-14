@@ -56,11 +56,15 @@ const statusLabels: Record<string, string> = {
 type DemandColumnsProps = {
   onEdit: (demand: Demand) => void
   onDelete: (demand: Demand) => void
+  canUpdate?: boolean
+  canDelete?: boolean
 }
 
 export function getDemandColumns({
   onEdit,
   onDelete,
+  canUpdate = true,
+  canDelete = true,
 }: DemandColumnsProps): ColumnDef<Demand>[] {
   return [
     {
@@ -113,12 +117,16 @@ export function getDemandColumns({
       id: "actions",
       cell: ({ row }) => (
         <div className="flex items-center gap-1">
-          <Button variant="ghost" size="icon-sm" onClick={() => onEdit(row.original)}>
-            <Pencil className="size-4" />
-          </Button>
-          <Button variant="ghost" size="icon-sm" onClick={() => onDelete(row.original)}>
-            <Trash2 className="size-4 text-destructive" />
-          </Button>
+          {canUpdate && (
+            <Button variant="ghost" size="icon-sm" onClick={() => onEdit(row.original)}>
+              <Pencil className="size-4" />
+            </Button>
+          )}
+          {canDelete && (
+            <Button variant="ghost" size="icon-sm" onClick={() => onDelete(row.original)}>
+              <Trash2 className="size-4 text-destructive" />
+            </Button>
+          )}
         </div>
       ),
     },

@@ -39,7 +39,9 @@ async function proxyHandler(request: NextRequest) {
 
   logRequest(request, session.user.id)
   const orgId = (session.user as any).organizationId
-  const permissions = (session.user as any).permissions as string[] | undefined
+  const permissions = (session.user as any).permissions as
+    | { resource: string; action: string; scope: string }[]
+    | undefined
   const mustChangePassword = (session.user as any).mustChangePassword as boolean | undefined
   const isSuperAdmin = (session.user as any).isSuperAdmin as boolean | undefined
 

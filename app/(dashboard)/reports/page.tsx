@@ -28,7 +28,7 @@ export default function ReportsPage() {
             clients={clients.data ?? []}
             analysts={analysts.data ?? []}
             onGenerate={generate}
-            onExport={(format) => exportReport(format, demands.data ?? [])}
+            onExport={(format) => exportReport(format, demands.data ?? [], appliedFilters)}
             onPrint={printReport}
             generating={!!appliedFilters && demands.isLoading}
             canPrint={hasResults}

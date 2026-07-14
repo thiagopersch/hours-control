@@ -33,6 +33,7 @@ import {
   TableRow,
 } from "@/components/ui/table"
 import { formatDuration, formatCurrency } from "@/lib/utils"
+import { useIsMobile } from "@/hooks/use-mobile"
 
 export type ChartDatum = { name: string; value: number; color?: string }
 export type ChartType = "barra" | "pizza" | "linha" | "tabela"
@@ -65,6 +66,7 @@ export function ChartCard({
   showLabels = false,
 }: ChartCardProps) {
   const [type, setType] = useState<ChartType>(defaultType)
+  const isMobile = useIsMobile()
   const { theme } = useTheme()
   const isDark = theme === "dark"
   const chartText = isDark ? "#a1a1aa" : "#71717a"
@@ -196,7 +198,7 @@ export function ChartCard({
               <BarChart data={data} layout="vertical">
                 <CartesianGrid stroke={chartGrid} strokeDasharray="3 3" />
                 <XAxis type="number" tick={{ fill: chartText, fontSize: 12 }} tickFormatter={formatValue} />
-                <YAxis type="category" dataKey="name" tick={{ fill: chartText, fontSize: 11 }} width={120} />
+                <YAxis type="category" dataKey="name" tick={{ fill: chartText, fontSize: 11 }} width={isMobile ? 72 : 120} />
                 <Tooltip
                   contentStyle={tooltipStyle}
                   labelStyle={tooltipLabelStyle}

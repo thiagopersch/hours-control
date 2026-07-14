@@ -45,7 +45,7 @@ export function Sidebar({ onNavClick, variant = 'desktop' }: SidebarProps) {
   const [openGroups, setOpenGroups] = useState<Record<string, boolean>>({});
   const { data: session } = useSession();
   const permissions = (session?.user as any)?.permissions as
-    | string[]
+    | { resource: string; action: string; scope: string }[]
     | undefined;
   const isSuperAdmin = (session?.user as any)?.isSuperAdmin as
     | boolean

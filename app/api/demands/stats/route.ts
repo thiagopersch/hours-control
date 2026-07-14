@@ -1,16 +1,13 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
-import { getDemandAnalystScope } from "@/lib/scope"
+import { requireScope, isGuardFailure } from "@/lib/api-guard"
 
 export async function GET(request: NextRequest) {
-  const session = await auth()
-  if (!session?.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-
-  const organizationId = request.headers.get("X-Organization-Id")
-  if (!organizationId) return NextResponse.json({ error: "Organization not found" }, { status: 403 })
+  const guard = await requireScope(request, "demand", "read")
+  if (isGuardFailure(guard)) return guard
+  const { organizationId, scopeWhere } = guard
 
   const { searchParams } = request.nextUrl
   const startDate = searchParams.get("startDate")
@@ -22,16 +19,25 @@ export async function GET(request: NextRequest) {
   if (startDate) dateFilter.gte = new Date(startDate)
   if (endDate) dateFilter.lte = new Date(endDate)
 
+  const filters: Record<string, unknown> = {}
+  if (Object.keys(dateFilter).length) filters.date = dateFilter
+  if (clientId) filters.clientId = clientId
+  if (analystId) filters.analystId = analystId
+
+  // AND (not merge) scopeWhere with the caller's own query filters, so a
+  // ?analystId= a user isn't scoped to can never override the security filter.
   const whereBase: Record<string, unknown> = {
     client: { organizationId },
     deletedAt: null,
+    AND: [scopeWhere, filters],
   }
-  if (Object.keys(dateFilter).length) whereBase.date = dateFilter
-  if (clientId) whereBase.clientId = clientId
-  if (analystId) whereBase.analystId = analystId
 
-  const scopedAnalystId = getDemandAnalystScope(session)
-  if (scopedAnalystId) whereBase.analystId = scopedAnalystId
+  // The raw SQL query below can't reuse the Prisma `where` object, so the
+  // same scope constraints are re-derived here explicitly.
+  const scopeAnalystId = (scopeWhere as any).analystId as string | undefined
+  const scopeClientId = (scopeWhere as any).clientId as string | undefined
+  const scopeDepartmentId = (scopeWhere as any).departmentId as string | undefined
+  const scopeTeamId = (scopeWhere as any).analyst?.teamId as string | undefined
 
   const [
     totalDemands,
@@ -127,9 +133,25 @@ export async function GET(request: NextRequest) {
         params.push(clientId)
         sql += ` AND "client_id" = $${params.length}`
       }
-      if (whereBase.analystId) {
-        params.push(whereBase.analystId as string)
+      if (analystId) {
+        params.push(analystId)
         sql += ` AND "analyst_id" = $${params.length}`
+      }
+      if (scopeClientId) {
+        params.push(scopeClientId)
+        sql += ` AND "client_id" = $${params.length}`
+      }
+      if (scopeAnalystId) {
+        params.push(scopeAnalystId)
+        sql += ` AND "analyst_id" = $${params.length}`
+      }
+      if (scopeDepartmentId) {
+        params.push(scopeDepartmentId)
+        sql += ` AND "department_id" = $${params.length}`
+      }
+      if (scopeTeamId) {
+        params.push(scopeTeamId)
+        sql += ` AND "analyst_id" IN (SELECT id FROM "Analyst" WHERE "teamId" = $${params.length})`
       }
       sql += ` GROUP BY year, month ORDER BY year ASC, month ASC`
       return prisma.$queryRawUnsafe<
@@ -140,48 +162,33 @@ export async function GET(request: NextRequest) {
 
   // Active contracts define the "hours sold" (contractedHours) and the
   // billing rate (hourlyRate) used for contract utilization and margin.
-  const activeContracts = await prisma.clientContract.findMany({
-    where: { status: "ACTIVE", client: { organizationId }, deletedAt: null },
-    select: { clientId: true, contractedHours: true, hourlyRate: true },
-  })
-
-  const clientIdsForNames = new Set([
-    ...clientStats.map((c) => c.clientId),
-    ...activeContracts.map((c) => c.clientId),
-  ])
-  const clientNames = clientIdsForNames.size
-    ? await prisma.client.findMany({
-        where: { id: { in: [...clientIdsForNames] }, organizationId },
+  const [activeContracts, clientNames, analystNames, departmentNames, demandTypeNames] =
+    await Promise.all([
+      prisma.clientContract.findMany({
+        where: {
+          status: "ACTIVE",
+          client: { organizationId, ...(scopeClientId ? { id: scopeClientId } : {}) },
+          deletedAt: null,
+        },
+        select: { clientId: true, contractedHours: true, hourlyRate: true },
+      }),
+      prisma.client.findMany({
+        where: { organizationId, ...(scopeClientId ? { id: scopeClientId } : {}) },
         select: { id: true, name: true },
-      })
-    : []
-
-  const analystIdsForNames = new Set([
-    ...analystStats.map((a) => a.analystId),
-    ...clientAnalystStats.map((a) => a.analystId),
-  ])
-  const analystNames = analystIdsForNames.size
-    ? await prisma.analyst.findMany({
-        where: { id: { in: [...analystIdsForNames] }, organizationId },
+      }),
+      prisma.analyst.findMany({
+        where: { organizationId },
         select: { id: true, name: true, color: true, hourlyRate: true },
-      })
-    : []
-
-  const departmentIds = departmentStats.map((d) => d.departmentId).filter((id): id is string => !!id)
-  const departmentNames = departmentIds.length
-    ? await prisma.department.findMany({
-        where: { id: { in: departmentIds }, organizationId },
+      }),
+      prisma.department.findMany({
+        where: { organizationId },
         select: { id: true, name: true },
-      })
-    : []
-
-  const demandTypeIds = demandTypeStats.map((d) => d.demandTypeId).filter((id): id is string => !!id)
-  const demandTypeNames = demandTypeIds.length
-    ? await prisma.demandType.findMany({
-        where: { id: { in: demandTypeIds }, organizationId },
+      }),
+      prisma.demandType.findMany({
+        where: { organizationId },
         select: { id: true, name: true, color: true },
-      })
-    : []
+      }),
+    ])
 
   const clientMap = new Map(clientNames.map((c) => [c.id, c.name]))
   const analystMap = new Map(analystNames.map((a) => [a.id, a]))

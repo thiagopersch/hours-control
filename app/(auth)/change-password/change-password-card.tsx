@@ -61,7 +61,9 @@ export function ChangePasswordCard() {
 
       await update({ mustChangePassword: false })
 
-      const permissions = (session?.user as any)?.permissions as string[] | undefined
+      const permissions = (session?.user as any)?.permissions as
+        | { resource: string; action: string; scope: string }[]
+        | undefined
       const target =
         flattenNavItems().find(
           (item) => item.resource && hasPermission(permissions, item.resource)

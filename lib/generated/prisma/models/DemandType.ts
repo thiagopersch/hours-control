@@ -33,6 +33,7 @@ export type DemandTypeMinAggregateOutputType = {
   updatedAt: Date | null
   deletedAt: Date | null
   organizationId: string | null
+  createdById: string | null
 }
 
 export type DemandTypeMaxAggregateOutputType = {
@@ -44,6 +45,7 @@ export type DemandTypeMaxAggregateOutputType = {
   updatedAt: Date | null
   deletedAt: Date | null
   organizationId: string | null
+  createdById: string | null
 }
 
 export type DemandTypeCountAggregateOutputType = {
@@ -55,6 +57,7 @@ export type DemandTypeCountAggregateOutputType = {
   updatedAt: number
   deletedAt: number
   organizationId: number
+  createdById: number
   _all: number
 }
 
@@ -68,6 +71,7 @@ export type DemandTypeMinAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  createdById?: true
 }
 
 export type DemandTypeMaxAggregateInputType = {
@@ -79,6 +83,7 @@ export type DemandTypeMaxAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  createdById?: true
 }
 
 export type DemandTypeCountAggregateInputType = {
@@ -90,6 +95,7 @@ export type DemandTypeCountAggregateInputType = {
   updatedAt?: true
   deletedAt?: true
   organizationId?: true
+  createdById?: true
   _all?: true
 }
 
@@ -174,6 +180,7 @@ export type DemandTypeGroupByOutputType = {
   updatedAt: Date
   deletedAt: Date | null
   organizationId: string
+  createdById: string | null
   _count: DemandTypeCountAggregateOutputType | null
   _min: DemandTypeMinAggregateOutputType | null
   _max: DemandTypeMaxAggregateOutputType | null
@@ -206,7 +213,9 @@ export type DemandTypeWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DemandType"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"DemandType"> | Date | string | null
   organizationId?: Prisma.StringFilter<"DemandType"> | string
+  createdById?: Prisma.StringNullableFilter<"DemandType"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }
 
@@ -219,7 +228,9 @@ export type DemandTypeOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   organization?: Prisma.OrganizationOrderByWithRelationInput
+  createdBy?: Prisma.UserOrderByWithRelationInput
   demands?: Prisma.DemandOrderByRelationAggregateInput
 }
 
@@ -235,7 +246,9 @@ export type DemandTypeWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"DemandType"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"DemandType"> | Date | string | null
   organizationId?: Prisma.StringFilter<"DemandType"> | string
+  createdById?: Prisma.StringNullableFilter<"DemandType"> | string | null
   organization?: Prisma.XOR<Prisma.OrganizationScalarRelationFilter, Prisma.OrganizationWhereInput>
+  createdBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
   demands?: Prisma.DemandListRelationFilter
 }, "id">
 
@@ -248,6 +261,7 @@ export type DemandTypeOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.DemandTypeCountOrderByAggregateInput
   _max?: Prisma.DemandTypeMaxOrderByAggregateInput
   _min?: Prisma.DemandTypeMinOrderByAggregateInput
@@ -265,6 +279,7 @@ export type DemandTypeScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"DemandType"> | Date | string
   deletedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"DemandType"> | Date | string | null
   organizationId?: Prisma.StringWithAggregatesFilter<"DemandType"> | string
+  createdById?: Prisma.StringNullableWithAggregatesFilter<"DemandType"> | string | null
 }
 
 export type DemandTypeCreateInput = {
@@ -276,6 +291,7 @@ export type DemandTypeCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDemandTypesInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedDemandTypesInput
   demands?: Prisma.DemandCreateNestedManyWithoutDemandTypeInput
 }
 
@@ -288,6 +304,7 @@ export type DemandTypeUncheckedCreateInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutDemandTypeInput
 }
 
@@ -300,6 +317,7 @@ export type DemandTypeUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDemandTypesNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedDemandTypesNestedInput
   demands?: Prisma.DemandUpdateManyWithoutDemandTypeNestedInput
 }
 
@@ -312,6 +330,7 @@ export type DemandTypeUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutDemandTypeNestedInput
 }
 
@@ -324,6 +343,7 @@ export type DemandTypeCreateManyInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  createdById?: string | null
 }
 
 export type DemandTypeUpdateManyMutationInput = {
@@ -345,6 +365,7 @@ export type DemandTypeUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DemandTypeListRelationFilter = {
@@ -366,6 +387,7 @@ export type DemandTypeCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type DemandTypeMaxOrderByAggregateInput = {
@@ -377,6 +399,7 @@ export type DemandTypeMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type DemandTypeMinOrderByAggregateInput = {
@@ -388,6 +411,7 @@ export type DemandTypeMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   deletedAt?: Prisma.SortOrder
   organizationId?: Prisma.SortOrder
+  createdById?: Prisma.SortOrder
 }
 
 export type DemandTypeNullableScalarRelationFilter = {
@@ -437,6 +461,48 @@ export type DemandTypeUncheckedUpdateManyWithoutOrganizationNestedInput = {
   deleteMany?: Prisma.DemandTypeScalarWhereInput | Prisma.DemandTypeScalarWhereInput[]
 }
 
+export type DemandTypeCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.DemandTypeCreateWithoutCreatedByInput, Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput> | Prisma.DemandTypeCreateWithoutCreatedByInput[] | Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput | Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.DemandTypeCreateManyCreatedByInputEnvelope
+  connect?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+}
+
+export type DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput = {
+  create?: Prisma.XOR<Prisma.DemandTypeCreateWithoutCreatedByInput, Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput> | Prisma.DemandTypeCreateWithoutCreatedByInput[] | Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput | Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput[]
+  createMany?: Prisma.DemandTypeCreateManyCreatedByInputEnvelope
+  connect?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+}
+
+export type DemandTypeUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.DemandTypeCreateWithoutCreatedByInput, Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput> | Prisma.DemandTypeCreateWithoutCreatedByInput[] | Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput | Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.DemandTypeUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.DemandTypeUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.DemandTypeCreateManyCreatedByInputEnvelope
+  set?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  disconnect?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  delete?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  connect?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  update?: Prisma.DemandTypeUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.DemandTypeUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.DemandTypeUpdateManyWithWhereWithoutCreatedByInput | Prisma.DemandTypeUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.DemandTypeScalarWhereInput | Prisma.DemandTypeScalarWhereInput[]
+}
+
+export type DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput = {
+  create?: Prisma.XOR<Prisma.DemandTypeCreateWithoutCreatedByInput, Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput> | Prisma.DemandTypeCreateWithoutCreatedByInput[] | Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput[]
+  connectOrCreate?: Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput | Prisma.DemandTypeCreateOrConnectWithoutCreatedByInput[]
+  upsert?: Prisma.DemandTypeUpsertWithWhereUniqueWithoutCreatedByInput | Prisma.DemandTypeUpsertWithWhereUniqueWithoutCreatedByInput[]
+  createMany?: Prisma.DemandTypeCreateManyCreatedByInputEnvelope
+  set?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  disconnect?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  delete?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  connect?: Prisma.DemandTypeWhereUniqueInput | Prisma.DemandTypeWhereUniqueInput[]
+  update?: Prisma.DemandTypeUpdateWithWhereUniqueWithoutCreatedByInput | Prisma.DemandTypeUpdateWithWhereUniqueWithoutCreatedByInput[]
+  updateMany?: Prisma.DemandTypeUpdateManyWithWhereWithoutCreatedByInput | Prisma.DemandTypeUpdateManyWithWhereWithoutCreatedByInput[]
+  deleteMany?: Prisma.DemandTypeScalarWhereInput | Prisma.DemandTypeScalarWhereInput[]
+}
+
 export type DemandTypeCreateNestedOneWithoutDemandsInput = {
   create?: Prisma.XOR<Prisma.DemandTypeCreateWithoutDemandsInput, Prisma.DemandTypeUncheckedCreateWithoutDemandsInput>
   connectOrCreate?: Prisma.DemandTypeCreateOrConnectWithoutDemandsInput
@@ -461,6 +527,7 @@ export type DemandTypeCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedDemandTypesInput
   demands?: Prisma.DemandCreateNestedManyWithoutDemandTypeInput
 }
 
@@ -472,6 +539,7 @@ export type DemandTypeUncheckedCreateWithoutOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  createdById?: string | null
   demands?: Prisma.DemandUncheckedCreateNestedManyWithoutDemandTypeInput
 }
 
@@ -513,6 +581,57 @@ export type DemandTypeScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"DemandType"> | Date | string
   deletedAt?: Prisma.DateTimeNullableFilter<"DemandType"> | Date | string | null
   organizationId?: Prisma.StringFilter<"DemandType"> | string
+  createdById?: Prisma.StringNullableFilter<"DemandType"> | string | null
+}
+
+export type DemandTypeCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  color?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutDemandTypesInput
+  demands?: Prisma.DemandCreateNestedManyWithoutDemandTypeInput
+}
+
+export type DemandTypeUncheckedCreateWithoutCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  color?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  demands?: Prisma.DemandUncheckedCreateNestedManyWithoutDemandTypeInput
+}
+
+export type DemandTypeCreateOrConnectWithoutCreatedByInput = {
+  where: Prisma.DemandTypeWhereUniqueInput
+  create: Prisma.XOR<Prisma.DemandTypeCreateWithoutCreatedByInput, Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput>
+}
+
+export type DemandTypeCreateManyCreatedByInputEnvelope = {
+  data: Prisma.DemandTypeCreateManyCreatedByInput | Prisma.DemandTypeCreateManyCreatedByInput[]
+  skipDuplicates?: boolean
+}
+
+export type DemandTypeUpsertWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.DemandTypeWhereUniqueInput
+  update: Prisma.XOR<Prisma.DemandTypeUpdateWithoutCreatedByInput, Prisma.DemandTypeUncheckedUpdateWithoutCreatedByInput>
+  create: Prisma.XOR<Prisma.DemandTypeCreateWithoutCreatedByInput, Prisma.DemandTypeUncheckedCreateWithoutCreatedByInput>
+}
+
+export type DemandTypeUpdateWithWhereUniqueWithoutCreatedByInput = {
+  where: Prisma.DemandTypeWhereUniqueInput
+  data: Prisma.XOR<Prisma.DemandTypeUpdateWithoutCreatedByInput, Prisma.DemandTypeUncheckedUpdateWithoutCreatedByInput>
+}
+
+export type DemandTypeUpdateManyWithWhereWithoutCreatedByInput = {
+  where: Prisma.DemandTypeScalarWhereInput
+  data: Prisma.XOR<Prisma.DemandTypeUpdateManyMutationInput, Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByInput>
 }
 
 export type DemandTypeCreateWithoutDemandsInput = {
@@ -524,6 +643,7 @@ export type DemandTypeCreateWithoutDemandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organization: Prisma.OrganizationCreateNestedOneWithoutDemandTypesInput
+  createdBy?: Prisma.UserCreateNestedOneWithoutCreatedDemandTypesInput
 }
 
 export type DemandTypeUncheckedCreateWithoutDemandsInput = {
@@ -535,6 +655,7 @@ export type DemandTypeUncheckedCreateWithoutDemandsInput = {
   updatedAt?: Date | string
   deletedAt?: Date | string | null
   organizationId: string
+  createdById?: string | null
 }
 
 export type DemandTypeCreateOrConnectWithoutDemandsInput = {
@@ -562,6 +683,7 @@ export type DemandTypeUpdateWithoutDemandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organization?: Prisma.OrganizationUpdateOneRequiredWithoutDemandTypesNestedInput
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedDemandTypesNestedInput
 }
 
 export type DemandTypeUncheckedUpdateWithoutDemandsInput = {
@@ -573,6 +695,7 @@ export type DemandTypeUncheckedUpdateWithoutDemandsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type DemandTypeCreateManyOrganizationInput = {
@@ -583,6 +706,7 @@ export type DemandTypeCreateManyOrganizationInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   deletedAt?: Date | string | null
+  createdById?: string | null
 }
 
 export type DemandTypeUpdateWithoutOrganizationInput = {
@@ -593,6 +717,7 @@ export type DemandTypeUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdBy?: Prisma.UserUpdateOneWithoutCreatedDemandTypesNestedInput
   demands?: Prisma.DemandUpdateManyWithoutDemandTypeNestedInput
 }
 
@@ -604,6 +729,7 @@ export type DemandTypeUncheckedUpdateWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   demands?: Prisma.DemandUncheckedUpdateManyWithoutDemandTypeNestedInput
 }
 
@@ -615,6 +741,53 @@ export type DemandTypeUncheckedUpdateManyWithoutOrganizationInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+}
+
+export type DemandTypeCreateManyCreatedByInput = {
+  id?: string
+  name: string
+  description?: string | null
+  color?: string
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+}
+
+export type DemandTypeUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutDemandTypesNestedInput
+  demands?: Prisma.DemandUpdateManyWithoutDemandTypeNestedInput
+}
+
+export type DemandTypeUncheckedUpdateWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  demands?: Prisma.DemandUncheckedUpdateManyWithoutDemandTypeNestedInput
+}
+
+export type DemandTypeUncheckedUpdateManyWithoutCreatedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  color?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -657,7 +830,9 @@ export type DemandTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalAr
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.DemandType$createdByArgs<ExtArgs>
   demands?: boolean | Prisma.DemandType$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.DemandTypeCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["demandType"]>
@@ -671,7 +846,9 @@ export type DemandTypeSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Ex
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.DemandType$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["demandType"]>
 
 export type DemandTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -683,7 +860,9 @@ export type DemandTypeSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Ex
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.DemandType$createdByArgs<ExtArgs>
 }, ExtArgs["result"]["demandType"]>
 
 export type DemandTypeSelectScalar = {
@@ -695,25 +874,30 @@ export type DemandTypeSelectScalar = {
   updatedAt?: boolean
   deletedAt?: boolean
   organizationId?: boolean
+  createdById?: boolean
 }
 
-export type DemandTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "color" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId", ExtArgs["result"]["demandType"]>
+export type DemandTypeOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "color" | "createdAt" | "updatedAt" | "deletedAt" | "organizationId" | "createdById", ExtArgs["result"]["demandType"]>
 export type DemandTypeInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.DemandType$createdByArgs<ExtArgs>
   demands?: boolean | Prisma.DemandType$demandsArgs<ExtArgs>
   _count?: boolean | Prisma.DemandTypeCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type DemandTypeIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.DemandType$createdByArgs<ExtArgs>
 }
 export type DemandTypeIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   organization?: boolean | Prisma.OrganizationDefaultArgs<ExtArgs>
+  createdBy?: boolean | Prisma.DemandType$createdByArgs<ExtArgs>
 }
 
 export type $DemandTypePayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "DemandType"
   objects: {
     organization: Prisma.$OrganizationPayload<ExtArgs>
+    createdBy: Prisma.$UserPayload<ExtArgs> | null
     demands: Prisma.$DemandPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
@@ -725,6 +909,7 @@ export type $DemandTypePayload<ExtArgs extends runtime.Types.Extensions.Internal
     updatedAt: Date
     deletedAt: Date | null
     organizationId: string
+    createdById: string | null
   }, ExtArgs["result"]["demandType"]>
   composites: {}
 }
@@ -1120,6 +1305,7 @@ readonly fields: DemandTypeFieldRefs;
 export interface Prisma__DemandTypeClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   organization<T extends Prisma.OrganizationDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.OrganizationDefaultArgs<ExtArgs>>): Prisma.Prisma__OrganizationClient<runtime.Types.Result.GetResult<Prisma.$OrganizationPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  createdBy<T extends Prisma.DemandType$createdByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandType$createdByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   demands<T extends Prisma.DemandType$demandsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.DemandType$demandsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -1158,6 +1344,7 @@ export interface DemandTypeFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"DemandType", 'DateTime'>
   readonly deletedAt: Prisma.FieldRef<"DemandType", 'DateTime'>
   readonly organizationId: Prisma.FieldRef<"DemandType", 'String'>
+  readonly createdById: Prisma.FieldRef<"DemandType", 'String'>
 }
     
 
@@ -1556,6 +1743,25 @@ export type DemandTypeDeleteManyArgs<ExtArgs extends runtime.Types.Extensions.In
    * Limit how many DemandTypes to delete.
    */
   limit?: number
+}
+
+/**
+ * DemandType.createdBy
+ */
+export type DemandType$createdByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

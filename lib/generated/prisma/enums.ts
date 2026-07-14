@@ -70,3 +70,15 @@ export const ExportFormat = {
 } as const
 
 export type ExportFormat = (typeof ExportFormat)[keyof typeof ExportFormat]
+
+
+export const PermissionScope = {
+  NONE: 'NONE',
+  OWN: 'OWN',
+  TEAM: 'TEAM',
+  DEPARTMENT: 'DEPARTMENT',
+  COMPANY: 'COMPANY',
+  ALL: 'ALL'
+} as const
+
+export type PermissionScope = (typeof PermissionScope)[keyof typeof PermissionScope]

@@ -274,6 +274,14 @@ export type UserWhereInput = {
   dashboardPreferences?: Prisma.XOR<Prisma.DashboardPreferenceNullableScalarRelationFilter, Prisma.DashboardPreferenceWhereInput> | null
   uploadedAttachments?: Prisma.AttachmentListRelationFilter
   analyst?: Prisma.XOR<Prisma.AnalystNullableScalarRelationFilter, Prisma.AnalystWhereInput> | null
+  client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
+  createdClients?: Prisma.ClientListRelationFilter
+  createdRequesters?: Prisma.RequesterListRelationFilter
+  createdDepartments?: Prisma.DepartmentListRelationFilter
+  createdDemandTypes?: Prisma.DemandTypeListRelationFilter
+  createdTags?: Prisma.TagListRelationFilter
+  createdContracts?: Prisma.ClientContractListRelationFilter
+  createdAnalysts?: Prisma.AnalystListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -304,6 +312,14 @@ export type UserOrderByWithRelationInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceOrderByWithRelationInput
   uploadedAttachments?: Prisma.AttachmentOrderByRelationAggregateInput
   analyst?: Prisma.AnalystOrderByWithRelationInput
+  client?: Prisma.ClientOrderByWithRelationInput
+  createdClients?: Prisma.ClientOrderByRelationAggregateInput
+  createdRequesters?: Prisma.RequesterOrderByRelationAggregateInput
+  createdDepartments?: Prisma.DepartmentOrderByRelationAggregateInput
+  createdDemandTypes?: Prisma.DemandTypeOrderByRelationAggregateInput
+  createdTags?: Prisma.TagOrderByRelationAggregateInput
+  createdContracts?: Prisma.ClientContractOrderByRelationAggregateInput
+  createdAnalysts?: Prisma.AnalystOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -337,6 +353,14 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   dashboardPreferences?: Prisma.XOR<Prisma.DashboardPreferenceNullableScalarRelationFilter, Prisma.DashboardPreferenceWhereInput> | null
   uploadedAttachments?: Prisma.AttachmentListRelationFilter
   analyst?: Prisma.XOR<Prisma.AnalystNullableScalarRelationFilter, Prisma.AnalystWhereInput> | null
+  client?: Prisma.XOR<Prisma.ClientNullableScalarRelationFilter, Prisma.ClientWhereInput> | null
+  createdClients?: Prisma.ClientListRelationFilter
+  createdRequesters?: Prisma.RequesterListRelationFilter
+  createdDepartments?: Prisma.DepartmentListRelationFilter
+  createdDemandTypes?: Prisma.DemandTypeListRelationFilter
+  createdTags?: Prisma.TagListRelationFilter
+  createdContracts?: Prisma.ClientContractListRelationFilter
+  createdAnalysts?: Prisma.AnalystListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -408,6 +432,14 @@ export type UserCreateInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -437,6 +469,14 @@ export type UserUncheckedCreateInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUpdateInput = {
@@ -466,6 +506,14 @@ export type UserUpdateInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -495,6 +543,14 @@ export type UserUncheckedUpdateInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -718,6 +774,12 @@ export type UserCreateNestedOneWithoutAnalystInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutCreatedAnalystsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAnalystsInput, Prisma.UserUncheckedCreateWithoutCreatedAnalystsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAnalystsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneWithoutAnalystNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutAnalystInput, Prisma.UserUncheckedCreateWithoutAnalystInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutAnalystInput
@@ -726,6 +788,112 @@ export type UserUpdateOneWithoutAnalystNestedInput = {
   delete?: Prisma.UserWhereInput | boolean
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAnalystInput, Prisma.UserUpdateWithoutAnalystInput>, Prisma.UserUncheckedUpdateWithoutAnalystInput>
+}
+
+export type UserUpdateOneWithoutCreatedAnalystsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedAnalystsInput, Prisma.UserUncheckedCreateWithoutCreatedAnalystsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedAnalystsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedAnalystsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedAnalystsInput, Prisma.UserUpdateWithoutCreatedAnalystsInput>, Prisma.UserUncheckedUpdateWithoutCreatedAnalystsInput>
+}
+
+export type UserCreateNestedOneWithoutClientInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientInput, Prisma.UserUncheckedCreateWithoutClientInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutCreatedClientsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedClientsInput, Prisma.UserUncheckedCreateWithoutCreatedClientsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedClientsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutClientNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutClientInput, Prisma.UserUncheckedCreateWithoutClientInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutClientInput
+  upsert?: Prisma.UserUpsertWithoutClientInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutClientInput, Prisma.UserUpdateWithoutClientInput>, Prisma.UserUncheckedUpdateWithoutClientInput>
+}
+
+export type UserUpdateOneWithoutCreatedClientsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedClientsInput, Prisma.UserUncheckedCreateWithoutCreatedClientsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedClientsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedClientsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedClientsInput, Prisma.UserUpdateWithoutCreatedClientsInput>, Prisma.UserUncheckedUpdateWithoutCreatedClientsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedContractsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedContractsInput, Prisma.UserUncheckedCreateWithoutCreatedContractsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedContractsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedContractsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedContractsInput, Prisma.UserUncheckedCreateWithoutCreatedContractsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedContractsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedContractsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedContractsInput, Prisma.UserUpdateWithoutCreatedContractsInput>, Prisma.UserUncheckedUpdateWithoutCreatedContractsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedRequestersInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedRequestersInput, Prisma.UserUncheckedCreateWithoutCreatedRequestersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedRequestersInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedRequestersNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedRequestersInput, Prisma.UserUncheckedCreateWithoutCreatedRequestersInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedRequestersInput
+  upsert?: Prisma.UserUpsertWithoutCreatedRequestersInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedRequestersInput, Prisma.UserUpdateWithoutCreatedRequestersInput>, Prisma.UserUncheckedUpdateWithoutCreatedRequestersInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedDepartmentsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedDepartmentsInput, Prisma.UserUncheckedCreateWithoutCreatedDepartmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDepartmentsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedDepartmentsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedDepartmentsInput, Prisma.UserUncheckedCreateWithoutCreatedDepartmentsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDepartmentsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedDepartmentsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedDepartmentsInput, Prisma.UserUpdateWithoutCreatedDepartmentsInput>, Prisma.UserUncheckedUpdateWithoutCreatedDepartmentsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedDemandTypesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedDemandTypesInput, Prisma.UserUncheckedCreateWithoutCreatedDemandTypesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDemandTypesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedDemandTypesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedDemandTypesInput, Prisma.UserUncheckedCreateWithoutCreatedDemandTypesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedDemandTypesInput
+  upsert?: Prisma.UserUpsertWithoutCreatedDemandTypesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedDemandTypesInput, Prisma.UserUpdateWithoutCreatedDemandTypesInput>, Prisma.UserUncheckedUpdateWithoutCreatedDemandTypesInput>
 }
 
 export type UserCreateNestedOneWithoutUploadedAttachmentsInput = {
@@ -756,6 +924,22 @@ export type UserUpdateOneRequiredWithoutCommentsNestedInput = {
   upsert?: Prisma.UserUpsertWithoutCommentsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCommentsInput, Prisma.UserUpdateWithoutCommentsInput>, Prisma.UserUncheckedUpdateWithoutCommentsInput>
+}
+
+export type UserCreateNestedOneWithoutCreatedTagsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTagsInput, Prisma.UserUncheckedCreateWithoutCreatedTagsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTagsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneWithoutCreatedTagsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutCreatedTagsInput, Prisma.UserUncheckedCreateWithoutCreatedTagsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutCreatedTagsInput
+  upsert?: Prisma.UserUpsertWithoutCreatedTagsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutCreatedTagsInput, Prisma.UserUpdateWithoutCreatedTagsInput>, Prisma.UserUncheckedUpdateWithoutCreatedTagsInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -856,6 +1040,14 @@ export type UserCreateWithoutOrganizationInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutOrganizationInput = {
@@ -884,6 +1076,14 @@ export type UserUncheckedCreateWithoutOrganizationInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutOrganizationInput = {
@@ -959,6 +1159,14 @@ export type UserCreateWithoutAccountsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAccountsInput = {
@@ -987,6 +1195,14 @@ export type UserUncheckedCreateWithoutAccountsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAccountsInput = {
@@ -1031,6 +1247,14 @@ export type UserUpdateWithoutAccountsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAccountsInput = {
@@ -1059,6 +1283,14 @@ export type UserUncheckedUpdateWithoutAccountsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutSessionsInput = {
@@ -1087,6 +1319,14 @@ export type UserCreateWithoutSessionsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutSessionsInput = {
@@ -1115,6 +1355,14 @@ export type UserUncheckedCreateWithoutSessionsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutSessionsInput = {
@@ -1159,6 +1407,14 @@ export type UserUpdateWithoutSessionsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutSessionsInput = {
@@ -1187,6 +1443,14 @@ export type UserUncheckedUpdateWithoutSessionsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutUserRolesInput = {
@@ -1215,6 +1479,14 @@ export type UserCreateWithoutUserRolesInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutUserRolesInput = {
@@ -1243,6 +1515,14 @@ export type UserUncheckedCreateWithoutUserRolesInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutUserRolesInput = {
@@ -1287,6 +1567,14 @@ export type UserUpdateWithoutUserRolesInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUserRolesInput = {
@@ -1315,6 +1603,14 @@ export type UserUncheckedUpdateWithoutUserRolesInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAnalystInput = {
@@ -1343,6 +1639,14 @@ export type UserCreateWithoutAnalystInput = {
   exports?: Prisma.ExportCreateNestedManyWithoutUserInput
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAnalystInput = {
@@ -1371,11 +1675,96 @@ export type UserUncheckedCreateWithoutAnalystInput = {
   exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAnalystInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutAnalystInput, Prisma.UserUncheckedCreateWithoutAnalystInput>
+}
+
+export type UserCreateWithoutCreatedAnalystsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedAnalystsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedAnalystsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAnalystsInput, Prisma.UserUncheckedCreateWithoutCreatedAnalystsInput>
 }
 
 export type UserUpsertWithoutAnalystInput = {
@@ -1415,6 +1804,14 @@ export type UserUpdateWithoutAnalystInput = {
   exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAnalystInput = {
@@ -1443,6 +1840,1057 @@ export type UserUncheckedUpdateWithoutAnalystInput = {
   exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutCreatedAnalystsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAnalystsInput, Prisma.UserUncheckedUpdateWithoutCreatedAnalystsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedAnalystsInput, Prisma.UserUncheckedCreateWithoutCreatedAnalystsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedAnalystsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedAnalystsInput, Prisma.UserUncheckedUpdateWithoutCreatedAnalystsInput>
+}
+
+export type UserUpdateWithoutCreatedAnalystsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedAnalystsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutClientInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutClientInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutClientInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientInput, Prisma.UserUncheckedCreateWithoutClientInput>
+}
+
+export type UserCreateWithoutCreatedClientsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedClientsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedClientsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedClientsInput, Prisma.UserUncheckedCreateWithoutCreatedClientsInput>
+}
+
+export type UserUpsertWithoutClientInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutClientInput, Prisma.UserUncheckedUpdateWithoutClientInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutClientInput, Prisma.UserUncheckedCreateWithoutClientInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutClientInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutClientInput, Prisma.UserUncheckedUpdateWithoutClientInput>
+}
+
+export type UserUpdateWithoutClientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutClientInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUpsertWithoutCreatedClientsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedClientsInput, Prisma.UserUncheckedUpdateWithoutCreatedClientsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedClientsInput, Prisma.UserUncheckedCreateWithoutCreatedClientsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedClientsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedClientsInput, Prisma.UserUncheckedUpdateWithoutCreatedClientsInput>
+}
+
+export type UserUpdateWithoutCreatedClientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedClientsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCreatedContractsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedContractsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedContractsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedContractsInput, Prisma.UserUncheckedCreateWithoutCreatedContractsInput>
+}
+
+export type UserUpsertWithoutCreatedContractsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedContractsInput, Prisma.UserUncheckedUpdateWithoutCreatedContractsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedContractsInput, Prisma.UserUncheckedCreateWithoutCreatedContractsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedContractsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedContractsInput, Prisma.UserUncheckedUpdateWithoutCreatedContractsInput>
+}
+
+export type UserUpdateWithoutCreatedContractsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedContractsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCreatedRequestersInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedRequestersInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedRequestersInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedRequestersInput, Prisma.UserUncheckedCreateWithoutCreatedRequestersInput>
+}
+
+export type UserUpsertWithoutCreatedRequestersInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedRequestersInput, Prisma.UserUncheckedUpdateWithoutCreatedRequestersInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedRequestersInput, Prisma.UserUncheckedCreateWithoutCreatedRequestersInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedRequestersInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedRequestersInput, Prisma.UserUncheckedUpdateWithoutCreatedRequestersInput>
+}
+
+export type UserUpdateWithoutCreatedRequestersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedRequestersInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCreatedDepartmentsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedDepartmentsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedDepartmentsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedDepartmentsInput, Prisma.UserUncheckedCreateWithoutCreatedDepartmentsInput>
+}
+
+export type UserUpsertWithoutCreatedDepartmentsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedDepartmentsInput, Prisma.UserUncheckedUpdateWithoutCreatedDepartmentsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedDepartmentsInput, Prisma.UserUncheckedCreateWithoutCreatedDepartmentsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedDepartmentsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedDepartmentsInput, Prisma.UserUncheckedUpdateWithoutCreatedDepartmentsInput>
+}
+
+export type UserUpdateWithoutCreatedDepartmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedDepartmentsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCreatedDemandTypesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedDemandTypesInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedDemandTypesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedDemandTypesInput, Prisma.UserUncheckedCreateWithoutCreatedDemandTypesInput>
+}
+
+export type UserUpsertWithoutCreatedDemandTypesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedDemandTypesInput, Prisma.UserUncheckedUpdateWithoutCreatedDemandTypesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedDemandTypesInput, Prisma.UserUncheckedCreateWithoutCreatedDemandTypesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedDemandTypesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedDemandTypesInput, Prisma.UserUncheckedUpdateWithoutCreatedDemandTypesInput>
+}
+
+export type UserUpdateWithoutCreatedDemandTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedDemandTypesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutUploadedAttachmentsInput = {
@@ -1471,6 +2919,14 @@ export type UserCreateWithoutUploadedAttachmentsInput = {
   exports?: Prisma.ExportCreateNestedManyWithoutUserInput
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutUploadedAttachmentsInput = {
@@ -1499,6 +2955,14 @@ export type UserUncheckedCreateWithoutUploadedAttachmentsInput = {
   exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutUploadedAttachmentsInput = {
@@ -1543,6 +3007,14 @@ export type UserUpdateWithoutUploadedAttachmentsInput = {
   exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutUploadedAttachmentsInput = {
@@ -1571,6 +3043,14 @@ export type UserUncheckedUpdateWithoutUploadedAttachmentsInput = {
   exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutCommentsInput = {
@@ -1599,6 +3079,14 @@ export type UserCreateWithoutCommentsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutCommentsInput = {
@@ -1627,6 +3115,14 @@ export type UserUncheckedCreateWithoutCommentsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutCommentsInput = {
@@ -1671,6 +3167,14 @@ export type UserUpdateWithoutCommentsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutCommentsInput = {
@@ -1699,6 +3203,174 @@ export type UserUncheckedUpdateWithoutCommentsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserCreateWithoutCreatedTagsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organization: Prisma.OrganizationCreateNestedOneWithoutUsersInput
+  accounts?: Prisma.AccountCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserUncheckedCreateWithoutCreatedTagsInput = {
+  id?: string
+  name?: string | null
+  email: string
+  emailVerified?: Date | string | null
+  image?: string | null
+  passwordHash?: string | null
+  phone?: string | null
+  status?: string
+  mustChangePassword?: boolean
+  isSuperAdmin?: boolean
+  lastLoginAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  deletedAt?: Date | string | null
+  organizationId: string
+  accounts?: Prisma.AccountUncheckedCreateNestedManyWithoutUserInput
+  sessions?: Prisma.SessionUncheckedCreateNestedManyWithoutUserInput
+  userRoles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  comments?: Prisma.CommentUncheckedCreateNestedManyWithoutUserInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutUserInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedCreateNestedManyWithoutUserInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutUserInput
+  exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
+  analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
+}
+
+export type UserCreateOrConnectWithoutCreatedTagsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTagsInput, Prisma.UserUncheckedCreateWithoutCreatedTagsInput>
+}
+
+export type UserUpsertWithoutCreatedTagsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTagsInput, Prisma.UserUncheckedUpdateWithoutCreatedTagsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutCreatedTagsInput, Prisma.UserUncheckedCreateWithoutCreatedTagsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutCreatedTagsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutCreatedTagsInput, Prisma.UserUncheckedUpdateWithoutCreatedTagsInput>
+}
+
+export type UserUpdateWithoutCreatedTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organization?: Prisma.OrganizationUpdateOneRequiredWithoutUsersNestedInput
+  accounts?: Prisma.AccountUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
+}
+
+export type UserUncheckedUpdateWithoutCreatedTagsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  emailVerified?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  status?: Prisma.StringFieldUpdateOperationsInput | string
+  mustChangePassword?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isSuperAdmin?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  lastLoginAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  organizationId?: Prisma.StringFieldUpdateOperationsInput | string
+  accounts?: Prisma.AccountUncheckedUpdateManyWithoutUserNestedInput
+  sessions?: Prisma.SessionUncheckedUpdateManyWithoutUserNestedInput
+  userRoles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  comments?: Prisma.CommentUncheckedUpdateManyWithoutUserNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutUserNestedInput
+  notificationSettings?: Prisma.NotificationSettingUncheckedUpdateManyWithoutUserNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutUserNestedInput
+  exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
+  dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
+  uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
+  analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1727,6 +3399,14 @@ export type UserCreateWithoutNotificationsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1755,6 +3435,14 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1799,6 +3487,14 @@ export type UserUpdateWithoutNotificationsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1827,6 +3523,14 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutNotificationSettingsInput = {
@@ -1855,6 +3559,14 @@ export type UserCreateWithoutNotificationSettingsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutNotificationSettingsInput = {
@@ -1883,6 +3595,14 @@ export type UserUncheckedCreateWithoutNotificationSettingsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutNotificationSettingsInput = {
@@ -1927,6 +3647,14 @@ export type UserUpdateWithoutNotificationSettingsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationSettingsInput = {
@@ -1955,6 +3683,14 @@ export type UserUncheckedUpdateWithoutNotificationSettingsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1983,6 +3719,14 @@ export type UserCreateWithoutAuditLogsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -2011,6 +3755,14 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -2055,6 +3807,14 @@ export type UserUpdateWithoutAuditLogsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -2083,6 +3843,14 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutExportsInput = {
@@ -2111,6 +3879,14 @@ export type UserCreateWithoutExportsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutExportsInput = {
@@ -2139,6 +3915,14 @@ export type UserUncheckedCreateWithoutExportsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedCreateNestedOneWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutExportsInput = {
@@ -2183,6 +3967,14 @@ export type UserUpdateWithoutExportsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutExportsInput = {
@@ -2211,6 +4003,14 @@ export type UserUncheckedUpdateWithoutExportsInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateWithoutDashboardPreferencesInput = {
@@ -2239,6 +4039,14 @@ export type UserCreateWithoutDashboardPreferencesInput = {
   exports?: Prisma.ExportCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserUncheckedCreateWithoutDashboardPreferencesInput = {
@@ -2267,6 +4075,14 @@ export type UserUncheckedCreateWithoutDashboardPreferencesInput = {
   exports?: Prisma.ExportUncheckedCreateNestedManyWithoutUserInput
   uploadedAttachments?: Prisma.AttachmentUncheckedCreateNestedManyWithoutUploadedByInput
   analyst?: Prisma.AnalystUncheckedCreateNestedOneWithoutUserInput
+  client?: Prisma.ClientUncheckedCreateNestedOneWithoutUserInput
+  createdClients?: Prisma.ClientUncheckedCreateNestedManyWithoutCreatedByInput
+  createdRequesters?: Prisma.RequesterUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDepartments?: Prisma.DepartmentUncheckedCreateNestedManyWithoutCreatedByInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedCreateNestedManyWithoutCreatedByInput
+  createdTags?: Prisma.TagUncheckedCreateNestedManyWithoutCreatedByInput
+  createdContracts?: Prisma.ClientContractUncheckedCreateNestedManyWithoutCreatedByInput
+  createdAnalysts?: Prisma.AnalystUncheckedCreateNestedManyWithoutCreatedByInput
 }
 
 export type UserCreateOrConnectWithoutDashboardPreferencesInput = {
@@ -2311,6 +4127,14 @@ export type UserUpdateWithoutDashboardPreferencesInput = {
   exports?: Prisma.ExportUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutDashboardPreferencesInput = {
@@ -2339,6 +4163,14 @@ export type UserUncheckedUpdateWithoutDashboardPreferencesInput = {
   exports?: Prisma.ExportUncheckedUpdateManyWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserCreateManyOrganizationInput = {
@@ -2384,6 +4216,14 @@ export type UserUpdateWithoutOrganizationInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateWithoutOrganizationInput = {
@@ -2412,6 +4252,14 @@ export type UserUncheckedUpdateWithoutOrganizationInput = {
   dashboardPreferences?: Prisma.DashboardPreferenceUncheckedUpdateOneWithoutUserNestedInput
   uploadedAttachments?: Prisma.AttachmentUncheckedUpdateManyWithoutUploadedByNestedInput
   analyst?: Prisma.AnalystUncheckedUpdateOneWithoutUserNestedInput
+  client?: Prisma.ClientUncheckedUpdateOneWithoutUserNestedInput
+  createdClients?: Prisma.ClientUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdRequesters?: Prisma.RequesterUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDepartments?: Prisma.DepartmentUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdDemandTypes?: Prisma.DemandTypeUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdTags?: Prisma.TagUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdContracts?: Prisma.ClientContractUncheckedUpdateManyWithoutCreatedByNestedInput
+  createdAnalysts?: Prisma.AnalystUncheckedUpdateManyWithoutCreatedByNestedInput
 }
 
 export type UserUncheckedUpdateManyWithoutOrganizationInput = {
@@ -2446,6 +4294,13 @@ export type UserCountOutputType = {
   auditLogs: number
   exports: number
   uploadedAttachments: number
+  createdClients: number
+  createdRequesters: number
+  createdDepartments: number
+  createdDemandTypes: number
+  createdTags: number
+  createdContracts: number
+  createdAnalysts: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2458,6 +4313,13 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   auditLogs?: boolean | UserCountOutputTypeCountAuditLogsArgs
   exports?: boolean | UserCountOutputTypeCountExportsArgs
   uploadedAttachments?: boolean | UserCountOutputTypeCountUploadedAttachmentsArgs
+  createdClients?: boolean | UserCountOutputTypeCountCreatedClientsArgs
+  createdRequesters?: boolean | UserCountOutputTypeCountCreatedRequestersArgs
+  createdDepartments?: boolean | UserCountOutputTypeCountCreatedDepartmentsArgs
+  createdDemandTypes?: boolean | UserCountOutputTypeCountCreatedDemandTypesArgs
+  createdTags?: boolean | UserCountOutputTypeCountCreatedTagsArgs
+  createdContracts?: boolean | UserCountOutputTypeCountCreatedContractsArgs
+  createdAnalysts?: boolean | UserCountOutputTypeCountCreatedAnalystsArgs
 }
 
 /**
@@ -2533,6 +4395,55 @@ export type UserCountOutputTypeCountUploadedAttachmentsArgs<ExtArgs extends runt
   where?: Prisma.AttachmentWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedClientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedRequestersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.RequesterWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedDepartmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DepartmentWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedDemandTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.DemandTypeWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.TagWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedContractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ClientContractWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountCreatedAnalystsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.AnalystWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -2562,6 +4473,14 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   dashboardPreferences?: boolean | Prisma.User$dashboardPreferencesArgs<ExtArgs>
   uploadedAttachments?: boolean | Prisma.User$uploadedAttachmentsArgs<ExtArgs>
   analyst?: boolean | Prisma.User$analystArgs<ExtArgs>
+  client?: boolean | Prisma.User$clientArgs<ExtArgs>
+  createdClients?: boolean | Prisma.User$createdClientsArgs<ExtArgs>
+  createdRequesters?: boolean | Prisma.User$createdRequestersArgs<ExtArgs>
+  createdDepartments?: boolean | Prisma.User$createdDepartmentsArgs<ExtArgs>
+  createdDemandTypes?: boolean | Prisma.User$createdDemandTypesArgs<ExtArgs>
+  createdTags?: boolean | Prisma.User$createdTagsArgs<ExtArgs>
+  createdContracts?: boolean | Prisma.User$createdContractsArgs<ExtArgs>
+  createdAnalysts?: boolean | Prisma.User$createdAnalystsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2635,6 +4554,14 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   dashboardPreferences?: boolean | Prisma.User$dashboardPreferencesArgs<ExtArgs>
   uploadedAttachments?: boolean | Prisma.User$uploadedAttachmentsArgs<ExtArgs>
   analyst?: boolean | Prisma.User$analystArgs<ExtArgs>
+  client?: boolean | Prisma.User$clientArgs<ExtArgs>
+  createdClients?: boolean | Prisma.User$createdClientsArgs<ExtArgs>
+  createdRequesters?: boolean | Prisma.User$createdRequestersArgs<ExtArgs>
+  createdDepartments?: boolean | Prisma.User$createdDepartmentsArgs<ExtArgs>
+  createdDemandTypes?: boolean | Prisma.User$createdDemandTypesArgs<ExtArgs>
+  createdTags?: boolean | Prisma.User$createdTagsArgs<ExtArgs>
+  createdContracts?: boolean | Prisma.User$createdContractsArgs<ExtArgs>
+  createdAnalysts?: boolean | Prisma.User$createdAnalystsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -2659,6 +4586,14 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     dashboardPreferences: Prisma.$DashboardPreferencePayload<ExtArgs> | null
     uploadedAttachments: Prisma.$AttachmentPayload<ExtArgs>[]
     analyst: Prisma.$AnalystPayload<ExtArgs> | null
+    client: Prisma.$ClientPayload<ExtArgs> | null
+    createdClients: Prisma.$ClientPayload<ExtArgs>[]
+    createdRequesters: Prisma.$RequesterPayload<ExtArgs>[]
+    createdDepartments: Prisma.$DepartmentPayload<ExtArgs>[]
+    createdDemandTypes: Prisma.$DemandTypePayload<ExtArgs>[]
+    createdTags: Prisma.$TagPayload<ExtArgs>[]
+    createdContracts: Prisma.$ClientContractPayload<ExtArgs>[]
+    createdAnalysts: Prisma.$AnalystPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -3082,6 +5017,14 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   dashboardPreferences<T extends Prisma.User$dashboardPreferencesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$dashboardPreferencesArgs<ExtArgs>>): Prisma.Prisma__DashboardPreferenceClient<runtime.Types.Result.GetResult<Prisma.$DashboardPreferencePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   uploadedAttachments<T extends Prisma.User$uploadedAttachmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$uploadedAttachmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AttachmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   analyst<T extends Prisma.User$analystArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$analystArgs<ExtArgs>>): Prisma.Prisma__AnalystClient<runtime.Types.Result.GetResult<Prisma.$AnalystPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  client<T extends Prisma.User$clientArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$clientArgs<ExtArgs>>): Prisma.Prisma__ClientClient<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  createdClients<T extends Prisma.User$createdClientsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdClientsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdRequesters<T extends Prisma.User$createdRequestersArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdRequestersArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$RequesterPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdDepartments<T extends Prisma.User$createdDepartmentsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdDepartmentsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DepartmentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdDemandTypes<T extends Prisma.User$createdDemandTypesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdDemandTypesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$DemandTypePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdTags<T extends Prisma.User$createdTagsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdTagsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$TagPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdContracts<T extends Prisma.User$createdContractsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdContractsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ClientContractPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  createdAnalysts<T extends Prisma.User$createdAnalystsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$createdAnalystsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$AnalystPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3778,6 +5721,193 @@ export type User$analystArgs<ExtArgs extends runtime.Types.Extensions.InternalAr
    */
   include?: Prisma.AnalystInclude<ExtArgs> | null
   where?: Prisma.AnalystWhereInput
+}
+
+/**
+ * User.client
+ */
+export type User$clientArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+}
+
+/**
+ * User.createdClients
+ */
+export type User$createdClientsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Client
+   */
+  select?: Prisma.ClientSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Client
+   */
+  omit?: Prisma.ClientOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientInclude<ExtArgs> | null
+  where?: Prisma.ClientWhereInput
+  orderBy?: Prisma.ClientOrderByWithRelationInput | Prisma.ClientOrderByWithRelationInput[]
+  cursor?: Prisma.ClientWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientScalarFieldEnum | Prisma.ClientScalarFieldEnum[]
+}
+
+/**
+ * User.createdRequesters
+ */
+export type User$createdRequestersArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Requester
+   */
+  select?: Prisma.RequesterSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Requester
+   */
+  omit?: Prisma.RequesterOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.RequesterInclude<ExtArgs> | null
+  where?: Prisma.RequesterWhereInput
+  orderBy?: Prisma.RequesterOrderByWithRelationInput | Prisma.RequesterOrderByWithRelationInput[]
+  cursor?: Prisma.RequesterWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.RequesterScalarFieldEnum | Prisma.RequesterScalarFieldEnum[]
+}
+
+/**
+ * User.createdDepartments
+ */
+export type User$createdDepartmentsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Department
+   */
+  select?: Prisma.DepartmentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Department
+   */
+  omit?: Prisma.DepartmentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DepartmentInclude<ExtArgs> | null
+  where?: Prisma.DepartmentWhereInput
+  orderBy?: Prisma.DepartmentOrderByWithRelationInput | Prisma.DepartmentOrderByWithRelationInput[]
+  cursor?: Prisma.DepartmentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DepartmentScalarFieldEnum | Prisma.DepartmentScalarFieldEnum[]
+}
+
+/**
+ * User.createdDemandTypes
+ */
+export type User$createdDemandTypesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the DemandType
+   */
+  select?: Prisma.DemandTypeSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the DemandType
+   */
+  omit?: Prisma.DemandTypeOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.DemandTypeInclude<ExtArgs> | null
+  where?: Prisma.DemandTypeWhereInput
+  orderBy?: Prisma.DemandTypeOrderByWithRelationInput | Prisma.DemandTypeOrderByWithRelationInput[]
+  cursor?: Prisma.DemandTypeWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.DemandTypeScalarFieldEnum | Prisma.DemandTypeScalarFieldEnum[]
+}
+
+/**
+ * User.createdTags
+ */
+export type User$createdTagsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Tag
+   */
+  select?: Prisma.TagSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Tag
+   */
+  omit?: Prisma.TagOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.TagInclude<ExtArgs> | null
+  where?: Prisma.TagWhereInput
+  orderBy?: Prisma.TagOrderByWithRelationInput | Prisma.TagOrderByWithRelationInput[]
+  cursor?: Prisma.TagWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.TagScalarFieldEnum | Prisma.TagScalarFieldEnum[]
+}
+
+/**
+ * User.createdContracts
+ */
+export type User$createdContractsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ClientContract
+   */
+  select?: Prisma.ClientContractSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ClientContract
+   */
+  omit?: Prisma.ClientContractOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ClientContractInclude<ExtArgs> | null
+  where?: Prisma.ClientContractWhereInput
+  orderBy?: Prisma.ClientContractOrderByWithRelationInput | Prisma.ClientContractOrderByWithRelationInput[]
+  cursor?: Prisma.ClientContractWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ClientContractScalarFieldEnum | Prisma.ClientContractScalarFieldEnum[]
+}
+
+/**
+ * User.createdAnalysts
+ */
+export type User$createdAnalystsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Analyst
+   */
+  select?: Prisma.AnalystSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Analyst
+   */
+  omit?: Prisma.AnalystOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AnalystInclude<ExtArgs> | null
+  where?: Prisma.AnalystWhereInput
+  orderBy?: Prisma.AnalystOrderByWithRelationInput | Prisma.AnalystOrderByWithRelationInput[]
+  cursor?: Prisma.AnalystWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.AnalystScalarFieldEnum | Prisma.AnalystScalarFieldEnum[]
 }
 
 /**
